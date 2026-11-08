@@ -231,3 +231,23 @@ Texto humano com ortografia normalizada, sem alteração de sentido.
 ### Histórico e incógnitas
 
 O texto original e as incógnitas anteriores permanecem como histórico. D1–D4 substituem a indefinição do frontend e a exclusão automática de self-hosted; não resolvem escolha de público, orçamento, demanda, preço ou licença final. A referência local de design requer verificar origem e direitos de reutilização antes de redistribuir seus assets.
+
+## Encaminhamento humano de 08/11/2026 — MVP pessoal e familiar
+
+- **Origem**: humano; CEO da Altivy e owner do GarageMotor, nesta conversa.
+- **Registro**: IA assistida; atualização da avaliação autorizada, preservando o histórico.
+- **Autorização**: preparar especificação, plano, tarefas e análise quando atendidos os critérios de entrada; implementação somente após revisão e autorização humana posteriores. Sem push, publicação ou instalação de dependências nesta rodada.
+
+> Uma vez fechado o licenciamento e as funcionalidades principais, use Spec Kit para efetivarmos a ideia.
+
+Nas respostas de esclarecimento, o humano confirmou:
+
+- **D6 — Público**: pessoas e famílias, com veículos, abastecimentos, despesas, manutenção, lembretes e comprovantes como núcleo funcional.
+- **D7 — Primeira entrega**: web, self-hosted e Android; iOS somente depois de resolver macOS/Xcode versus as regras de build e testes em containers.
+- **D8 — Necessidade declarada**: "Falta de opção self hosted, tecnologia portátil, C#, Angular, IONIC, abrange várias plataformas compartilhando o mesmo código, ter uma opção totalmente brasileira para esse tipo de app". Ortografia normalizada, sem alteração de sentido.
+- **D9 — Licença**: `AGPL-3.0-only`, já escolhida pelo humano e formalizada na [constituição](../../memory/constitution.md). Isso substitui a recomendação MIT anterior; o arquivo oficial e a reconciliação operacional ainda precisam ser entregues por tarefa autorizada.
+- **D10 — Design system**: usar Dokpod como referência de implementação Angular do DS Altivy, conforme pedido humano anterior nesta conversa; não importar automaticamente regras de negócio, edição Business ou dependências do Dokpod.
+
+A necessidade D8 é intenção de produto e demanda declarada pelo stakeholder responsável, não pesquisa de mercado ou comparação exaustiva de concorrentes. Não há dados de pagamento, entrevistas ou confirmação factual de ausência de alternativas. O público de pequenas frotas permanece histórico e não pertence ao primeiro MVP autorizado para especificação.
+
+Ionic foi citado na justificativa de portabilidade. Sua função e compatibilidade com o DS próprio devem ser esclarecidas antes de adoção; esta referência não aprova uma biblioteca de UI ou versão sem licença e manutenção verificadas. Compartilhar código não implica paridade automática de recursos em todas as plataformas.

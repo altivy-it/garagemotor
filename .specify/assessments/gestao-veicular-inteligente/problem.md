@@ -5,11 +5,11 @@
 - **Inputs used**: [intake.md](intake.md), [research.md](research.md) e respostas humanas desta conversa
 - **Origem**: IA assistida
 - **Revisor humano**: CEO da Altivy e owner do projeto
-- **Estado da revisão**: pendente; problema e critérios ainda não confirmados por usuários
+- **Estado da revisão**: recorte pessoal/familiar confirmado pelo owner em 2026-11-08; critérios e implementação aguardam revisão própria
 
 ## Problem Statement
 
-Hipótese: pessoas/famílias e responsáveis por pequenas frotas que mantêm informações veiculares dispersas têm dificuldade para entender o custo real de uso e agir antes de despesas ou obrigações previsíveis. A proposta busca reduzir esforço de acompanhamento e decisões baseadas em registros incompletos, mas intensidade, recorrência e urgência da dor ainda não foram observadas [ASSUMPTION; research.md, Users & Demand].
+Pessoas e famílias precisam acompanhar custos e compromissos de seus veículos em uma experiência brasileira e portátil, podendo manter os próprios dados sob seu controle em instalação self-hosted. Essa necessidade foi declarada pelo owner, que confirmou o recorte para especificação; recorrência da dor, adoção e superioridade às alternativas não foram medidas [intake.md, D6–D8; research.md, Evidência primária].
 
 ## Affected Users & Stakeholders
 
@@ -79,3 +79,15 @@ Não construir preserva recursos da Altivy e permite continuar com soluções ex
 ## Próxima etapa
 
 `/speckit-assess-shape slug=gestao-veicular-inteligente`
+
+## Recorte confirmado e histórico — 08/11/2026
+
+Os perfis, objetivos comerciais e métricas comparativas acima preservam a primeira rodada da descoberta. Para o encaminhamento atual, o humano escolheu **pessoas e famílias**; pequenas frotas deixam de compor o MVP. A justificativa é autonomia sobre dados, portabilidade e experiência brasileira, não mercado ou pagamento comprovados.
+
+Objetivos atuais: conhecer despesas e compromissos por veículo; reduzir esforço de acompanhamento; manter dados acessíveis e recuperáveis sob controle do usuário; compartilhar responsabilidades familiares sem acesso indevido; preservar a utilidade do núcleo sem assinatura de serviços opcionais.
+
+O núcleo confirmado é veículos, abastecimentos, despesas, manutenção, lembretes e comprovantes. Web, self-hosted e Android pertencem à primeira entrega; iOS, OCR, chat e predição não pertencem a ela. Preços e SLA não estão aprovados. A licença é AGPL-3.0-only conforme a constituição.
+
+Critérios de sucesso da primeira feature devem medir conclusão desses fluxos, correção financeira, isolamento entre famílias, persistência/recuperação e possibilidade de uso independente de SaaS. As linhas de base comerciais permanecem desconhecidas; entrevistas e piloto pago não devem ser apresentados como validação executada.
+
+Questões a levar ao planejamento: capacidade inicial testada, papéis de compartilhamento, retenção, proteção de arquivos, compatibilidade mobile e direitos do DS. Definir premissas conservadoras e gates na especificação e no plano. Orçamento, aquisição e preço permanecem questões de negócio, sem autorização de publicação ou promessa de data.

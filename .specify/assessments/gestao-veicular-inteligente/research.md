@@ -2,7 +2,7 @@
 
 - **Slug**: gestao-veicular-inteligente
 - **Created**: 2026-11-08
-- **Evidence confidence (overall)**: low
+- **Evidence confidence (overall)**: medium para necessidade declarada pelo owner; low para demanda comercial
 - **Origem**: IA assistida
 - **Revisor humano**: CEO da Altivy e owner do projeto, conforme [intake](intake.md)
 - **Estado da revisão**: pendente
@@ -123,3 +123,15 @@ Mesma política da primeira rodada: consulta somente após autorização do host
 | S13 | https://angular.dev/reference/releases | angular.dev | confirmed-by-user | Nova tentativa não verificada: falha de conexão segura |
 
 Lacunas adicionais: direito de reutilizar o DS; cadeia iOS compatível com as regras de execução; endpoint próprio e serviços opcionais; enquadramento de cobrança nas lojas; contrato e preço de suporte self-hosted. Não se reclassifica evidência comercial como `adequate` a partir de decisões técnicas do owner.
+
+## Evidência primária e recorte atual — 08/11/2026
+
+- O stakeholder responsável escolheu pessoas e famílias e confirmou o núcleo de veículos, abastecimentos, despesas, manutenção, lembretes e comprovantes. Confirmou web, self-hosted e Android primeiro, com iOS posterior. Esta é evidência direta de requisito e prioridade do produto, não de adoção pelo mercado. [source: respostas humanas e intake.md, D6–D7; cited] (confidence: high)
+- O owner declarou como necessidade autonomia self-hosted, portabilidade e uma opção brasileira. "Falta de opção" é sua percepção, não conclusão de levantamento de concorrentes. [source: intake.md, D8; cited para a declaração, ASSUMPTION para ausência de alternativas] (confidence: medium)
+- A licença atual é `AGPL-3.0-only`, escolhida pelo humano e formalizada na constituição 1.0.0. A recomendação MIT acima é histórico da etapa anterior, não regra atual do código próprio. [source: intake.md, D9 e .specify/memory/constitution.md; cited] (confidence: high)
+- Dokpod é referência de componentes Angular do DS Altivy, por solicitação humana. Sua Community usa AGPL-3.0-only, mas dependências, fontes, proveniência, maturidade e direitos de componentes exigem conferência própria. Não se aprova edição proprietária nem se copia automaticamente a aplicação. [source: intake.md, D10 e documentos locais Dokpod lidos nesta conversa; cited] (confidence: medium)
+- Ionic foi citado como parte da portabilidade. É necessário distinguir framework de componentes de UI e integração nativa; citar o nome não aprova versão, licença ou substituição do DS. [source: intake.md, D8; cited] (confidence: medium)
+
+**Limite de suficiência**: a solicitação direta do responsável sustenta especificar um MVP pessoal/familiar para atender às necessidades declaradas de controle e autonomia. Não sustenta afirmar mercado desatendido, preço aceito, retorno financeiro ou autorização de implementação. A nota `medium` refere-se a esse novo recorte; evidência comercial permanece `low`. As métricas anteriores de entrevistas e pagamento continuam propostas para descoberta comercial, não resultados existentes.
+
+Riscos remanescentes: compatibilidade de versões, direitos do DS, privacidade, recuperação de dados, distribuição Android e contratos comerciais. A cadeia iOS fica fora da primeira entrega; continuará bloqueada até resolução explícita. Requisitos e planejamento devem definir gates verificáveis, sem tratar esses riscos como já mitigados.

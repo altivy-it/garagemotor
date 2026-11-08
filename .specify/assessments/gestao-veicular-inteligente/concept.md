@@ -2,7 +2,7 @@
 
 - **Slug**: gestao-veicular-inteligente
 - **Created**: 2026-11-08
-- **Recommended option**: B — controle operacional enxuto de pequenas frotas, condicionado à validação comparativa
+- **Recommended option**: A — garagem pessoal e familiar com controle de dados self-hosted
 - **Origem**: IA assistida
 - **Revisor humano**: CEO da Altivy e owner do projeto
 - **Estado da revisão**: pendente; recomendação não equivale a escolha humana ou autorização
@@ -34,7 +34,7 @@
 - **Trade-offs**: preserva recursos e acelera aprendizado; pode limitar diferenciação, controle e receita própria. Adequação das alternativas ainda precisa ser verificada, inclusive identificação correta de Fuel.io.
 - **Rabbit holes**: customizar tanto uma ferramenta externa que a validação se torne um projeto de integração; escolher fornecedor sem verificar licença, termos e proteção de dados.
 
-## Recommendation
+## Histórico da recomendação para pequenas frotas
 
 Recomendar **B como hipótese preferencial de produto**, não como seleção já aprovada. O motivo é sua relação potencial com as métricas do problema: tempo de consolidação, qualidade dos gastos e identificação de comprador podem ser observados num processo operacional delimitado. Esta relação é suposição, não evidência de mercado superior [research.md, Users & Demand e Market & Context].
 
@@ -130,7 +130,7 @@ Self-hosted significa que backend e dados podem operar sob controle do cliente. 
 
 Serviços pagos e contratos de distribuição Apple/Google não são licenças de bibliotecas do app. Ainda exigem decisão de orçamento e verificação de termos. Compras no app, cobrança web e links externos precisam de análise por território e modalidade; nenhuma estratégia de contornar comissão ou revisão foi aprovada.
 
-## Licença recomendada e limites comerciais
+## Histórico da recomendação MIT e limites comerciais
 
 **Recomendação: MIT para todo código próprio do GarageMotor**, coerente com a regra atual. A adoção formal de arquivo de licença, titularidade e avisos exige revisão humana e jurídica; nenhum arquivo de licença foi criado ou modificado nesta rodada.
 
@@ -181,3 +181,26 @@ Revisar com o humano os critérios do problema: dor observada, redução de esfo
 ## Histórico da mudança de direção
 
 Antes deste complemento, self-hosted estava fora do primeiro recorte e Angular era candidato. D2 e D4 do intake, fornecidas pelo owner em 08/11/2026, substituem essas posições. A proposta original de apetite `medium` refere-se à validação limitada, não à entrega de web, dois apps e self-hosted completos. Reestimar o apetite conceitual após informar equipe, orçamento e requisitos operacionais; nenhuma data de lançamento foi assumida.
+
+## Recommendation
+
+**Opção A, por escolha humana de 08/11/2026**: garagem pessoal e familiar em pt-BR, com controle de custos e manutenção e possibilidade de operar os próprios dados. O owner confirmou essa necessidade e autorizou preparação de spec, plano, tarefas e análise, sem implementação. Esta escolha substitui a preferência anterior por pequenas frotas, preservada no histórico.
+
+O menor produto útil acompanha veículos, abastecimentos, despesas, manutenção, lembretes e comprovantes de uma pessoa ou família, com acesso compartilhado autorizado, cálculos conferíveis e histórico recuperável. A primeira entrega inclui web, self-hosted e Android. Não depende de pagamento, IA ou serviço de licença online para usar o núcleo aberto.
+
+Apetite ainda não estimado: `medium` acima era orçamento candidato de descoberta, não prazo para o novo MVP. Não comprometer data ou custo antes do plano e da revisão humana.
+
+## Licenciamento e referência visual atuais
+
+**AGPL-3.0-only** é a decisão humana atual, formalizada na constituição 1.0.0; a seção MIT é histórica. Manter autogerido gratuito, SaaS e suporte self-hosted como modalidades, sem aprovar preços, edição proprietária ou duplo licenciamento. Cumprir condições de distribuição e oferta de fonte das versões modificadas com interação remota. Dados dos usuários e secrets não fazem parte dessa publicação.
+
+O DS Altivy permanece obrigatório; **Dokpod passa a ser referência de implementação Angular**, sem importar automaticamente funcionalidades empresariais, dependências ou exceções de licença. Angular 22 continua obrigatório; demais componentes devem ser LTS/estáveis mantidos. Ionic citado pelo humano precisa de enquadramento explícito sem trocar a identidade visual por um kit genérico.
+
+## Escopo atual para o SDD
+
+- Dentro: núcleo pessoal/familiar confirmado; pt-BR; web e Android; self-hosted; compartilhamento e acesso autorizado; indicadores básicos; evidências de despesas; recuperação e continuidade do histórico.
+- Fora: pequenas frotas empresariais, grande frota, governo, máquinas agrícolas, telemetria, roteirização, IA/OCR, chat, previsão mecânica, iOS nesta entrega, Kubernetes e edição proprietária.
+- A entregar por tarefas próprias: licença oficial e avisos, reconciliação das regras MIT, referência DS/Dokpod, matriz de versões e licenças, instalação, backup/recuperação e validação nos níveis exigidos.
+- A revisar antes de implementar: spec, plano, tarefas, análise, capacidade suportada, riscos e premissas. Não há autorização de push ou publicação.
+
+Suposições: unidade familiar como fronteira de compartilhamento, dados financeiros em BRL e distâncias em quilômetros; limites exatos e comportamentos de edição/exclusão devem ser testáveis na spec. Sem promessa de offline integral, push sem infraestrutura externa ou paridade total entre plataformas.
