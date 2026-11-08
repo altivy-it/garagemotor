@@ -1,0 +1,60 @@
+# Normalize text files in the repository.
+* text=auto eol=lf
+
+# Pin PowerShell source to stable CRLF; PowerShell 7 supports it on Windows, macOS and Linux.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+*.psm1 text eol=crlf
+*.psd1 text eol=crlf
+
+# POSIX and cross-platform shell entrypoints require stable LF on every host.
+*.sh text eol=lf
+*.bash text eol=lf
+*.zsh text eol=lf
+*.fish text eol=lf
+**/entrypoint* text eol=lf
+.githooks/* text eol=lf
+
+# Common cross-platform scripting languages use LF.
+*.py text eol=lf
+*.pl text eol=lf
+*.rb text eol=lf
+
+# Web source and package metadata use stable Unix line endings.
+*.css text eol=lf
+*.html text eol=lf
+*.js text eol=lf
+*.jsx text eol=lf
+*.json text eol=lf
+*.mjs text eol=lf
+*.cjs text eol=lf
+*.scss text eol=lf
+*.svg text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+
+# Common binary formats.
+*.7z binary
+*.dll binary
+*.exe binary
+*.gif binary
+*.gz binary
+*.ico binary
+*.jpg binary
+*.jpeg binary
+*.avif binary
+*.eot binary
+*.pdf binary
+*.png binary
+*.p12 binary
+*.pfx binary
+*.snk binary
+*.tar binary
+*.ttf binary
+*.webp binary
+*.woff binary
+*.woff2 binary
+*.zip binary

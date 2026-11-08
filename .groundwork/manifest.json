@@ -1,0 +1,456 @@
+{
+  "schemaVersion": 1,
+  "toolVersion": "0.11.3",
+  "catalogVersion": "0.11.3",
+  "parameters": {
+    "auto_deploy_environment": "",
+    "commit_scopes": "docs,tooling,deps,actions,repo",
+    "default_branch": "main",
+    "dependabot_ecosystems": "github-actions,nuget",
+    "deploy_environments": "",
+    "deploy_reviewers": "lzocateli",
+    "distribution_approval_mode": "environment",
+    "dotnet_sdk_image": "lzocateli/dotnet-sdk:10.0.403-noble-v1",
+    "dotnet_solution": "",
+    "github_owner": "lzocateli",
+    "github_repo": "garagemotor",
+    "initial_version": "0.1.0",
+    "issue_areas": "Arquitetura,Backend,Frontend,Banco de dados,Seguran\u00E7a,DevOps,Documenta\u00E7\u00E3o,Testes",
+    "legacy_rulesets": "",
+    "license": "MIT",
+    "native_aot_legal_files": "LICENSE,THIRD-PARTY-NOTICES.md",
+    "native_aot_namespace_base_uri": "https://github.com/lzocateli/garagemotor",
+    "native_aot_package_name": "garagemotor",
+    "native_aot_project": "",
+    "native_aot_publisher": "GarageMotor",
+    "native_aot_rids": "linux-x64,linux-arm64,win-x64,win-arm64,osx-arm64,osx-x64",
+    "native_aot_sdk_image": "mcr.microsoft.com/dotnet/sdk:10.0.403-noble@sha256:9c7b6b263d9d4c2e4718e16dae6d75cd8f4b5ccf206f1e7d48a98eb429981b03",
+    "native_aot_smoke_script": "",
+    "nuget_auth": "trusted",
+    "nuget_feed": "github",
+    "nuget_rc_feed": "",
+    "nuget_user": "",
+    "preview_acceptance": "deploy",
+    "project_description": "",
+    "project_name": "GarageMotor",
+    "project_slug": "garagemotor",
+    "publish_snapshots": "true",
+    "release_app_id": "",
+    "release_reviewers": "lzocateli",
+    "release_type": "simple",
+    "require_signed_commits": "false",
+    "required_approvals": "1",
+    "secrets_dir_name": "GarageMotor",
+    "version_files": "Directory.Build.props"
+  },
+  "components": [
+    "core",
+    "speckit"
+  ],
+  "files": {
+    ".gitattributes": {
+      "component": "core",
+      "sha256": "a51139a7880acb3d3cbca495171c89e14c9f5b613154c31d2060a6d36e23c46b"
+    },
+    ".github/ADR_TEMPLATE.md": {
+      "component": "core",
+      "sha256": "fd2950265886441f484fb56783a0a3ba21097fef633a5da7119c956b1768267b"
+    },
+    ".github/CODEOWNERS": {
+      "component": "core",
+      "sha256": "b856db5c064a34191407a878db09f9bf7d7d00af024adaa927e867e0562941c4"
+    },
+    ".github/COMMIT_CONVENTIONS.md": {
+      "component": "core",
+      "sha256": "386b133156c8ab392d816cf8efd6b7b6c830da4d68450f65afd5363d7a524a8d"
+    },
+    ".github/CONTRIBUTING.md": {
+      "component": "core",
+      "sha256": "c568c8631b8d4e2abc989b53e3d7180a690aea497f0c3a6aa265fb16343a3d02"
+    },
+    ".github/ISSUE_TEMPLATE/architecture-spike.yml": {
+      "component": "core",
+      "sha256": "a69a6d841aa992ea93384ef90fec4f0ad7aef0f8d8a02ade9ab604932f065341"
+    },
+    ".github/ISSUE_TEMPLATE/bug.yml": {
+      "component": "core",
+      "sha256": "848bc9ba9bdb44ae4dd1ad9375d1db7bf0087e25a5da933c38fd6a6cd78a4854"
+    },
+    ".github/ISSUE_TEMPLATE/config.yml": {
+      "component": "core",
+      "sha256": "c335487d3d24d277a555527a1337ad727bb57ae134510ef427ece037bedcf7d8"
+    },
+    ".github/ISSUE_TEMPLATE/feature.yml": {
+      "component": "core",
+      "sha256": "dbbc5a715caf71b802f548d5f2248f6575cdff999dca7ea3cd1c1d6d37391b73"
+    },
+    ".github/ISSUE_TEMPLATE/spec-kit-task.yml": {
+      "component": "speckit",
+      "sha256": "69e000f409ee0e289acc9a2a6bff92d42d307ad3e3084fc3c68dbfd7da642e6f"
+    },
+    ".github/ISSUE_TEMPLATE/technical-task.yml": {
+      "component": "core",
+      "sha256": "9d7f5798d2f23ea2e1f19886307df78c72de4b660add8765ac9f0a12183b1367"
+    },
+    ".github/PULL_REQUEST_TEMPLATE.md": {
+      "component": "core",
+      "sha256": "fca2531cf7cc58a3ae5fcc0d532826d1642e26a5acc473bb3171a6f51d01eb7f"
+    },
+    ".github/SECURITY.md": {
+      "component": "core",
+      "sha256": "7d043d0d954baf15081ba19de471d0010495a2dba414d98f55c976b5f26e4e20"
+    },
+    ".github/copilot-instructions.md": {
+      "component": "core",
+      "sha256": "9042d15ea92b083b7a2baf3a99eccaa705a0744af6f4754e9a1edbd2a55a7f24"
+    },
+    ".github/instructions/conventional-commits.instructions.md": {
+      "component": "core",
+      "sha256": "a1196fe04aaa6736dc2d4231acc07d7ebb2319ef84f310c632d83f3f516a2e4d"
+    },
+    ".github/instructions/documentation.instructions.md": {
+      "component": "core",
+      "sha256": "3a2623ee347bc97510f040c2d9a426b88bfe4448a98c51fe2d1447a12aa19c14"
+    },
+    ".github/labels.json": {
+      "component": "core",
+      "sha256": "85c0f3bb5a6d53088ed2604d8e75254b6397d0530ca7e4ec90145c8937fbd182"
+    },
+    ".github/prompts/localize-speckit.prompt.md": {
+      "component": "speckit",
+      "sha256": "3788bde5221e6d8c95126fae126ea7e9dd37e3b14dd09eea985d805a497b2975"
+    },
+    ".github/skills/speckit-analyze/SKILL.md": {
+      "component": "speckit",
+      "sha256": "19279e979988a05205c9c285c764e6a2c0ec95c7a985feaa46cfbe66bae56be5"
+    },
+    ".github/skills/speckit-assess-decide/SKILL.md": {
+      "component": "speckit",
+      "sha256": "7417b8cbb12a03815a78f8db41bd21e4e9f1e734947be7bfa89933ae541fd3ee"
+    },
+    ".github/skills/speckit-assess-define/SKILL.md": {
+      "component": "speckit",
+      "sha256": "fd3fe4c44677208165c575d08cfefe4db6d2298dabbcafc5261be15586d2f843"
+    },
+    ".github/skills/speckit-assess-intake/SKILL.md": {
+      "component": "speckit",
+      "sha256": "9ac8622e38491712f14d9030db08fc6e734e00654df5a7471a0614a6e9e44d66"
+    },
+    ".github/skills/speckit-assess-research/SKILL.md": {
+      "component": "speckit",
+      "sha256": "25b1cff98de6ced7ec2d69ca4d183ebb265c05ac550748a491c31c568f4d1d72"
+    },
+    ".github/skills/speckit-assess-shape/SKILL.md": {
+      "component": "speckit",
+      "sha256": "bd8312a1a10f195d6d363a7f96f9879e17b9054b97433e2602af4f0f0c01ce62"
+    },
+    ".github/skills/speckit-bug-assess/SKILL.md": {
+      "component": "speckit",
+      "sha256": "d8b4f4043fa9b74d923ca67291bb9ab2e3e0627928ed6bb52a3399b7459a0e08"
+    },
+    ".github/skills/speckit-bug-fix/SKILL.md": {
+      "component": "speckit",
+      "sha256": "967dbc539df7e9b25b7ff3a8f42f4f9c38b031417c70d5ada2ce7b17bc5a31e9"
+    },
+    ".github/skills/speckit-bug-test/SKILL.md": {
+      "component": "speckit",
+      "sha256": "515c4b86e61fba8f5b87da46417e76dadc1b1f430a08c4b3f74af44164f9ae41"
+    },
+    ".github/skills/speckit-checklist/SKILL.md": {
+      "component": "speckit",
+      "sha256": "a75eec9edd14bbfea26d1b7d069344dd085c4d0b33c368672b3d152c2fbbce67"
+    },
+    ".github/skills/speckit-clarify/SKILL.md": {
+      "component": "speckit",
+      "sha256": "6f9403664c9ac9f7e5b01d6a5db3acf8440fc9a969711e6709ec8f8d61fae6a2"
+    },
+    ".github/skills/speckit-constitution/SKILL.md": {
+      "component": "speckit",
+      "sha256": "31400d85511be1c17a0e0dda8892c5d2c39d4b0dba2b6e7fdd875481ef40ce16"
+    },
+    ".github/skills/speckit-converge/SKILL.md": {
+      "component": "speckit",
+      "sha256": "725044041502564748a0736376bb4f937d28f59b338a3b1ec30895a070efd4c4"
+    },
+    ".github/skills/speckit-git-commit/SKILL.md": {
+      "component": "speckit",
+      "sha256": "baccb60076fc01abdaaf4d561ac5fd065ba23b9a632f6c4f2c4af25dc4381c0b"
+    },
+    ".github/skills/speckit-git-feature/SKILL.md": {
+      "component": "speckit",
+      "sha256": "d39e433e93d1f69d2fa8d9fffa986c9f34b847e8bd59a99dd450340bc501c4cb"
+    },
+    ".github/skills/speckit-git-initialize/SKILL.md": {
+      "component": "speckit",
+      "sha256": "7101bfa30b66ea37f9732793f18202e88c3cdcd944b5c208a8f93630e8376d38"
+    },
+    ".github/skills/speckit-git-remote/SKILL.md": {
+      "component": "speckit",
+      "sha256": "18ff6fad7e6524cdc7fb4711019bf7fa5aa8df91539572af8588c1e601a86981"
+    },
+    ".github/skills/speckit-git-validate/SKILL.md": {
+      "component": "speckit",
+      "sha256": "2ea45c98f55bf9443e5b6e15f2add46db6cb4f89c0e5944d2ec978878fe96639"
+    },
+    ".github/skills/speckit-implement/SKILL.md": {
+      "component": "speckit",
+      "sha256": "684d06dffa1d88f8f7061acde2976c0a709afa3c545342f9a3038063ccfc680c"
+    },
+    ".github/skills/speckit-plan/SKILL.md": {
+      "component": "speckit",
+      "sha256": "f048beab53c06c8c9670ffe8b04d13b871ab1e5ce508872690f7b6353066495e"
+    },
+    ".github/skills/speckit-specify/SKILL.md": {
+      "component": "speckit",
+      "sha256": "0429122c83409669fdec27de1bacebcc6c04f17f026f7b5c443257bb1f0f3ba5"
+    },
+    ".github/skills/speckit-tasks/SKILL.md": {
+      "component": "speckit",
+      "sha256": "8686cd044b1b2595bd649f7b870e31228e95cec401bea9ca646c2e08bf74fc9d"
+    },
+    ".github/skills/speckit-taskstoissues/SKILL.md": {
+      "component": "speckit",
+      "sha256": "924df4b5bcba0f360de0811822ae23c107ae511a86a94fc27c053c64acb11a6e"
+    },
+    ".specify/.gitignore": {
+      "component": "speckit",
+      "sha256": "8c908410d177a1ef3d0dee16d7ad55f2ac3333df3104c4d4adee1c9b82f1dbc1"
+    },
+    ".specify/extensions.yml": {
+      "component": "speckit",
+      "sha256": "1b83777f486687ec7c350f30724c453da21a2c06765f2f7425909c3c4714e06b"
+    },
+    ".specify/extensions/.registry": {
+      "component": "speckit",
+      "sha256": "ac453b2c5dc479d4e26efc02aa0c72cfb5bceb562399b315dec79d080495d9c2"
+    },
+    ".specify/extensions/assess/README.md": {
+      "component": "speckit",
+      "sha256": "c9ce68d68051f32e07b42a443ca31f3151c4febf380cd5d4ddc8019df1466cc5"
+    },
+    ".specify/extensions/assess/commands/speckit.assess.decide.md": {
+      "component": "speckit",
+      "sha256": "17b8f0ea0c96dde639d7a23bafa44895e3cdab5208d0a1fea449d9ab05147af0"
+    },
+    ".specify/extensions/assess/commands/speckit.assess.define.md": {
+      "component": "speckit",
+      "sha256": "e69e551f7a68f0743439b1bb7c749ed8900e76de4af2601bb97d56fb349821fc"
+    },
+    ".specify/extensions/assess/commands/speckit.assess.intake.md": {
+      "component": "speckit",
+      "sha256": "6d0afec343de199f24e620de340e6a565bdac3b20c1dcff7bde2d0b9a767a8f2"
+    },
+    ".specify/extensions/assess/commands/speckit.assess.research.md": {
+      "component": "speckit",
+      "sha256": "cf577c78ccf8a606c3eefc1915f6817bd7f2ac89185ac8258130a424b0be0792"
+    },
+    ".specify/extensions/assess/commands/speckit.assess.shape.md": {
+      "component": "speckit",
+      "sha256": "e543ab1113e89ee3f047acd1525da598cf368c7641756cfe37d867975d383e00"
+    },
+    ".specify/extensions/assess/extension.yml": {
+      "component": "speckit",
+      "sha256": "df265721796338f49bff3bc993ea540389b15768247465eedf1bd4ef14258551"
+    },
+    ".specify/extensions/bug/README.md": {
+      "component": "speckit",
+      "sha256": "2b1caa378fe0dae4c56c046b779ca1be49a25161a640132bd51e545d7fe5e07f"
+    },
+    ".specify/extensions/bug/README.pt-BR.md": {
+      "component": "speckit",
+      "sha256": "cb00d85534b03dd4900cf5f2ba45699379f443d40c2aebbc88945320567e6d42"
+    },
+    ".specify/extensions/bug/commands/speckit.bug.assess.md": {
+      "component": "speckit",
+      "sha256": "f261783cc5ecd92ca4ece9158da0ea7d3c5124860f3f0d3024ba049c73b7de3b"
+    },
+    ".specify/extensions/bug/commands/speckit.bug.fix.md": {
+      "component": "speckit",
+      "sha256": "5466d093cc20f221cbb79ad3fcba0247a1ea56436c24fc2d036671652b147d3a"
+    },
+    ".specify/extensions/bug/commands/speckit.bug.test.md": {
+      "component": "speckit",
+      "sha256": "89af5136e46918edfa4954135d34a968d2bad6bd3dd98ee99e10d1b0537e2984"
+    },
+    ".specify/extensions/bug/extension.yml": {
+      "component": "speckit",
+      "sha256": "9597c06a76a0c6fa980ecaf5daf7be60c8bc3e85ba6561a3012d50aaa25d5ab2"
+    },
+    ".specify/extensions/git/README.md": {
+      "component": "speckit",
+      "sha256": "ef9b9970f2aee96da7fbd6557c0497d30e7d726b410e87cc1549d63050126b2e"
+    },
+    ".specify/extensions/git/commands/speckit.git.commit.md": {
+      "component": "speckit",
+      "sha256": "6dffb765e363007a94f5c1c8821099ca3b429ab43ef59c863ff0e9194bc4fa93"
+    },
+    ".specify/extensions/git/commands/speckit.git.feature.md": {
+      "component": "speckit",
+      "sha256": "d2a98f229c573fcd1b725915a62cedd02fec9a6fcc5d0981f1aaed7dc876522b"
+    },
+    ".specify/extensions/git/commands/speckit.git.initialize.md": {
+      "component": "speckit",
+      "sha256": "be425ffb3482a7c8e367ba3bb9f044d621fa08dbe7194bd03a6112061367c5ef"
+    },
+    ".specify/extensions/git/commands/speckit.git.remote.md": {
+      "component": "speckit",
+      "sha256": "399f08cc5a6dcd1f58ebc4180eb4ca885a6850ae95d3fd415353eb26b004f6e0"
+    },
+    ".specify/extensions/git/commands/speckit.git.validate.md": {
+      "component": "speckit",
+      "sha256": "1d83c178dc8a9a8bc32d314c5bc0cd06af302f5416c5428883e1e923bc013ceb"
+    },
+    ".specify/extensions/git/config-template.yml": {
+      "component": "speckit",
+      "sha256": "16aaa7c974e34953f9997658080916a62429c9b7fcd24f1c56c7ad8911a8b670"
+    },
+    ".specify/extensions/git/extension.yml": {
+      "component": "speckit",
+      "sha256": "9ab4f204029d718232cba969211b5ada506799b384630e02c8e8de9a1d1e66d7"
+    },
+    ".specify/extensions/git/git-config.yml": {
+      "component": "speckit",
+      "sha256": "16aaa7c974e34953f9997658080916a62429c9b7fcd24f1c56c7ad8911a8b670"
+    },
+    ".specify/extensions/git/scripts/bash/auto-commit.sh": {
+      "component": "speckit",
+      "sha256": "351baa7f4f0ecdfb281790ef223f8981a587ec8a2582c013824b1bcfc6039869"
+    },
+    ".specify/extensions/git/scripts/bash/create-new-feature-branch.sh": {
+      "component": "speckit",
+      "sha256": "22f22cbd2ba7fa4876a94f90d90accff633dbcd8f2ea8d196930e1cf0cb238ae"
+    },
+    ".specify/extensions/git/scripts/bash/git-common.sh": {
+      "component": "speckit",
+      "sha256": "a27b59fe3d6dfc36f58754e4ad98fb65d010d0fc3b61d1d2ee5ee809588c0ca0"
+    },
+    ".specify/extensions/git/scripts/bash/initialize-repo.sh": {
+      "component": "speckit",
+      "sha256": "19f1a8bcb591d988a516bd661f9da7029b5a6f265ab27a769d390099104d0763"
+    },
+    ".specify/extensions/git/scripts/powershell/auto-commit.ps1": {
+      "component": "speckit",
+      "sha256": "0f1e6578d1df90c65522ee3505371f131a69b5e652da729d4d98a885d0873d08"
+    },
+    ".specify/extensions/git/scripts/powershell/create-new-feature-branch.ps1": {
+      "component": "speckit",
+      "sha256": "bec34426a5f15766605cde41c263561fff59d8cf2a4db106228dae608138d7da"
+    },
+    ".specify/extensions/git/scripts/powershell/git-common.ps1": {
+      "component": "speckit",
+      "sha256": "d560648cf51e2b032e81a6d542fe51171708fdcbbaf16984536918ca4f850f7d"
+    },
+    ".specify/extensions/git/scripts/powershell/initialize-repo.ps1": {
+      "component": "speckit",
+      "sha256": "99025d83d3168afa89fd1043981e9c068c84a12fe9fffe1d2d103aa3c85c2c03"
+    },
+    ".specify/extensions/git/scripts/python/auto_commit.py": {
+      "component": "speckit",
+      "sha256": "f82a73965dcc56d8ec085f6478abeefdb3e15cc7a7149e1bb3ff52438bad1b52"
+    },
+    ".specify/extensions/git/scripts/python/create_new_feature_branch.py": {
+      "component": "speckit",
+      "sha256": "c97285953d7ff20b00f4372ea35b75db9aa723eb18699efbec259101f7337cff"
+    },
+    ".specify/extensions/git/scripts/python/git_common.py": {
+      "component": "speckit",
+      "sha256": "0d8590aa2edebe8b251bede591dcca194720a3770974f5c964152898e5150596"
+    },
+    ".specify/extensions/git/scripts/python/initialize_repo.py": {
+      "component": "speckit",
+      "sha256": "c5b71ff2e3c71e4b5f1184f7bafbf86935437670e633681926483309526f4096"
+    },
+    ".specify/init-options.json": {
+      "component": "speckit",
+      "sha256": "c012768b13041dc0b3f15dd082bd95eb321a203c9251bd52902f1ad92e45aaec"
+    },
+    ".specify/integration.json": {
+      "component": "speckit",
+      "sha256": "efbb630a7162b82638fa3f73a97cd9e28857c2351faabedb625408100f882461"
+    },
+    ".specify/integrations/copilot.manifest.json": {
+      "component": "speckit",
+      "sha256": "c946b69abe8bcca324116dd5705304eaadbf95261726c1c6fa388c6dbb7c8810"
+    },
+    ".specify/integrations/speckit.manifest.json": {
+      "component": "speckit",
+      "sha256": "3f71f1c2f394eb5bdfbf187337da525ec80eb323235b58644abf188d041f3605"
+    },
+    ".specify/memory/.constitution-template.json": {
+      "component": "speckit",
+      "sha256": "8fc4b39294bae0c10d59547ad7d415b6f0e890d656cbf7171dd567f4e9054711"
+    },
+    ".specify/scripts/powershell/check-prerequisites.ps1": {
+      "component": "speckit",
+      "sha256": "f671563c76b1c01e9fd749da430c5cfad38ffe6e850db93371560ff78d2dcb6c"
+    },
+    ".specify/scripts/powershell/common.ps1": {
+      "component": "speckit",
+      "sha256": "3af0f7cb8a3c42418a5ed1c045c674d885e6e64b4e8204baba7dd5a3b38e6107"
+    },
+    ".specify/scripts/powershell/create-new-feature.ps1": {
+      "component": "speckit",
+      "sha256": "6c37e53b7fa1c796d49afaf970ea64a451d99fa896c2c77be8f979be50f227ed"
+    },
+    ".specify/scripts/powershell/resolve-template.ps1": {
+      "component": "speckit",
+      "sha256": "99a4589963895d07146ccc195873832c67141ee7d9dd4cb2c1e47bf39f933778"
+    },
+    ".specify/scripts/powershell/setup-plan.ps1": {
+      "component": "speckit",
+      "sha256": "dda307ce74dcdf7a72d438746e67df488a40f202cb9ec670031c1527908e9e12"
+    },
+    ".specify/scripts/powershell/setup-tasks.ps1": {
+      "component": "speckit",
+      "sha256": "de7a8fa4a7f004087773c1a48094143097e24530feaf6e50eb2b550a9672eb67"
+    },
+    ".specify/templates/checklist-template.md": {
+      "component": "speckit",
+      "sha256": "856532b3cb66171c662cc16f16b31a5856e4655a8666aad1e545bbfc7f603ca1"
+    },
+    ".specify/templates/constitution-template.md": {
+      "component": "speckit",
+      "sha256": "ce7549540fa45543cca797a150201d868e64495fdff39dc38246fb17bd4024b3"
+    },
+    ".specify/templates/overrides/checklist-template.md": {
+      "component": "speckit",
+      "sha256": "62f337ca758c3358f2a76258efccf83594e86c0187efb954261d87e5a0edbc13"
+    },
+    ".specify/templates/overrides/constitution-template.md": {
+      "component": "speckit",
+      "sha256": "7feb965539f5bfd0d2979dab5425b9a27b5abbb4031a23bd8179bcd6ee16d398"
+    },
+    ".specify/templates/overrides/plan-template.md": {
+      "component": "speckit",
+      "sha256": "1e0eff956261ccfd8638d3de7f645e1531766cfb40ab70971235dc11248bf84f"
+    },
+    ".specify/templates/overrides/spec-template.md": {
+      "component": "speckit",
+      "sha256": "016257712eef430543f05b67ec41aa65c8abbb2977350c342548604fe9e01906"
+    },
+    ".specify/templates/overrides/tasks-template.md": {
+      "component": "speckit",
+      "sha256": "70d00f1ea07389f1bb614e13f7bfe3be4cbc98f6b0b926acdf12c9722e27615b"
+    },
+    ".specify/templates/plan-template.md": {
+      "component": "speckit",
+      "sha256": "7e637502d41eccf0ca672496636365691fdca62ef37b27ec07fcb412dbfa90d4"
+    },
+    ".specify/templates/spec-template.md": {
+      "component": "speckit",
+      "sha256": "3945437fc35cd30a5b2bf7beea680337c3516826d3efa5a6b92c4a7eca1ba28e"
+    },
+    ".specify/templates/tasks-template.md": {
+      "component": "speckit",
+      "sha256": "fc29a233f6f5a27ca31f1aa46b596af6500c627441c6e62b2bc4a1d721525842"
+    },
+    ".specify/workflows/speckit/workflow.yml": {
+      "component": "speckit",
+      "sha256": "177761c5e7df28126beea043b5cb45aeaf7958090c022dc11ac71399422fcfbc"
+    },
+    ".specify/workflows/workflow-registry.json": {
+      "component": "speckit",
+      "sha256": "78190bfede2359abd2d9c00763bab100e6f9bb3ceeb70adcf6de9b34a4f2b421"
+    }
+  }
+}
