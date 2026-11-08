@@ -66,7 +66,7 @@ Entrada sugerida: contatos nos dois públicos, exemplos autorizados do processo,
 
 ## Histórico de revisão de 08/11/2026
 
-A primeira rodada tinha seis bloqueios, Angular como candidato e self-hosted fora do recorte inicial. Após solicitação e autorização explícitas do owner, o intake recebeu complemento humano, a pesquisa recebeu fontes locais e Apple, o conceito passou a incluir distribuição mobile e três ofertas comerciais e esta decisão recebeu o bloqueio B7. O veredito histórico e atual é `needs-clarification`; nenhuma aprovação comercial ou técnica além das diretrizes humanas foi inferida.
+A primeira rodada tinha seis bloqueios, Angular como candidato e self-hosted fora do recorte inicial. Após solicitação e autorização explícitas do owner, o intake recebeu complemento humano, a pesquisa recebeu fontes locais e Apple, o conceito passou a incluir distribuição mobile e três ofertas comerciais e esta decisão recebeu o bloqueio B7. O veredito dessa revisão foi `needs-clarification`; nenhuma aprovação comercial ou técnica além das diretrizes humanas foi inferida.
 
 ### Recomendações submetidas à revisão
 
