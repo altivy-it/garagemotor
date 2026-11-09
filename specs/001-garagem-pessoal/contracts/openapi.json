@@ -222,22 +222,11 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Códigos offline revelados uma vez ao usuário autenticado após reautenticação",
+                        "description": "Dez códigos offline revelados uma única vez após reautenticação; lote válido por 12 meses, sem cache ou log de conteúdo",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "object",
-                                    "required": [
-                                        "codes"
-                                    ],
-                                    "properties": {
-                                        "codes": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "string"
-                                            }
-                                        }
-                                    }
+                                    "$ref": "#/components/schemas/OfflineRecoveryBatch"
                                 }
                             }
                         }
@@ -262,6 +251,11 @@
             },
             "post": {
                 "operationId": "createGarage",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/OperationKey"
+                    }
+                ],
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -453,6 +447,11 @@
             ],
             "post": {
                 "operationId": "createInvite",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/OperationKey"
+                    }
+                ],
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -550,6 +549,11 @@
             },
             "post": {
                 "operationId": "createVehicle",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/OperationKey"
+                    }
+                ],
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -907,6 +911,11 @@
             },
             "post": {
                 "operationId": "createPlan",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/OperationKey"
+                    }
+                ],
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -980,6 +989,11 @@
             },
             "post": {
                 "operationId": "createCommitment",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/OperationKey"
+                    }
+                ],
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1243,6 +1257,11 @@
             ],
             "post": {
                 "operationId": "createExport",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/OperationKey"
+                    }
+                ],
                 "responses": {
                     "202": {
                         "$ref": "#/components/responses/Item"
@@ -1571,6 +1590,9 @@
                     },
                     "code": {
                         "type": "string",
+                        "minLength": 22,
+                        "maxLength": 22,
+                        "pattern": "^[A-Za-z0-9_-]{22}$",
                         "writeOnly": true
                     },
                     "newPassword": {
@@ -1578,6 +1600,37 @@
                         "minLength": 12,
                         "maxLength": 128,
                         "writeOnly": true
+                    }
+                }
+            },
+            "OfflineRecoveryBatch": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                    "batchId",
+                    "expiresUtc",
+                    "codes"
+                ],
+                "properties": {
+                    "batchId": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "expiresUtc": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "codes": {
+                        "type": "array",
+                        "minItems": 10,
+                        "maxItems": 10,
+                        "uniqueItems": true,
+                        "items": {
+                            "type": "string",
+                            "minLength": 22,
+                            "maxLength": 22,
+                            "pattern": "^[A-Za-z0-9_-]{22}$"
+                        }
                     }
                 }
             },
@@ -2066,43 +2119,7 @@
                 "maximum": 9999999
             },
             "Resource": {
-                "type": "object",
-                "required": [
-                    "id",
-                    "version",
-                    "kind",
-                    "attributes"
-                ],
-                "properties": {
-                    "id": {
-                        "type": "string",
-                        "format": "uuid"
-                    },
-                    "version": {
-                        "type": "integer",
-                        "minimum": 1
-                    },
-                    "kind": {
-                        "enum": [
-                            "garage",
-                            "member",
-                            "invite",
-                            "vehicle",
-                            "expense",
-                            "fuel",
-                            "maintenance",
-                            "plan",
-                            "commitment",
-                            "reminder",
-                            "attachment",
-                            "export"
-                        ]
-                    },
-                    "attributes": {
-                        "type": "object",
-                        "description": "DTO por kind definido em api.md e modelo de dados; sem propriedades internas de segurança"
-                    }
-                }
+                "$ref": "resources.schema.json#/$defs/Resource"
             },
             "Summary": {
                 "type": "object",

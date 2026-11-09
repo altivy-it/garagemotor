@@ -8,6 +8,8 @@
 **Revisor humano:** CEO da Altivy e owner do GarageMotor
 **Relacionado:** [spec](../../specs/001-garagem-pessoal/spec.md), [plano](../../specs/001-garagem-pessoal/plan.md) e [pesquisa](../../specs/001-garagem-pessoal/research.md)
 
+**Revisão:** 2026-11-09, incorporando os esclarecimentos sem aceite automático do datastore.
+
 ## Contexto
 
 O MVP familiar precisa de consistência entre despesas, medições, membros e comprovantes, isolamento entre garagens e recuperação self-hosted. Histórico e auditoria podem crescer; a constituição exige decisão explícita de datastore e particionamento antes da implementação.
@@ -57,7 +59,9 @@ Role runtime sem superuser/BYPASSRLS, membership por operação e contexto trans
 
 Despesas, histórico, recibos e auditoria particionados mensalmente; doze meses anteriores, três futuros e default seguro. Chaves/relacionamentos incluem a data da partição quando necessário. Não presumir constraint de unicidade global inexistente; idempotência combina lock transacional e busca entre partições.
 
-Retenção financeira até exclusão da garagem; auditoria 90 dias; pedidos de exclusão/backups seguem limite de 30 dias. APIs públicas versionadas e problem+json; mudanças de schema usam expand-contract e teste com dados reais.
+Retenção financeira até exclusão da garagem; auditoria90dias. Pedido fixa requestedUtc+30dias para dados ativos, arquivos e todos os backups sob gestão contendo a garagem, inclusive anteriores ao pedido ou criados durante processamento; novo snapshot não reinicia o prazo. APIs públicas versionadas e problem+json; mudanças de schema usam expand-contract e testes reais.
+
+BackupCatalog e DeletionAuthority integram o controle operacional da persistência proposta, sem datastore adicional. Autoridade atual não é sobrescrita pelo dump restaurado: deve demonstrar procedência, integridade e cobertura desde a data do snapshot até o ponto coordenado de promoção. Reaplicar todos os pedidos pertinentes, inclusive posteriores à cópia, antes de liberar dados; invalidar sessões/códigos antigos. Ausência de evidência, histórico incompleto ou autoridade desatualizada bloqueiam restauração. Operador mantém o registro independente, sem serviço SaaS obrigatório; cópias particulares externas não têm eliminação garantida pelo app.
 
 ## Observabilidade e operação
 
@@ -66,10 +70,10 @@ Métricas de latência, falhas de autorização, conflitos, jobs/partições, ar
 ## Validação
 
 - Integração real com duas garagens, role runtime e conexão reaproveitada, sem vazamento após SET LOCAL.
-- Precisão de valores/consumo, criação concorrente e repetição após rollover sem duplicação.
+- Precisão de valores/consumo e repetição/concorrência de toda criação de domínio, incluindo garagem com escopo de ator antes de existir garageId, sem duplicação após rollover.
 - Roteamento dentro/fora da janela, índices por partição, migração do default e retenção segura.
-- Falhas entre disco e banco, arquivo parcialmente gravado e restauração em ambiente limpo.
-- Carga SC-005: dez usuários, 10.000 registros, P95 até dois segundos na matriz do plano.
+- Falhas entre disco e banco, autoridade perdida/desatualizada e restauração isolada que reaplica pedidos posteriores ao snapshot; prazo de exclusão respeitado em todas as cópias gerenciadas, sem afetar outras garagens.
+- Carga SC-005: dez usuários, 10.000 despesas/20garagens/60veículos/12meses; aquecimento2min/medição10min, 80%histórico/20%totais e P95<=2s por tipo, sem erros inesperados na matriz do plano.
 
 Nenhuma dessas validações foi executada nesta fase de desenho.
 

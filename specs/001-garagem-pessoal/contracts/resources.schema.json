@@ -1,0 +1,1055 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "Recursos públicos GarageMotor v1",
+    "description": "Schemas de resposta propostos; campos internos, credenciais e dados privados de operação não são permitidos.",
+    "$defs": {
+        "Uuid": {
+            "type": "string",
+            "format": "uuid"
+        },
+        "NullableUuid": {
+            "type": [
+                "string",
+                "null"
+            ],
+            "format": "uuid"
+        },
+        "Date": {
+            "type": "string",
+            "format": "date"
+        },
+        "NullableDate": {
+            "type": [
+                "string",
+                "null"
+            ],
+            "format": "date"
+        },
+        "NullableOdometer": {
+            "type": [
+                "integer",
+                "null"
+            ],
+            "minimum": 0,
+            "maximum": 9999999
+        },
+        "Money": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 999999999999
+        },
+        "NullableMoney": {
+            "type": [
+                "integer",
+                "null"
+            ],
+            "minimum": 1,
+            "maximum": 999999999999
+        },
+        "GarageAttributes": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "name",
+                "timezone",
+                "state",
+                "ownerUserId"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 100
+                },
+                "timezone": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 100
+                },
+                "state": {
+                    "enum": [
+                        "active",
+                        "deleting"
+                    ]
+                },
+                "ownerUserId": {
+                    "$ref": "#/$defs/Uuid"
+                }
+            }
+        },
+        "MemberAttributes": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "userId",
+                "displayName",
+                "role",
+                "state"
+            ],
+            "properties": {
+                "userId": {
+                    "$ref": "#/$defs/Uuid"
+                },
+                "displayName": {
+                    "type": "string",
+                    "maxLength": 100
+                },
+                "role": {
+                    "enum": [
+                        "owner",
+                        "editor",
+                        "reader"
+                    ]
+                },
+                "state": {
+                    "enum": [
+                        "active",
+                        "revoked"
+                    ]
+                }
+            }
+        },
+        "InviteAttributes": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "email",
+                "role",
+                "state",
+                "expiresUtc"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "format": "email",
+                    "maxLength": 254
+                },
+                "role": {
+                    "enum": [
+                        "editor",
+                        "reader"
+                    ]
+                },
+                "state": {
+                    "enum": [
+                        "pending",
+                        "accepted",
+                        "revoked",
+                        "expired"
+                    ]
+                },
+                "expiresUtc": {
+                    "type": "string",
+                    "format": "date-time"
+                }
+            }
+        },
+        "VehicleAttributes": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "label",
+                "kind",
+                "brand",
+                "model",
+                "year",
+                "fuel",
+                "plate",
+                "renavam",
+                "chassis",
+                "state"
+            ],
+            "properties": {
+                "label": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 100
+                },
+                "kind": {
+                    "enum": [
+                        "car",
+                        "motorcycle"
+                    ]
+                },
+                "brand": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 100
+                },
+                "model": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 100
+                },
+                "year": {
+                    "type": "integer",
+                    "minimum": 1900
+                },
+                "fuel": {
+                    "enum": [
+                        "gasoline",
+                        "ethanol",
+                        "diesel",
+                        "flex",
+                        "electric",
+                        "other"
+                    ]
+                },
+                "plate": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "maxLength": 10
+                },
+                "renavam": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "pattern": "^[0-9]{11}$"
+                },
+                "chassis": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "maxLength": 17
+                },
+                "state": {
+                    "enum": [
+                        "active",
+                        "archived"
+                    ]
+                }
+            }
+        },
+        "ExpenseAttributes": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "vehicleId",
+                "spentOn",
+                "category",
+                "description",
+                "amountMinor",
+                "currency",
+                "origin",
+                "originId",
+                "state"
+            ],
+            "properties": {
+                "vehicleId": {
+                    "$ref": "#/$defs/Uuid"
+                },
+                "spentOn": {
+                    "$ref": "#/$defs/Date"
+                },
+                "category": {
+                    "enum": [
+                        "fuel",
+                        "maintenance",
+                        "insurance",
+                        "tax",
+                        "other"
+                    ]
+                },
+                "description": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 500
+                },
+                "amountMinor": {
+                    "$ref": "#/$defs/Money"
+                },
+                "currency": {
+                    "const": "BRL"
+                },
+                "origin": {
+                    "enum": [
+                        "manual",
+                        "fuel",
+                        "maintenance"
+                    ]
+                },
+                "originId": {
+                    "$ref": "#/$defs/NullableUuid"
+                },
+                "state": {
+                    "enum": [
+                        "active",
+                        "voided"
+                    ]
+                }
+            }
+        },
+        "FuelAttributes": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "vehicleId",
+                "occurredOn",
+                "odometerKm",
+                "volumeMl",
+                "amountMinor",
+                "fuel",
+                "fullTank",
+                "station",
+                "historicalReason",
+                "expenseId",
+                "expenseDate",
+                "state"
+            ],
+            "properties": {
+                "vehicleId": {
+                    "$ref": "#/$defs/Uuid"
+                },
+                "occurredOn": {
+                    "$ref": "#/$defs/Date"
+                },
+                "odometerKm": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9999999
+                },
+                "volumeMl": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 1000000
+                },
+                "amountMinor": {
+                    "$ref": "#/$defs/Money"
+                },
+                "fuel": {
+                    "enum": [
+                        "gasoline",
+                        "ethanol",
+                        "diesel",
+                        "other"
+                    ]
+                },
+                "fullTank": {
+                    "type": "boolean"
+                },
+                "station": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "maxLength": 200
+                },
+                "historicalReason": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "maxLength": 500
+                },
+                "expenseId": {
+                    "$ref": "#/$defs/Uuid"
+                },
+                "expenseDate": {
+                    "$ref": "#/$defs/Date"
+                },
+                "state": {
+                    "enum": [
+                        "active",
+                        "voided"
+                    ]
+                }
+            }
+        },
+        "MaintenanceAttributes": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "vehicleId",
+                "kind",
+                "description",
+                "completedOn",
+                "odometerKm",
+                "amountMinor",
+                "planId",
+                "expenseId",
+                "expenseDate"
+            ],
+            "properties": {
+                "vehicleId": {
+                    "$ref": "#/$defs/Uuid"
+                },
+                "kind": {
+                    "enum": [
+                        "preventive",
+                        "corrective"
+                    ]
+                },
+                "description": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 500
+                },
+                "completedOn": {
+                    "$ref": "#/$defs/Date"
+                },
+                "odometerKm": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9999999
+                },
+                "amountMinor": {
+                    "$ref": "#/$defs/NullableMoney"
+                },
+                "planId": {
+                    "$ref": "#/$defs/NullableUuid"
+                },
+                "expenseId": {
+                    "$ref": "#/$defs/NullableUuid"
+                },
+                "expenseDate": {
+                    "$ref": "#/$defs/NullableDate"
+                }
+            }
+        },
+        "PlanAttributes": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "vehicleId",
+                "title",
+                "dueOn",
+                "dueKm",
+                "intervalMonths",
+                "intervalKm",
+                "state"
+            ],
+            "properties": {
+                "vehicleId": {
+                    "$ref": "#/$defs/Uuid"
+                },
+                "title": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200
+                },
+                "dueOn": {
+                    "$ref": "#/$defs/NullableDate"
+                },
+                "dueKm": {
+                    "$ref": "#/$defs/NullableOdometer"
+                },
+                "intervalMonths": {
+                    "type": [
+                        "integer",
+                        "null"
+                    ],
+                    "minimum": 1,
+                    "maximum": 120
+                },
+                "intervalKm": {
+                    "type": [
+                        "integer",
+                        "null"
+                    ],
+                    "minimum": 1,
+                    "maximum": 1000000
+                },
+                "state": {
+                    "enum": [
+                        "active",
+                        "paused",
+                        "completed"
+                    ]
+                }
+            },
+            "anyOf": [
+                {
+                    "properties": {
+                        "dueOn": {
+                            "type": "string"
+                        }
+                    }
+                },
+                {
+                    "properties": {
+                        "dueKm": {
+                            "type": "integer"
+                        }
+                    }
+                }
+            ]
+        },
+        "CommitmentAttributes": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "vehicleId",
+                "title",
+                "kind",
+                "dueOn",
+                "dueKm",
+                "intervalMonths",
+                "intervalKm",
+                "completedOn",
+                "completedKm",
+                "state"
+            ],
+            "properties": {
+                "vehicleId": {
+                    "$ref": "#/$defs/Uuid"
+                },
+                "title": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200
+                },
+                "kind": {
+                    "enum": [
+                        "insurance",
+                        "licensing",
+                        "inspection",
+                        "other"
+                    ]
+                },
+                "dueOn": {
+                    "$ref": "#/$defs/NullableDate"
+                },
+                "dueKm": {
+                    "$ref": "#/$defs/NullableOdometer"
+                },
+                "intervalMonths": {
+                    "type": [
+                        "integer",
+                        "null"
+                    ],
+                    "minimum": 1,
+                    "maximum": 120
+                },
+                "intervalKm": {
+                    "type": [
+                        "integer",
+                        "null"
+                    ],
+                    "minimum": 1,
+                    "maximum": 1000000
+                },
+                "completedOn": {
+                    "$ref": "#/$defs/NullableDate"
+                },
+                "completedKm": {
+                    "$ref": "#/$defs/NullableOdometer"
+                },
+                "state": {
+                    "enum": [
+                        "active",
+                        "completed",
+                        "cancelled"
+                    ]
+                }
+            },
+            "anyOf": [
+                {
+                    "properties": {
+                        "dueOn": {
+                            "type": "string"
+                        }
+                    }
+                },
+                {
+                    "properties": {
+                        "dueKm": {
+                            "type": "integer"
+                        }
+                    }
+                }
+            ]
+        },
+        "ReminderAttributes": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "referenceId",
+                "referenceKind",
+                "vehicleId",
+                "title",
+                "dueOn",
+                "dueKm",
+                "lastReadingOn",
+                "lastReadingKm",
+                "state"
+            ],
+            "properties": {
+                "referenceId": {
+                    "$ref": "#/$defs/Uuid"
+                },
+                "referenceKind": {
+                    "enum": [
+                        "plan",
+                        "commitment"
+                    ]
+                },
+                "vehicleId": {
+                    "$ref": "#/$defs/Uuid"
+                },
+                "title": {
+                    "type": "string",
+                    "maxLength": 200
+                },
+                "dueOn": {
+                    "$ref": "#/$defs/NullableDate"
+                },
+                "dueKm": {
+                    "$ref": "#/$defs/NullableOdometer"
+                },
+                "lastReadingOn": {
+                    "$ref": "#/$defs/NullableDate"
+                },
+                "lastReadingKm": {
+                    "$ref": "#/$defs/NullableOdometer"
+                },
+                "state": {
+                    "enum": [
+                        "upcoming",
+                        "due",
+                        "completed",
+                        "unknown"
+                    ]
+                }
+            }
+        },
+        "AttachmentAttributes": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "parentKind",
+                "parentId",
+                "parentDate",
+                "originalName",
+                "mediaType",
+                "sizeBytes",
+                "sha256",
+                "state"
+            ],
+            "properties": {
+                "parentKind": {
+                    "enum": [
+                        "expense",
+                        "maintenance"
+                    ]
+                },
+                "parentId": {
+                    "$ref": "#/$defs/Uuid"
+                },
+                "parentDate": {
+                    "$ref": "#/$defs/NullableDate"
+                },
+                "originalName": {
+                    "type": "string",
+                    "maxLength": 255
+                },
+                "mediaType": {
+                    "enum": [
+                        "application/pdf",
+                        "image/jpeg",
+                        "image/png"
+                    ]
+                },
+                "sizeBytes": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 10485760
+                },
+                "sha256": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "pattern": "^[a-f0-9]{64}$"
+                },
+                "state": {
+                    "enum": [
+                        "pending",
+                        "ready",
+                        "deleting"
+                    ]
+                }
+            }
+        },
+        "ExportAttributes": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "state",
+                "createdUtc",
+                "expiresUtc",
+                "sha256"
+            ],
+            "properties": {
+                "state": {
+                    "enum": [
+                        "pending",
+                        "running",
+                        "ready",
+                        "failed",
+                        "expired"
+                    ]
+                },
+                "createdUtc": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "expiresUtc": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "sha256": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "pattern": "^[a-f0-9]{64}$"
+                }
+            }
+        },
+        "GarageResource": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "id",
+                "version",
+                "kind",
+                "attributes"
+            ],
+            "properties": {
+                "id": {
+                    "$ref": "#/$defs/Uuid"
+                },
+                "version": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "kind": {
+                    "const": "garage"
+                },
+                "attributes": {
+                    "$ref": "#/$defs/GarageAttributes"
+                }
+            }
+        },
+        "MemberResource": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "id",
+                "version",
+                "kind",
+                "attributes"
+            ],
+            "properties": {
+                "id": {
+                    "$ref": "#/$defs/Uuid"
+                },
+                "version": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "kind": {
+                    "const": "member"
+                },
+                "attributes": {
+                    "$ref": "#/$defs/MemberAttributes"
+                }
+            }
+        },
+        "InviteResource": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "id",
+                "version",
+                "kind",
+                "attributes"
+            ],
+            "properties": {
+                "id": {
+                    "$ref": "#/$defs/Uuid"
+                },
+                "version": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "kind": {
+                    "const": "invite"
+                },
+                "attributes": {
+                    "$ref": "#/$defs/InviteAttributes"
+                }
+            }
+        },
+        "VehicleResource": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "id",
+                "version",
+                "kind",
+                "attributes"
+            ],
+            "properties": {
+                "id": {
+                    "$ref": "#/$defs/Uuid"
+                },
+                "version": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "kind": {
+                    "const": "vehicle"
+                },
+                "attributes": {
+                    "$ref": "#/$defs/VehicleAttributes"
+                }
+            }
+        },
+        "ExpenseResource": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "id",
+                "version",
+                "kind",
+                "attributes"
+            ],
+            "properties": {
+                "id": {
+                    "$ref": "#/$defs/Uuid"
+                },
+                "version": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "kind": {
+                    "const": "expense"
+                },
+                "attributes": {
+                    "$ref": "#/$defs/ExpenseAttributes"
+                }
+            }
+        },
+        "FuelResource": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "id",
+                "version",
+                "kind",
+                "attributes"
+            ],
+            "properties": {
+                "id": {
+                    "$ref": "#/$defs/Uuid"
+                },
+                "version": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "kind": {
+                    "const": "fuel"
+                },
+                "attributes": {
+                    "$ref": "#/$defs/FuelAttributes"
+                }
+            }
+        },
+        "MaintenanceResource": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "id",
+                "version",
+                "kind",
+                "attributes"
+            ],
+            "properties": {
+                "id": {
+                    "$ref": "#/$defs/Uuid"
+                },
+                "version": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "kind": {
+                    "const": "maintenance"
+                },
+                "attributes": {
+                    "$ref": "#/$defs/MaintenanceAttributes"
+                }
+            }
+        },
+        "PlanResource": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "id",
+                "version",
+                "kind",
+                "attributes"
+            ],
+            "properties": {
+                "id": {
+                    "$ref": "#/$defs/Uuid"
+                },
+                "version": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "kind": {
+                    "const": "plan"
+                },
+                "attributes": {
+                    "$ref": "#/$defs/PlanAttributes"
+                }
+            }
+        },
+        "CommitmentResource": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "id",
+                "version",
+                "kind",
+                "attributes"
+            ],
+            "properties": {
+                "id": {
+                    "$ref": "#/$defs/Uuid"
+                },
+                "version": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "kind": {
+                    "const": "commitment"
+                },
+                "attributes": {
+                    "$ref": "#/$defs/CommitmentAttributes"
+                }
+            }
+        },
+        "ReminderResource": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "id",
+                "version",
+                "kind",
+                "attributes"
+            ],
+            "properties": {
+                "id": {
+                    "$ref": "#/$defs/Uuid"
+                },
+                "version": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "kind": {
+                    "const": "reminder"
+                },
+                "attributes": {
+                    "$ref": "#/$defs/ReminderAttributes"
+                }
+            }
+        },
+        "AttachmentResource": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "id",
+                "version",
+                "kind",
+                "attributes"
+            ],
+            "properties": {
+                "id": {
+                    "$ref": "#/$defs/Uuid"
+                },
+                "version": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "kind": {
+                    "const": "attachment"
+                },
+                "attributes": {
+                    "$ref": "#/$defs/AttachmentAttributes"
+                }
+            }
+        },
+        "ExportResource": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "id",
+                "version",
+                "kind",
+                "attributes"
+            ],
+            "properties": {
+                "id": {
+                    "$ref": "#/$defs/Uuid"
+                },
+                "version": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "kind": {
+                    "const": "export"
+                },
+                "attributes": {
+                    "$ref": "#/$defs/ExportAttributes"
+                }
+            }
+        },
+        "Resource": {
+            "oneOf": [
+                {
+                    "$ref": "#/$defs/GarageResource"
+                },
+                {
+                    "$ref": "#/$defs/MemberResource"
+                },
+                {
+                    "$ref": "#/$defs/InviteResource"
+                },
+                {
+                    "$ref": "#/$defs/VehicleResource"
+                },
+                {
+                    "$ref": "#/$defs/ExpenseResource"
+                },
+                {
+                    "$ref": "#/$defs/FuelResource"
+                },
+                {
+                    "$ref": "#/$defs/MaintenanceResource"
+                },
+                {
+                    "$ref": "#/$defs/PlanResource"
+                },
+                {
+                    "$ref": "#/$defs/CommitmentResource"
+                },
+                {
+                    "$ref": "#/$defs/ReminderResource"
+                },
+                {
+                    "$ref": "#/$defs/AttachmentResource"
+                },
+                {
+                    "$ref": "#/$defs/ExportResource"
+                }
+            ]
+        }
+    },
+    "$ref": "#/$defs/Resource"
+}

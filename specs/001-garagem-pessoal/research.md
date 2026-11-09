@@ -139,3 +139,40 @@ Tags são referências de versão; blobs vinculam o texto conferido. Não confun
 Proxy nginx 1.30.6 da linha estável, licença BSD-2-Clause conferida em `nginx/nginx`, ref `release-1.30.6`, LICENSE blob `4366554533723cee5e155e317b0eb014867c1f0a`. Prettier 3.9.10 estável MIT, LICENSE blob `5767e34d30ab78796220f9492726dd2f677d4166` e package.json blob `9646b6d624fb8bbf1be2e068fa06528b45a6fe4e`, engine Node >=22 satisfeito por 24.22.2. Não confundir nginx mainline 1.31 com a linha estável escolhida.
 
 O gate da Fase 0 fica liberado para produzir desenho. Antes de implementar: revisão humana da spec/plano/tarefas, aceite do ADR de datastore, auditoria de pacotes e imagens, avisos de terceiros, aceite humano de termos Android quando aplicável e threat model. Medidas de desempenho, backup, acessibilidade e Android permanecem planejadas, não executadas. Retomar pesquisa se a resolução real de pacotes contradizer a matriz.
+
+## Revisão após esclarecimentos — 2026-11-09
+
+Pesquisa delegada somente leitura confrontou as quatro decisões da spec com os artefatos existentes. Somente recomendações compatíveis com a spec e a constituição foram incorporadas; qualquer sugestão de permitir retorno de dados excluídos por serem anteriores ao pedido foi rejeitada. Nenhuma dependência nova, consulta Web, troca de stack ou implementação nesta revisão.
+
+### Decisão — idempotência de domínio
+
+- **Escolha**: todas as dez criações de FR-013 recebem chave UUID, contexto/ator e hash de operação+conteúdo; criar garagem usa escopo do ator antes de existir a garagem e vincula o recibo na mesma transação. Replay reautoriza acesso e preserva resultado público, sem códigos/tokens em recibos.
+- **Justificativa**: Q1 da Session2026-11-09 resolveu a diferença de escopo; teste inclui garagens, veículos, convites, planos e exportações, não só financeiro.
+- **Alternativas rejeitadas**: apenas financeiro; deduplicação por conteúdo sem contexto/ator; lookup do recibo sem revalidar acesso.
+
+### Decisão — recuperação de conta
+
+- **Escolha**: APIs do framework para RNG128bits/base64url22caracteres/hash/tempo constante; SMTP15min, dez códigos offline12meses, lote revogável, cinco falhas em janela móvel15min e 100 falhas/origem15min como parâmetro operacional definido nesta revisão. Nenhuma criptografia própria.
+- **Justificativa**: Q2 e FR-001; teto adicional por origem reduz abuso sem a restrição de cinco compartilhada entre usuários em NAT. Valores de validade/revogação são humanos; teto por origem é decisão técnica revisável sem remover o limite por conta.
+- **Alternativas rejeitadas**: código offline sem prazo, valores plaintext persistidos, reset de falhas em nova solicitação e bloqueio permanente da conta.
+
+### Decisão — exclusão e restauração
+
+- **Escolha**: catálogo local de backups e autoridade operacional mínima na persistência já proposta, separados do snapshot de domínio que será restaurado; deadline=requestedUtc+30dias para todas as cópias gerenciadas pertinentes. Estado atual autenticado ou artefato independente cuja procedência/integridade/cobertura/atualidade seja comprovável pelo operador; promoção coordenada pela sequência.
+- **Justificativa**: Q3, FR-023/FR-024 e SC-006; hash de arquivo não comprova atualidade, e histórico incompleto não demonstra ausência de pedido. Sem evidência atual válida, falhar fechado. Operador self-hosted é autoridade confiável e não exige SaaS.
+- **Alternativas rejeitadas**: usar somente a tabela antiga do dump, permitir backup anterior reintroduzir garagem excluída, reiniciar prazo pela criação de cópia e garantir eliminação de cópias particulares externas.
+- **Limites**: não adicionar storage distribuído; cópias independentes de controle precisam de procedimento operacional e teste real. Não confundir esse desenho com prova de conformidade jurídica ou execução de eliminação.
+
+### Decisão — respostas e teste de desempenho
+
+- **Escolha**: schemas fechados de envelope/atributos para os 12 tipos públicos, nullable explícito e mapeamento por operationId; lote offline separado. Workload determinístico de 10.000 despesas/20garagens/60veículos/12meses, dez usuários, warmup2min/medição10min, 80%histórico/20%totais e P95<=2s por tipo, sem erros inesperados.
+- **Justificativa**: schemas eliminam atributos arbitrários; Q4 define critério repetível, sem média global ocultando endpoint lento. Tests de contrato e carga serão implementados após revisão de tarefas.
+- **Alternativas rejeitadas**: DTO de atributos livre, cenário de carga escolhido a cada execução e usar somente média/P95 agregado.
+
+### Decisão — preparação de manifests e lockfiles
+
+- **Escolha**: inventário inicial/pins, manifests mínimos sem execução de dependências, resolução isolada de metadados/lockfiles, auditoria transitiva e só depois restore/install/build autorizado. Lockfiles NuGet por csproj.
+- **Justificativa**: corrigir a dependência entre T003 e T005 sem reduzir a auditoria ou executar targets/scripts de pacotes antes do gate.
+- **Alternativas rejeitadas**: exigir lock final sem manifests existentes ou liberar scripts de dependências para resolver essa ordem.
+
+Fase0 concluída para revisar o desenho, sem pendências de escolha de stack. Plano/modelo/contratos/quickstart são os artefatos desta revisão; tasks anteriores continuam pendentes de sincronização e nova análise. Gate de implementação permanece humano.

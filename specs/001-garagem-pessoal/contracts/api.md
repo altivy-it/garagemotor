@@ -4,11 +4,15 @@
 **Estado**: contrato proposto da Fase 1, sem endpoints implementados.
 **Contrato de máquina**: [openapi.json](openapi.json). **Tipos e limites**: [modelo de dados](../data-model.md).
 
+**Revisão**: 2026-11-09, alinhada à sessão de esclarecimento; sem endpoints implementados.
+
 ## Protocolo e respostas
 
 Base `/api/v1`; JSON camelCase, UUID, datas ISO, instantes UTC, dinheiro em centavos BRL e volume em mililitros. Indicadores decimais são strings com ponto, apresentados em pt-BR pelo cliente. API não aceita formato de moeda localizado como número.
 
-`Resource` tem id, version, kind e attributes. Campos attributes são os campos públicos camelCase da entidade correspondente do modelo: recursos vehicle/expense/fuel/maintenance/plan/commitment incluem dados de entrada e estado/vínculos públicos; garage inclui nome/fuso/estado; member inclui identidade pública/papel/estado; invite inclui destinatário/papel/expiração/estado; attachment inclui nome original, tipo, tamanho, hash e vínculo; export inclui estado/expiração e nunca caminho real. Reminder é projeção de referência, título, limite, última leitura e estado, não entidade de predição. Nenhum DTO contém hash de senha, token de sessão, código de recuperação, storageKey ou credencial de serviço.
+`Resource` tem id, version, kind e attributes fechados pelos [schemas públicos](resources.schema.json), com `oneOf` por kind e `additionalProperties: false` nos envelopes e atributos. Nenhum recurso de domínio contém hashes de senha/token/código, códigos de recuperação, storageKey ou credenciais. Campos opcionais de saída definidos como nullable são presentes com null, não objetos arbitrários. Session e OfflineRecoveryBatch são respostas excepcionais de autenticação, não Resource ou dados exportáveis; seus valores secretos não são logados/cacheados.
+
+Mapeamento obrigatório por operação: garagens/ownership -> GarageResource; members -> MemberResource; invites/acceptInvite -> InviteResource; vehicles -> VehicleResource; expenses -> ExpenseResource; fuel-records -> FuelResource; maintenance -> MaintenanceResource; plans -> PlanResource; commitments/completion -> CommitmentResource; reminders -> ReminderResource; uploads -> AttachmentResource; exports/status -> ExportResource. Coleções usam o mesmo tipo nos items; download retorna binário. Testes de contrato devem rejeitar kind trocado, campo extra/privado ou tipo incorreto, mesmo que o union aceite outro tipo em operação diferente. A API deve declarar o tipo específico ao publicar sua descrição, sem relaxar os schemas do desenho.
 
 Coleções usam items/nextCursor e limite padrão 50, máximo 100. Ordenação é determinística por data/id; cursor opaco é validado e não permite navegar para outra garagem. Filtros temporais incluem as duas datas; `from > to` é erro de entrada. GET nunca exige If-Match; PUT substitui o conjunto de campos editáveis da entidade e exige versão.
 
@@ -16,7 +20,11 @@ Falhas usam application/problem+json: 400 entrada, 401 sessão, 403 papel insufi
 
 ## Identidade, web e Android
 
-Contas locais, PasswordHasher/Identity e rate limiting do framework; sem algoritmo criptográfico próprio. Cadastro/solicitação de recuperação devolvem resposta genérica. Recuperação exige código de uso único; acesso offline usa códigos já entregues ao usuário após reautenticação, não bypass administrativo público. Falha e sucesso da confirmação têm mensagem genérica; senha só muda após validação.
+Contas locais, PasswordHasher/Identity e primitivas criptográficas/rate limiting do framework; sem algoritmo próprio. Cadastro/solicitação de recuperação devolvem resposta genérica. Códigos têm pelo menos 128 bits (16 bytes aleatórios codificados em base64url, 22 caracteres), somente hash persistido e comparação de tempo constante. SMTP expira em 15 minutos; lote offline tem dez códigos únicos e expira em 12 meses. Entregar OfflineRecoveryBatch uma única vez após reautenticação, com expiresUtc explícito, Cache-Control: no-store e sem logs de conteúdo.
+
+Renovar invalida o lote anterior; código SMTP novo invalida o SMTP anterior sem destruir códigos offline válidos. Sucesso de recuperação troca senha, consome o código e revoga todas as sessões e demais códigos na mesma transação. Expirado, consumido, revogado ou conta inexistente são recusados genericamente; senha não muda em falha. A resposta 204 confirma alteração válida; 422 recusa genericamente e 429 limita taxa, sem detalhar se a conta existe.
+
+Contar atomicamente até cinco falhas por identidade em janela móvel de 15 minutos, inclusive sob concorrência; não criar bloqueio permanente. Teto operacional por origem: 100 falhas em 15 minutos, conforme decisão técnica documentada no modelo, com identidade/origem protegidas e sem IP/email plaintext nos logs. Não resetar falhas por uma nova solicitação de recuperação. Limites aplicam-se a conta inexistente e códigos SMTP/offline, sem bypass público ou dependência de SaaS.
 
 Web usa cookie `__Host-gm-session`, Secure, HttpOnly, Path=/ e SameSite restritivo; token de sessão não é devolvido ao JavaScript web. Antiforgery do framework em mutações por cookie com X-CSRF-Token, origem validada e CORS restrito; endpoint csrf fornece o requestToken correspondente. Persistência de chaves do framework usa provider padrão com proteção por credencial externa e material protegido em volume privado, nunca segredo plaintext no repositório.
 
@@ -28,7 +36,9 @@ Escolher instância própria altera somente destino do cliente, não faz o servi
 
 Owner gerencia membros, propriedade, exclusão e exportações; editor cria/corrige dados financeiros, planos e comprovantes; reader apenas consulta. Nenhuma garagem atravessa essas fronteiras. Estados active/archived/deleting são verificados antes de escrita.
 
-Despesas, abastecimentos, conclusão de compromissos e uploads usam Idempotency-Key UUID. Chave/corpo idênticos retornam a operação anterior, após reautorizar o ator. Chave reutilizada com conteúdo diferente retorna 409. Recibos duram enquanto existir a garagem; partições não justificam perder idempotência após rollover.
+Criações de garagem, veículo, convite, despesa, abastecimento, manutenção, plano, compromisso, comprovante e exportação exigem Idempotency-Key UUID; conclusão de compromisso também mantém a chave. Cadastro, sessão e lote de recuperação têm regras próprias, não esse mecanismo de domínio. Chave, ator e contexto identificam a operação; operationId e conteúdo normalizado entram no hash. Chave reutilizada com conteúdo ou operação diferente retorna 409 antes de mutar. Recibo e recurso são commitados atomicamente, e replay preserva status/id/version originais após reautorizar acesso.
+
+Criar garagem usa contexto actor/actorId antes de existir garageId; o recibo passa a apontar para a garagem criada e membership é revalidada em todo replay. Outras criações usam contexto garage/garageId. Não recuperar resposta pelo hash sem contexto/ator. Recibos duram enquanto existir a garagem; partições não justificam perder idempotência após rollover. Recibo não armazena tokens de convite ou autenticação; entrega de convite não se duplica com repetição da criação.
 
 ETag é versão inteira entre aspas; If-Match ausente na mutação exigida é 400, divergente é 409. Anular despesa/abastecimento é tombstone financeiro, não remoção física. Registro, vínculo de despesa e auditoria alteram juntos. Custo de manutenção/abastecimento não entra duas vezes nos totais.
 
@@ -38,11 +48,15 @@ Multipart: arquivo PDF/JPEG/PNG de até 10 MiB, até cinco por despesa/manutenç
 
 Download exige sessão e vínculo autorizado em cada acesso, attachment, nosniff e nome codificado pelo framework. Verificação de tipo não é promessa de antivírus ou segurança ao abrir arquivo no dispositivo. Auditoria/logs não registram conteúdo. Remoção marca deleting e coleta após checar referências.
 
-Exportação familiar é job interno e inclui dados e arquivos autorizados da garagem com manifesto/checksums; não inclui identidade secreta, credenciais, chaves, códigos ou tokens. Expira em 24 horas; download exige owner ainda ativo. Backup operacional não é endpoint remoto que executa shell: ocorre por ferramenta de administração em containers, conforme quickstart.
+Exportação familiar é job interno e inclui dados e arquivos autorizados da garagem com manifesto/checksums; não inclui identidade secreta, credenciais, chaves, códigos, tokens ou catálogo operacional. Expira em 24 horas; download exige owner ainda ativo. Backup operacional não é endpoint que executa shell: ocorre por ferramenta de administração em containers, conforme quickstart.
+
+Pedido de exclusão define deadline=requestedUtc+30 dias para dados ativos, comprovantes e cada backup gerenciado contendo a garagem, inclusive cópias anteriores ao pedido ou criadas durante processamento. Catálogo aplica a data-limite mais restritiva e registra remoção real; nova cópia não reinicia prazo. Operador é responsável por suas cópias; não prometer eliminação de cópias particulares externas à gestão.
 
 ## Disponibilidade e compatibilidade
 
 Durante backup/restore/manutenção, bloquear novas escritas com 503 e Retry-After, drenar gravações em curso e não confirmar operação incompleta. Restauração exige destino vazio. Dados e direitos do código não são bloqueados por término de serviço de suporte.
+
+Restauração exige estado atual e verificável de exclusões independente do snapshot. Consultar autoridade atual autenticada ou artefato operacional separado cuja atualidade/procedência seja verificável pelo operador; checksum de arquivo antigo não é essa evidência. Reaplicar todos os pedidos pertinentes, inclusive posteriores ao backup, remover dados/arquivos/recibos antes da promoção e impedir reativação de sessões/códigos antigos. Autoridade ausente, perdida, corrompida ou não atual bloqueia a promoção; sem serviço SaaS obrigatório. Não sobrescrever catálogo/autoridade de controle com tabelas antigas do dump.
 
 Mudanças de API/schema seguem expand-contract; cliente incompatível não escreve. Android API 35/36 e navegadores Chromium/Firefox/WebKit serão a matriz inicial testada, sem promessa de toda versão antiga. Sem escrita offline, push, IA ou iOS nesta feature.
 
