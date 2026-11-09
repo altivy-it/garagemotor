@@ -59,6 +59,16 @@ bibliotecas copyleft, proprietárias ou source-available nem libera dependência
 bloqueadas. Direitos de reutilização do DS precisam de comprovação; referências visuais
 não equivalem a uma biblioteca Angular licenciada e estável.
 
+Por decisão humana explícita de 2026-11-08, OpenJDK e ferramentas oficiais Android
+podem compor exclusivamente o ambiente de build e testes em containers, mesmo com
+licenças ou termos distintos de licença permissiva. Essa exceção não alcança bibliotecas
+do app, plugins, runtime distribuído ou serviços comerciais. Antes do uso, devem ser
+verificados versão estável mantida, origem, licença/termos, integridade e imagem fixada;
+aceites contratuais necessários permanecem humanos, nunca automáticos por agente.
+Essas ferramentas não devem ser distribuídas com o app. A exceção permite a cadeia
+Android sem enfraquecer a regra do código e não autoriza execução fora de containers,
+instalação, publicação ou a cadeia iOS/macOS.
+
 ### IV. Segurança, confidencialidade e integridade
 
 Secrets devem permanecer exclusivamente no local externo previsto nas
@@ -119,6 +129,11 @@ Esta é a adoção inicial `1.0.0`, ratificada em 2026-11-08 pelo humano identif
 Somente princípios existentes ou explicitamente acordados foram incorporados. A escolha
 da licença não aprova preço, contrato, release, implementação ou a avaliação inteira.
 
+Emenda `1.1.0`, autorizada pelo mesmo humano em 2026-11-08: "Sim, formalizar a exceção
+restrita na constituição antes de fechar o plano", para ferramentas de build/testes
+Android. O incremento MINOR registra a ampliação; não altera a licença do código próprio
+ou a autorização necessária para implementar e publicar.
+
 A constituição registra princípios duradouros; instruções operacionais registram
 procedimentos; specs e tarefas registram mudanças; ADRs registram decisões justificadas.
 Nenhum agente pode alterar aprovação humana ou status histórico sem decisão referenciada.
@@ -135,4 +150,4 @@ tarefa Spec Kit separada. Até essa tarefa, a decisão constitucional de AGPL pa
 próprio é explícita, mas não se deve afirmar que o arquivo LICENSE, os avisos ou a auditoria
 jurídica já foram entregues. A restrição atual de dependências permanece preservada.
 
-**Versão**: 1.0.0 | **Ratificada em**: 2026-11-08 | **Última alteração**: 2026-11-08
+**Versão**: 1.1.0 | **Ratificada em**: 2026-11-08 | **Última alteração**: 2026-11-08

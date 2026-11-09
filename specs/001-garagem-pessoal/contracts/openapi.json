@@ -1,0 +1,2185 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "GarageMotor API",
+        "version": "1.0.0",
+        "description": "Contrato proposto do MVP pessoal/familiar. Sem implementação ou publicação autorizada. Regras complementares em api.md.",
+        "license": {
+            "name": "AGPL-3.0-only",
+            "identifier": "AGPL-3.0-only"
+        }
+    },
+    "servers": [
+        {
+            "url": "/api/v1"
+        }
+    ],
+    "security": [
+        {
+            "sessionCookie": []
+        },
+        {
+            "opaqueBearer": []
+        }
+    ],
+    "paths": {
+        "/instance": {
+            "get": {
+                "operationId": "getInstance",
+                "security": [],
+                "responses": {
+                    "200": {
+                        "description": "Identidade pública e compatibilidade da instância",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Instance"
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            }
+        },
+        "/accounts": {
+            "post": {
+                "operationId": "registerAccount",
+                "security": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Registration"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "202": {
+                        "description": "Resposta genérica sem revelar existência da identidade"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            }
+        },
+        "/sessions": {
+            "post": {
+                "operationId": "createSession",
+                "security": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Login"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Sessão: cookie HttpOnly web ou token opaco Android",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Session"
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "revokeSession",
+                "responses": {
+                    "204": {
+                        "description": "Sessão revogada"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            }
+        },
+        "/csrf": {
+            "get": {
+                "operationId": "getCsrfToken",
+                "security": [],
+                "responses": {
+                    "200": {
+                        "description": "Token antiforgery do framework para contexto web",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "requestToken"
+                                    ],
+                                    "properties": {
+                                        "requestToken": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            }
+        },
+        "/recovery-requests": {
+            "post": {
+                "operationId": "requestRecovery",
+                "security": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "email"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "maxLength": 254
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "202": {
+                        "description": "Resposta genérica; SMTP configurado opcional"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            }
+        },
+        "/recovery-confirmations": {
+            "post": {
+                "operationId": "confirmRecovery",
+                "security": [],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Recovery"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "Senha alterada somente após validar código; falhas usam resposta genérica 422 sem enumerar contas"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            }
+        },
+        "/recovery-codes": {
+            "post": {
+                "operationId": "renewOfflineRecoveryCodes",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "currentPassword"
+                                ],
+                                "properties": {
+                                    "currentPassword": {
+                                        "type": "string",
+                                        "maxLength": 128,
+                                        "writeOnly": true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Códigos offline revelados uma vez ao usuário autenticado após reautenticação",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "required": [
+                                        "codes"
+                                    ],
+                                    "properties": {
+                                        "codes": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            }
+        },
+        "/garages": {
+            "get": {
+                "operationId": "listGarages",
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Collection"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            },
+            "post": {
+                "operationId": "createGarage",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/GarageInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "$ref": "#/components/responses/Item"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            }
+        },
+        "/garages/{garageId}": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/GarageId"
+                }
+            ],
+            "get": {
+                "operationId": "getGarage",
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Item"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            },
+            "put": {
+                "operationId": "updateGarage",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/IfMatch"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/GarageInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Item"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "requestGarageDeletion",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/IfMatch"
+                    }
+                ],
+                "responses": {
+                    "202": {
+                        "description": "Solicitação confirmada pelo proprietário; prazo até 30 dias"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            }
+        },
+        "/garages/{garageId}/members": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/GarageId"
+                }
+            ],
+            "get": {
+                "operationId": "listMembers",
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Collection"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            }
+        },
+        "/garages/{garageId}/members/{id}": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/GarageId"
+                },
+                {
+                    "$ref": "#/components/parameters/Id"
+                },
+                {
+                    "$ref": "#/components/parameters/IfMatch"
+                }
+            ],
+            "put": {
+                "operationId": "changeMemberRole",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RoleInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Item"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "revokeMember",
+                "responses": {
+                    "204": {
+                        "description": "Membership revogada; último proprietário protegido"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            }
+        },
+        "/garages/{garageId}/ownership": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/GarageId"
+                },
+                {
+                    "$ref": "#/components/parameters/IfMatch"
+                }
+            ],
+            "post": {
+                "operationId": "transferOwnership",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "memberId"
+                                ],
+                                "properties": {
+                                    "memberId": {
+                                        "type": "string",
+                                        "format": "uuid"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Item"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            }
+        },
+        "/garages/{garageId}/invites": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/GarageId"
+                }
+            ],
+            "post": {
+                "operationId": "createInvite",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/InviteInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "$ref": "#/components/responses/Item"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            }
+        },
+        "/garages/{garageId}/invites/{id}": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/GarageId"
+                },
+                {
+                    "$ref": "#/components/parameters/Id"
+                }
+            ],
+            "delete": {
+                "operationId": "revokeInvite",
+                "responses": {
+                    "204": {
+                        "description": "Convite revogado"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            }
+        },
+        "/invites/{id}/accept": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/Id"
+                }
+            ],
+            "post": {
+                "operationId": "acceptInvite",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "token"
+                                ],
+                                "properties": {
+                                    "token": {
+                                        "type": "string",
+                                        "writeOnly": true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Item"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            }
+        },
+        "/garages/{garageId}/vehicles": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/GarageId"
+                }
+            ],
+            "get": {
+                "operationId": "listVehicles",
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Collection"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            },
+            "post": {
+                "operationId": "createVehicle",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/VehicleInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "$ref": "#/components/responses/Item"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            }
+        },
+        "/garages/{garageId}/vehicles/{id}": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/GarageId"
+                },
+                {
+                    "$ref": "#/components/parameters/Id"
+                }
+            ],
+            "get": {
+                "operationId": "getVehicle",
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Item"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            },
+            "put": {
+                "operationId": "updateVehicle",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/IfMatch"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/VehicleInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Item"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            }
+        },
+        "/garages/{garageId}/expenses": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/GarageId"
+                },
+                {
+                    "$ref": "#/components/parameters/Limit"
+                },
+                {
+                    "$ref": "#/components/parameters/Cursor"
+                },
+                {
+                    "$ref": "#/components/parameters/From"
+                },
+                {
+                    "$ref": "#/components/parameters/To"
+                },
+                {
+                    "$ref": "#/components/parameters/VehicleFilter"
+                }
+            ],
+            "get": {
+                "operationId": "listExpenses",
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Collection"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            },
+            "post": {
+                "operationId": "createExpense",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/OperationKey"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ExpenseInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "$ref": "#/components/responses/Item"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            }
+        },
+        "/garages/{garageId}/expenses/{id}": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/GarageId"
+                },
+                {
+                    "$ref": "#/components/parameters/Id"
+                },
+                {
+                    "$ref": "#/components/parameters/IfMatch"
+                }
+            ],
+            "put": {
+                "operationId": "updateExpense",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ExpenseInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Item"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "voidExpense",
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Item"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            }
+        },
+        "/garages/{garageId}/fuel-records": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/GarageId"
+                }
+            ],
+            "get": {
+                "operationId": "listFuelRecords",
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Collection"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            },
+            "post": {
+                "operationId": "createFuelRecord",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/OperationKey"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FuelInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "$ref": "#/components/responses/Item"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            }
+        },
+        "/garages/{garageId}/fuel-records/{id}": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/GarageId"
+                },
+                {
+                    "$ref": "#/components/parameters/Id"
+                },
+                {
+                    "$ref": "#/components/parameters/IfMatch"
+                }
+            ],
+            "put": {
+                "operationId": "updateFuelRecord",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FuelInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Item"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "voidFuelRecord",
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Item"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            }
+        },
+        "/garages/{garageId}/maintenance": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/GarageId"
+                }
+            ],
+            "get": {
+                "operationId": "listMaintenance",
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Collection"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            },
+            "post": {
+                "operationId": "createMaintenance",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/OperationKey"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MaintenanceInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "$ref": "#/components/responses/Item"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            }
+        },
+        "/garages/{garageId}/maintenance/{id}": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/GarageId"
+                },
+                {
+                    "$ref": "#/components/parameters/Id"
+                },
+                {
+                    "$ref": "#/components/parameters/IfMatch"
+                }
+            ],
+            "put": {
+                "operationId": "updateMaintenance",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/MaintenanceInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Item"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            }
+        },
+        "/garages/{garageId}/plans": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/GarageId"
+                }
+            ],
+            "get": {
+                "operationId": "listPlans",
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Collection"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            },
+            "post": {
+                "operationId": "createPlan",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PlanInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "$ref": "#/components/responses/Item"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            }
+        },
+        "/garages/{garageId}/plans/{id}": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/GarageId"
+                },
+                {
+                    "$ref": "#/components/parameters/Id"
+                },
+                {
+                    "$ref": "#/components/parameters/IfMatch"
+                }
+            ],
+            "put": {
+                "operationId": "updatePlan",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PlanInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Item"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            }
+        },
+        "/garages/{garageId}/commitments": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/GarageId"
+                }
+            ],
+            "get": {
+                "operationId": "listCommitments",
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Collection"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            },
+            "post": {
+                "operationId": "createCommitment",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CommitmentInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "$ref": "#/components/responses/Item"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            }
+        },
+        "/garages/{garageId}/commitments/{id}": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/GarageId"
+                },
+                {
+                    "$ref": "#/components/parameters/Id"
+                },
+                {
+                    "$ref": "#/components/parameters/IfMatch"
+                }
+            ],
+            "put": {
+                "operationId": "updateCommitment",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CommitmentInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Item"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            }
+        },
+        "/garages/{garageId}/commitments/{id}/completion": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/GarageId"
+                },
+                {
+                    "$ref": "#/components/parameters/Id"
+                },
+                {
+                    "$ref": "#/components/parameters/IfMatch"
+                },
+                {
+                    "$ref": "#/components/parameters/OperationKey"
+                }
+            ],
+            "post": {
+                "operationId": "completeCommitment",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CompletionInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Item"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            }
+        },
+        "/garages/{garageId}/reminders": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/GarageId"
+                }
+            ],
+            "get": {
+                "operationId": "listReminders",
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Collection"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            }
+        },
+        "/garages/{garageId}/summary": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/GarageId"
+                },
+                {
+                    "$ref": "#/components/parameters/From"
+                },
+                {
+                    "$ref": "#/components/parameters/To"
+                },
+                {
+                    "$ref": "#/components/parameters/VehicleFilter"
+                }
+            ],
+            "get": {
+                "operationId": "getSummary",
+                "responses": {
+                    "200": {
+                        "description": "Totais e indicadores com cobertura explícita",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Summary"
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            }
+        },
+        "/garages/{garageId}/attachments": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/GarageId"
+                }
+            ],
+            "post": {
+                "operationId": "createAttachment",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/OperationKey"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "parentKind",
+                                    "parentId",
+                                    "file"
+                                ],
+                                "properties": {
+                                    "parentKind": {
+                                        "enum": [
+                                            "expense",
+                                            "maintenance"
+                                        ]
+                                    },
+                                    "parentId": {
+                                        "type": "string",
+                                        "format": "uuid"
+                                    },
+                                    "file": {
+                                        "type": "string",
+                                        "contentEncoding": "binary",
+                                        "description": "PDF/JPEG/PNG; até 10 MiB; limite de cinco por pai"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "$ref": "#/components/responses/Item"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            }
+        },
+        "/garages/{garageId}/attachments/{id}": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/GarageId"
+                },
+                {
+                    "$ref": "#/components/parameters/Id"
+                }
+            ],
+            "get": {
+                "operationId": "downloadAttachment",
+                "responses": {
+                    "200": {
+                        "description": "Download autorizado, attachment e nosniff",
+                        "headers": {
+                            "Content-Disposition": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "X-Content-Type-Options": {
+                                "schema": {
+                                    "const": "nosniff"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/octet-stream": {
+                                "schema": {
+                                    "type": "string",
+                                    "contentEncoding": "binary"
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "deleteAttachment",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/IfMatch"
+                    }
+                ],
+                "responses": {
+                    "202": {
+                        "description": "Coleta controlada; vínculo marcado para exclusão"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            }
+        },
+        "/garages/{garageId}/exports": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/GarageId"
+                }
+            ],
+            "post": {
+                "operationId": "createExport",
+                "responses": {
+                    "202": {
+                        "$ref": "#/components/responses/Item"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            }
+        },
+        "/garages/{garageId}/exports/{id}": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/GarageId"
+                },
+                {
+                    "$ref": "#/components/parameters/Id"
+                }
+            ],
+            "get": {
+                "operationId": "getExport",
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Item"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            }
+        },
+        "/garages/{garageId}/exports/{id}/download": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/GarageId"
+                },
+                {
+                    "$ref": "#/components/parameters/Id"
+                }
+            ],
+            "get": {
+                "operationId": "downloadExport",
+                "responses": {
+                    "200": {
+                        "description": "Exportação autorizada sem credenciais; expira em 24 horas",
+                        "content": {
+                            "application/zip": {
+                                "schema": {
+                                    "type": "string",
+                                    "contentEncoding": "binary"
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "sessionCookie": {
+                "type": "apiKey",
+                "in": "cookie",
+                "name": "__Host-gm-session"
+            },
+            "opaqueBearer": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "opaque"
+            }
+        },
+        "parameters": {
+            "GarageId": {
+                "name": "garageId",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "string",
+                    "format": "uuid"
+                }
+            },
+            "Id": {
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "string",
+                    "format": "uuid"
+                }
+            },
+            "IfMatch": {
+                "name": "If-Match",
+                "in": "header",
+                "required": true,
+                "description": "Versão do recurso entre aspas, por exemplo \"1\"",
+                "schema": {
+                    "type": "string",
+                    "pattern": "^\"[1-9][0-9]*\"$"
+                }
+            },
+            "OperationKey": {
+                "name": "Idempotency-Key",
+                "in": "header",
+                "required": true,
+                "schema": {
+                    "type": "string",
+                    "format": "uuid"
+                }
+            },
+            "Limit": {
+                "name": "limit",
+                "in": "query",
+                "schema": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 100,
+                    "default": 50
+                }
+            },
+            "Cursor": {
+                "name": "cursor",
+                "in": "query",
+                "schema": {
+                    "type": "string",
+                    "maxLength": 512
+                }
+            },
+            "From": {
+                "name": "from",
+                "in": "query",
+                "schema": {
+                    "type": "string",
+                    "format": "date"
+                }
+            },
+            "To": {
+                "name": "to",
+                "in": "query",
+                "schema": {
+                    "type": "string",
+                    "format": "date"
+                }
+            },
+            "VehicleFilter": {
+                "name": "vehicleId",
+                "in": "query",
+                "schema": {
+                    "type": "string",
+                    "format": "uuid"
+                }
+            }
+        },
+        "responses": {
+            "Item": {
+                "description": "Recurso autorizado; tipo de payload conforme operationId e api.md",
+                "headers": {
+                    "ETag": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Resource"
+                        }
+                    }
+                }
+            },
+            "Collection": {
+                "description": "Coleção autorizada; limite padrão 50, máximo 100",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "items",
+                                "nextCursor"
+                            ],
+                            "properties": {
+                                "items": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Resource"
+                                    }
+                                },
+                                "nextCursor": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "Problem": {
+                "description": "400 entrada; 401 sessão; 403 papel; 404 inexistente/fora da garagem; 409 conflito; 413 tamanho; 415 tipo; 422 domínio; 429 limite; 503 manutenção",
+                "content": {
+                    "application/problem+json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Problem"
+                        }
+                    }
+                }
+            }
+        },
+        "schemas": {
+            "Problem": {
+                "type": "object",
+                "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "traceId"
+                ],
+                "properties": {
+                    "type": {
+                        "type": "string"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "integer",
+                        "minimum": 400,
+                        "maximum": 599
+                    },
+                    "detail": {
+                        "type": "string"
+                    },
+                    "traceId": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Instance": {
+                "type": "object",
+                "required": [
+                    "name",
+                    "apiMajor",
+                    "minimumClientMajor"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "apiMajor": {
+                        "const": 1
+                    },
+                    "minimumClientMajor": {
+                        "type": "integer",
+                        "minimum": 1
+                    }
+                }
+            },
+            "Registration": {
+                "type": "object",
+                "required": [
+                    "email",
+                    "name",
+                    "password"
+                ],
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "maxLength": 254
+                    },
+                    "name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 100
+                    },
+                    "password": {
+                        "type": "string",
+                        "minLength": 12,
+                        "maxLength": 128,
+                        "writeOnly": true
+                    }
+                }
+            },
+            "Login": {
+                "type": "object",
+                "required": [
+                    "email",
+                    "password",
+                    "channel"
+                ],
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "maxLength": 254
+                    },
+                    "password": {
+                        "type": "string",
+                        "maxLength": 128,
+                        "writeOnly": true
+                    },
+                    "channel": {
+                        "enum": [
+                            "web",
+                            "android"
+                        ]
+                    }
+                }
+            },
+            "Recovery": {
+                "type": "object",
+                "required": [
+                    "email",
+                    "code",
+                    "newPassword"
+                ],
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "maxLength": 254
+                    },
+                    "code": {
+                        "type": "string",
+                        "writeOnly": true
+                    },
+                    "newPassword": {
+                        "type": "string",
+                        "minLength": 12,
+                        "maxLength": 128,
+                        "writeOnly": true
+                    }
+                }
+            },
+            "Session": {
+                "type": "object",
+                "required": [
+                    "userId",
+                    "expiresUtc"
+                ],
+                "properties": {
+                    "userId": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "expiresUtc": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "token": {
+                        "type": "string",
+                        "description": "Somente canal Android; nunca em logs ou armazenamento web persistente"
+                    }
+                }
+            },
+            "GarageInput": {
+                "type": "object",
+                "required": [
+                    "name",
+                    "timezone"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 100
+                    },
+                    "timezone": {
+                        "type": "string",
+                        "default": "America/Sao_Paulo"
+                    }
+                }
+            },
+            "RoleInput": {
+                "type": "object",
+                "required": [
+                    "role"
+                ],
+                "properties": {
+                    "role": {
+                        "enum": [
+                            "editor",
+                            "reader"
+                        ]
+                    }
+                }
+            },
+            "InviteInput": {
+                "type": "object",
+                "required": [
+                    "email",
+                    "role"
+                ],
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "maxLength": 254
+                    },
+                    "role": {
+                        "enum": [
+                            "editor",
+                            "reader"
+                        ]
+                    }
+                }
+            },
+            "VehicleInput": {
+                "type": "object",
+                "required": [
+                    "label",
+                    "kind",
+                    "brand",
+                    "model",
+                    "year",
+                    "fuel",
+                    "state"
+                ],
+                "properties": {
+                    "label": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 100
+                    },
+                    "kind": {
+                        "enum": [
+                            "car",
+                            "motorcycle"
+                        ]
+                    },
+                    "brand": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 100
+                    },
+                    "model": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 100
+                    },
+                    "year": {
+                        "type": "integer",
+                        "minimum": 1900
+                    },
+                    "fuel": {
+                        "enum": [
+                            "gasoline",
+                            "ethanol",
+                            "diesel",
+                            "flex",
+                            "electric",
+                            "other"
+                        ]
+                    },
+                    "plate": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "maxLength": 10
+                    },
+                    "renavam": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "pattern": "^[0-9]{11}$"
+                    },
+                    "chassis": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "maxLength": 17
+                    },
+                    "state": {
+                        "enum": [
+                            "active",
+                            "archived"
+                        ]
+                    }
+                }
+            },
+            "ExpenseInput": {
+                "type": "object",
+                "required": [
+                    "vehicleId",
+                    "spentOn",
+                    "category",
+                    "description",
+                    "amountMinor"
+                ],
+                "properties": {
+                    "vehicleId": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "spentOn": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "category": {
+                        "enum": [
+                            "fuel",
+                            "maintenance",
+                            "insurance",
+                            "tax",
+                            "other"
+                        ]
+                    },
+                    "description": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 500
+                    },
+                    "amountMinor": {
+                        "$ref": "#/components/schemas/PositiveMoney"
+                    }
+                }
+            },
+            "FuelInput": {
+                "type": "object",
+                "required": [
+                    "vehicleId",
+                    "occurredOn",
+                    "odometerKm",
+                    "volumeMl",
+                    "amountMinor",
+                    "fuel",
+                    "fullTank"
+                ],
+                "properties": {
+                    "vehicleId": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "occurredOn": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "odometerKm": {
+                        "$ref": "#/components/schemas/Odometer"
+                    },
+                    "volumeMl": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 1000000
+                    },
+                    "amountMinor": {
+                        "$ref": "#/components/schemas/PositiveMoney"
+                    },
+                    "fuel": {
+                        "enum": [
+                            "gasoline",
+                            "ethanol",
+                            "diesel",
+                            "other"
+                        ]
+                    },
+                    "fullTank": {
+                        "type": "boolean"
+                    },
+                    "station": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "maxLength": 200
+                    },
+                    "historicalReason": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "maxLength": 500
+                    }
+                }
+            },
+            "MaintenanceInput": {
+                "type": "object",
+                "required": [
+                    "vehicleId",
+                    "kind",
+                    "description",
+                    "completedOn",
+                    "odometerKm"
+                ],
+                "properties": {
+                    "vehicleId": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "kind": {
+                        "enum": [
+                            "preventive",
+                            "corrective"
+                        ]
+                    },
+                    "description": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 500
+                    },
+                    "completedOn": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "odometerKm": {
+                        "$ref": "#/components/schemas/Odometer"
+                    },
+                    "amountMinor": {
+                        "$ref": "#/components/schemas/PositiveMoney"
+                    },
+                    "planId": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "format": "uuid"
+                    }
+                }
+            },
+            "PlanInput": {
+                "type": "object",
+                "required": [
+                    "vehicleId",
+                    "title",
+                    "state"
+                ],
+                "properties": {
+                    "vehicleId": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "title": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 200
+                    },
+                    "dueOn": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "format": "date"
+                    },
+                    "dueKm": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ],
+                        "minimum": 0,
+                        "maximum": 9999999
+                    },
+                    "intervalMonths": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ],
+                        "minimum": 1,
+                        "maximum": 120
+                    },
+                    "intervalKm": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ],
+                        "minimum": 1,
+                        "maximum": 1000000
+                    },
+                    "state": {
+                        "enum": [
+                            "active",
+                            "paused",
+                            "completed"
+                        ]
+                    }
+                },
+                "anyOf": [
+                    {
+                        "required": [
+                            "dueOn"
+                        ],
+                        "properties": {
+                            "dueOn": {
+                                "type": "string",
+                                "format": "date"
+                            }
+                        }
+                    },
+                    {
+                        "required": [
+                            "dueKm"
+                        ],
+                        "properties": {
+                            "dueKm": {
+                                "type": "integer"
+                            }
+                        }
+                    }
+                ]
+            },
+            "CommitmentInput": {
+                "type": "object",
+                "required": [
+                    "vehicleId",
+                    "title",
+                    "kind",
+                    "state"
+                ],
+                "properties": {
+                    "vehicleId": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "title": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 200
+                    },
+                    "kind": {
+                        "enum": [
+                            "insurance",
+                            "licensing",
+                            "inspection",
+                            "other"
+                        ]
+                    },
+                    "dueOn": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "format": "date"
+                    },
+                    "dueKm": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ],
+                        "minimum": 0,
+                        "maximum": 9999999
+                    },
+                    "intervalMonths": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ],
+                        "minimum": 1,
+                        "maximum": 120
+                    },
+                    "intervalKm": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ],
+                        "minimum": 1,
+                        "maximum": 1000000
+                    },
+                    "state": {
+                        "enum": [
+                            "active",
+                            "completed",
+                            "cancelled"
+                        ]
+                    }
+                },
+                "anyOf": [
+                    {
+                        "required": [
+                            "dueOn"
+                        ],
+                        "properties": {
+                            "dueOn": {
+                                "type": "string",
+                                "format": "date"
+                            }
+                        }
+                    },
+                    {
+                        "required": [
+                            "dueKm"
+                        ],
+                        "properties": {
+                            "dueKm": {
+                                "type": "integer"
+                            }
+                        }
+                    }
+                ]
+            },
+            "CompletionInput": {
+                "type": "object",
+                "required": [
+                    "completedOn",
+                    "odometerKm"
+                ],
+                "properties": {
+                    "completedOn": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "odometerKm": {
+                        "$ref": "#/components/schemas/Odometer"
+                    }
+                }
+            },
+            "PositiveMoney": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 999999999999,
+                "description": "Centavos BRL; não aceitar float ou moeda distinta"
+            },
+            "Odometer": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9999999
+            },
+            "Resource": {
+                "type": "object",
+                "required": [
+                    "id",
+                    "version",
+                    "kind",
+                    "attributes"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "minimum": 1
+                    },
+                    "kind": {
+                        "enum": [
+                            "garage",
+                            "member",
+                            "invite",
+                            "vehicle",
+                            "expense",
+                            "fuel",
+                            "maintenance",
+                            "plan",
+                            "commitment",
+                            "reminder",
+                            "attachment",
+                            "export"
+                        ]
+                    },
+                    "attributes": {
+                        "type": "object",
+                        "description": "DTO por kind definido em api.md e modelo de dados; sem propriedades internas de segurança"
+                    }
+                }
+            },
+            "Summary": {
+                "type": "object",
+                "required": [
+                    "totalMinor",
+                    "byCategory",
+                    "coverage",
+                    "consumptionKmPerLiter",
+                    "costPerKm",
+                    "coveredFrom",
+                    "coveredTo",
+                    "distanceKm",
+                    "coveredExpenseMinor"
+                ],
+                "properties": {
+                    "totalMinor": {
+                        "type": "integer",
+                        "minimum": 0
+                    },
+                    "byCategory": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "integer",
+                            "minimum": 0
+                        }
+                    },
+                    "coverage": {
+                        "enum": [
+                            "complete",
+                            "partial",
+                            "unavailable"
+                        ]
+                    },
+                    "consumptionKmPerLiter": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "pattern": "^[0-9]+(\\.[0-9]{1,2})?$"
+                    },
+                    "costPerKm": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "pattern": "^[0-9]+(\\.[0-9]{1,4})?$"
+                    },
+                    "coveredFrom": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "format": "date"
+                    },
+                    "coveredTo": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "format": "date"
+                    },
+                    "distanceKm": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ],
+                        "minimum": 0
+                    },
+                    "coveredExpenseMinor": {
+                        "type": [
+                            "integer",
+                            "null"
+                        ],
+                        "minimum": 0
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,7 +1,7 @@
 # Pesquisa Técnica: Garagem pessoal e familiar
 
 **Feature**: [spec.md](spec.md). **Data**: 2026-11-08.
-**Status**: Fase 0 incompleta; F0-1/F0-2/F0-3 bloqueiam a Fase 1.
+**Status**: Fase 0 concluída para desenho; histórico de bloqueios preservado abaixo. Instalação, implementação e publicação permanecem não autorizadas.
 **Origem**: IA assistida, incluindo pesquisa delegada somente leitura.
 **Revisor humano**: CEO da Altivy e owner do GarageMotor.
 
@@ -45,7 +45,7 @@ O agente Explore foi acionado pela Fase 0, somente leitura e sem consultas Web, 
 - **Alternativas consideradas**: SDK local Dokpod 10.0.400; a referência local não substitui atualização da linha suportada.
 - **Limite**: metadata de suporte não constitui auditoria de licenças de todo o backend ou de imagens. Nenhum pacote foi instalado.
 
-## Bloqueios da Fase 0
+## Histórico dos bloqueios da Fase 0
 
 | ID | Decisão pendente | Evidência faltante | Consequência |
 |---|---|---|---|
@@ -73,6 +73,69 @@ Hosts não previstos na allowlist da descoberta foram autorizados explicitamente
 
 O endpoint `latest` foi apenas tentativa de descoberta de versão, não tag flutuante aprovada para instalação. Fonte Microsoft é mutável: metadata consultada em 2026-11-08. Registrar versões e hashes reais na conclusão da pesquisa.
 
-## Próximas verificações
+## Verificações propostas na primeira rodada
 
 Conseguir acesso verificável às fontes aprovadas ou fornecer inventário confiável de versão/licença com proveniência. Resolver os três bloqueios, rever o gate constitucional e somente então executar a Fase 1 de `/speckit-plan`. Não há contratos, tarefas executáveis ou análise SDD completa enquanto a pesquisa estiver incompleta.
+
+## Fechamento da Fase 0 — 2026-11-08
+
+As consultas diretas anteriores continuam registradas como falhas. Nesta retomada, a CLI GitHub consultou a API oficial via HTTPS, sem ler/exibir credenciais, executar conteúdo remoto ou instalar pacotes. Não se afirma que essa via realizou o pinning de IP das consultas anteriores. Conteúdo remoto foi tratado como dado.
+
+As duas pesquisas delegadas foram somente leitura. Seus resultados foram conferidos pelo agente principal nas tags oficiais; recomendações sem evidência exata não foram usadas para liberar dependências. A primeira tentativa Angular sem prefixo `v` retornou 404; a referência correta foi confirmada pelas releases oficiais.
+
+### Versões selecionadas para o desenho
+
+| Componente | Versão fixa | Licença/fundamento verificado | Compatibilidade e decisão |
+|---|---|---|---|
+| .NET SDK/runtime/ASP.NET Core | 10.0.403 / 10.0.14 | Metadata Microsoft da linha LTS; runtime e ASP.NET Core MIT na tag v10.0.14 | Suporte até 2028-11-14; inventário completo das imagens continua gate antes de uso |
+| Angular framework | 22.2.5 | MIT em angular/angular, v22.2.5 | Release não prerelease de 2026-11-06; major obrigatória do owner |
+| Angular CLI/build | 22.2.6 | MIT em angular/angular-cli, v22.2.6 | Linha 22; source usa placeholders de publicação, não versão 0.0.0 real |
+| TypeScript | 6.0.3 | Apache-2.0 em microsoft/TypeScript, v6.0.3 | Satisfaz >=6.0 <6.1 de compiler-cli/build; TypeScript 7 foi rejeitado |
+| Node | 24.22.2 | Licença primária MIT em nodejs/node, v24.22.2 | ^24.15.0 aceito por Angular; LTS em manutenção até 2028-04-30 |
+| Capacitor core/cli/android | 8.6.0 | MIT em ionic-team/capacitor, tag 8.6.0 | CLI >=22 Node; Android exige core ^8.6.0; mesmos patches fixados |
+| Playwright | 1.65.0 | Apache-2.0 em microsoft/playwright, v1.65.0 | Node >=20; apenas ferramentas de teste, não runtime do produto |
+| Npgsql | 10.0.3 | Licença PostgreSQL permissiva em npgsql/npgsql, v10.0.3 | Target net10.0; consultas parametrizadas; sem adicionar EF por conveniência |
+| PostgreSQL | 18.6 | Licença PostgreSQL em postgres/postgres, REL_18_6 | Release estável documentada de 2026-08-13; sem alegar uma linha LTS oficial |
+| MSTest SDK/framework | 4.5.2 | MIT em microsoft/testfx, v4.5.2 | Runner backend selecionado; sem adotar xUnit adicional |
+
+Versões transitivas, avisos incorporados, hashes de pacotes/imagens e lockfiles devem ser inventariados antes de instalação/execução, com falha fechada para licença ausente ou incompatível. O desenho não afirma que um install, build ou teste já comprovou a matriz.
+
+### Evidências imutáveis de licença e manifestos
+
+Referências oficiais consultadas por `repos/<owner>/<repo>/contents/<path>?ref=<tag>`:
+
+- Angular e CLI: LICENSE blob `5ec8e26b9eec0aa26838c4bfd32a260108524ad5`; compiler-cli manifest `a0083832e81b694480ee9fff040e95de4c092b53`, build manifest `1b0aeb21bf230cbe09999a60b79f55ac1abe7b03`.
+- Capacitor: LICENSE blob `c3e903bdded1959466a54a74dd3e9361481f8144`; core `43d3a909dc5c51b5bd224974056470609f61f5bb`, cli `cb3ff1050b22c2b300593109cf9d5041a06bc4f6`, android `e628a3fc710e63b357a5348d31e007b57da0eba1`.
+- TypeScript LICENSE.txt: `8746124b277914d0f0fd9cf4aef2ed3b587143d9`; Node LICENSE: `9cc3315dd388a004c225620b30c5806bba3151d5`.
+- Playwright LICENSE: `df112373eb2e23e459bf93ec412be1764dc5a38b`; Npgsql LICENSE: `c551cb7b0c921b082c2424f213e12fb6b84a864c`; PostgreSQL COPYRIGHT: `0a397648dcd3c2177acc58bd7daecd11ad64be62`.
+- MSTest LICENSE: `d859446c6968eaeff058d8c5de28e607ffb4c717`; runtime/ASP.NET Core LICENSE: `984713a49622a96da110443c15477613bc12656b`.
+
+Tags são referências de versão; blobs vinculam o texto conferido. Não confundir blob de licença com hash do pacote distribuído, que deve ser verificado separadamente antes de uso.
+
+### Android e emenda constitucional
+
+- **Decisão**: JDK Temurin 21.0.13+9, Gradle 8.14.3, Android Gradle Plugin 8.13.0, compile/target API 36 e build-tools 36.0.0. Capacitor aceita min API 24; a matriz inicial de qualificação será API 35 e 36, sem promessa de funcionamento em toda versão antiga.
+- **Fundamento**: tag Capacitor 8.6.0, build.gradle blob `6ece3eda05e25df4b597be28f28c64f896397f50` e wrapper blob `7705927e949fdfbe2bfa90ef9d397e6057ccf104`; release estável Temurin publicada em 2026-10-22.
+- **Autorização humana**: o owner aprovou exceção restrita para ferramentas oficiais Android somente em build/testes em containers; formalizada na [constituição 1.1.0](../../.specify/memory/constitution.md). Não abrange libs do app, execução no host, iOS ou publicação.
+- **Gate de execução**: termos de SDK/JDK, origem, checksum e imagens fixadas precisam de verificação antes de uso; aceites contratuais permanecem humanos. Não fornecer script que aceite contratos automaticamente.
+- **Alternativas rejeitadas**: Capacitor 9 beta, build Android no host e incluir iOS nesta entrega.
+
+### DS e fontes
+
+- **Decisão**: owner confirmou os direitos necessários da Altivy para reutilização de seu DS; preservar avisos e direitos de terceiros. Implementar somente primitivas necessárias, sem copiar módulos Business ou importar dependências do Dokpod.
+- **Fundamento**: confirmação humana nesta retomada; referências locais de tokens/componentes e avisos OFL de Outfit. AGPL do código próprio não relicencia fontes/assets.
+- **Alternativas rejeitadas**: supor direitos por pertencer à mesma empresa ou adotar bibliotecas UI/Ionic compulsoriamente.
+
+### Persistência e estrutura
+
+- **Decisão**: um backend modular e um PostgreSQL, arquivos privados em volume local; nenhuma dependência de S3/MinIO, broker, cache distribuído ou serviço externo para o núcleo.
+- **Justificativa**: acesso transacional e partições mensais para histórico/auditoria; volume local é suficiente ao recorte, evita nova biblioteca/storage. Novo datastore exige ADR proposto e decisão humana antes de implementação.
+- **Partições**: preparar três meses futuros e doze anteriores, manter default para datas fora da janela, índices por filho e migração segura do default; retenção financeira depende de exclusão da garagem, não de corte global por idade. Auditoria tem 90 dias; drop somente de partições expiradas compatíveis com a política e sem vínculos financeiros.
+- **Segurança**: contas locais com APIs Identity/PasswordHasher do framework, sessões opacas revogáveis e apenas hashes persistidos; nada de algoritmo criptográfico próprio. Isolamento por garagem, idempotência transacional e concorrência otimista em todas as mutações.
+- **Alternativas rejeitadas**: EF, Keycloak, microserviços e storage distribuído sem necessidade demonstrada. Recuperação pode usar códigos offline ou SMTP configurado, nunca serviço SaaS obrigatório.
+
+## Gates remanescentes de execução, não indefinições de desenho
+
+Proxy nginx 1.30.6 da linha estável, licença BSD-2-Clause conferida em `nginx/nginx`, ref `release-1.30.6`, LICENSE blob `4366554533723cee5e155e317b0eb014867c1f0a`. Prettier 3.9.10 estável MIT, LICENSE blob `5767e34d30ab78796220f9492726dd2f677d4166` e package.json blob `9646b6d624fb8bbf1be2e068fa06528b45a6fe4e`, engine Node >=22 satisfeito por 24.22.2. Não confundir nginx mainline 1.31 com a linha estável escolhida.
+
+O gate da Fase 0 fica liberado para produzir desenho. Antes de implementar: revisão humana da spec/plano/tarefas, aceite do ADR de datastore, auditoria de pacotes e imagens, avisos de terceiros, aceite humano de termos Android quando aplicável e threat model. Medidas de desempenho, backup, acessibilidade e Android permanecem planejadas, não executadas. Retomar pesquisa se a resolução real de pacotes contradizer a matriz.
