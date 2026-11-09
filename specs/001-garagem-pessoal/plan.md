@@ -10,7 +10,7 @@
 
 **Feature selecionada**: `SPECIFY_FEATURE_DIRECTORY=specs/001-garagem-pessoal`.
 
-**Revisão**: 2026-11-09, após quatro esclarecimentos humanos. Modelo, contratos e quickstart foram alinhados; as tarefas de 2026-11-08 ainda precisam ser revisadas e analisadas. Nenhuma alteração de stack ou autorização de implementação.
+**Revisão**: 2026-11-09, após quatro esclarecimentos humanos. Modelo, contratos, quickstart e tarefas foram sincronizados e validados estruturalmente; análise SDD e autorização humana de implementação ainda pendentes. Nenhuma alteração de stack.
 
 ## Resumo
 
@@ -133,12 +133,12 @@ Correção da ordem de preparação: (1) pins/inventário inicial e gates humano
 5. US6: Android, instalação própria, exportação/backup, carga, compatibilidade e smoke de imagens.
 6. Transversal: formato/análise/build/testes, revisão de segurança e acessibilidade, matriz e documentação. Não marcar tarefa como executada sem evidência.
 
-US6 faz parte da entrega, não autorização de publicar app nas lojas. Não iniciar implementação só porque o plano e a spec estão presentes. Próxima fase: `/speckit-tasks`, depois `/speckit-analyze` e revisão/autorização humana explícitas.
+US6 faz parte da entrega, não autorização de publicar app nas lojas. Não iniciar implementação só porque o plano e a spec estão presentes. Próxima fase: `/speckit-analyze` somente leitura; após corrigir achados e obter revisão/autorização humana explícitas, pode-se considerar `/speckit-implement`.
 
 A revisão de tarefas deve ampliar T014/testes/criações de US1–US6, campos/testes de recuperação de T016/T017, catálogo/autoridade/restore de T053/T056–T058/T064, validators de respostas de T011 e workload de T063. Esses são pontos de encaminhamento, não tarefas já editadas ou executadas. Reconciliar T003/T005 pela ordem acima e atualizar a referência de hash do contrato.
 
 ## Validações e pendências
 
-Checagens em containers: JSON/OpenAPI refs/IDs, estados/decimais, estrutura dos documentos e links. Não foram executados serviços, migrations, unit/integration, carga, Android ou Playwright. Validar o contrato completo na implementação, inclusive DTOs de resposta por kind.
+Checagens em containers: JSON/OpenAPI refs/IDs, schemas fechados, estados/decimais, cobertura e IDs das 70 tarefas, estrutura dos documentos e links. Não foram executados serviços, migrations, unit/integration, carga, Android ou Playwright. Validar o contrato completo na implementação, inclusive DTOs de resposta por kind.
 
 Instalação ainda depende de inventário real e aceites Android; promoção depende de todas as evidências do quickstart. ADR permanece proposto. Preços, orçamento, SLA, prazo, publicação de portal, push e release são decisões separadas. A referência de origem do Dokpod não autoriza copiar materiais de terceiros sem avisos.

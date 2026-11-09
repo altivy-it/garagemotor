@@ -175,4 +175,4 @@ Pesquisa delegada somente leitura confrontou as quatro decisões da spec com os 
 - **Justificativa**: corrigir a dependência entre T003 e T005 sem reduzir a auditoria ou executar targets/scripts de pacotes antes do gate.
 - **Alternativas rejeitadas**: exigir lock final sem manifests existentes ou liberar scripts de dependências para resolver essa ordem.
 
-Fase0 concluída para revisar o desenho, sem pendências de escolha de stack. Plano/modelo/contratos/quickstart são os artefatos desta revisão; tasks anteriores continuam pendentes de sincronização e nova análise. Gate de implementação permanece humano.
+Fase0 concluída para revisar o desenho, sem pendências de escolha de stack. Plano/modelo/contratos/quickstart e tasks.md foram sincronizados; a análise não destrutiva `/speckit-analyze` continua pendente. Gate de implementação permanece humano.
