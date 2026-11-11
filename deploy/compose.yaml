@@ -1,0 +1,62 @@
+name: garagemotor
+
+services:
+  web:
+    image: local/garagemotor-web:dev
+    platform: ${GARAGEMOTOR_PLATFORM:?Plataforma Linux obrigatória}
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.web
+      target: development
+      args:
+        NODE_IMAGE: ${GARAGEMOTOR_NODE_IMAGE:?Imagem Node fixada no lock obrigatória}
+        NGINX_IMAGE: ${GARAGEMOTOR_NGINX_IMAGE:?Imagem nginx fixada no lock obrigatória}
+    expose:
+      - "4200"
+    command: ["npm", "exec", "--", "ng", "serve", "--configuration", "shared", "--host", "0.0.0.0", "--port", "4200"]
+    networks:
+      gateway:
+        aliases:
+          - garagemotor-web
+
+  api:
+    image: local/garagemotor-api:dev
+    platform: ${GARAGEMOTOR_PLATFORM:?Plataforma Linux obrigatória}
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.api
+      target: development
+      args:
+        DOTNET_SDK_IMAGE: ${GARAGEMOTOR_DOTNET_SDK_IMAGE:?Imagem SDK fixada no lock obrigatória}
+        ASPNET_RUNTIME_IMAGE: ${GARAGEMOTOR_ASPNET_IMAGE:?Imagem ASP.NET fixada no lock obrigatória}
+    environment:
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__GarageMotor: ${GARAGEMOTOR_CONNECTION_STRING:-}
+      ConnectionStrings__GarageMotorMigrations: ${GARAGEMOTOR_MIGRATIONS_CONNECTION_STRING:-}
+      Security__TrustedOrigins__0: ${GARAGEMOTOR_PUBLIC_ORIGIN:?Defina a origem pública do gateway compartilhado}
+      Security__TrustedProxy: ${GARAGEMOTOR_TRUSTED_PROXY:?Gateway compartilhado deve ser identificado pelo launcher}
+      Security__DataProtection__KeysPath: /var/lib/garagemotor/keys
+      Security__DataProtection__CertificateBase64: ${GARAGEMOTOR_DATA_PROTECTION_CERTIFICATE_BASE64:?Certificado externo obrigatório}
+      Security__DataProtection__CertificatePassword: ${GARAGEMOTOR_DATA_PROTECTION_CERTIFICATE_PASSWORD:?Proteção externa obrigatória}
+    volumes:
+      - garagemotor-api-keys:/var/lib/garagemotor/keys
+    expose:
+      - "8080"
+    networks:
+      gateway:
+        aliases:
+          - garagemotor-api
+      database:
+      egress:
+
+networks:
+  gateway:
+    external: true
+    name: ${GARAGEMOTOR_GATEWAY_NETWORK:-identity-global}
+  database:
+    external: true
+    name: ${GARAGEMOTOR_DATABASE_NETWORK:-identity-client}
+  egress:
+
+volumes:
+  garagemotor-api-keys:

@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>GarageMotor | Escolha de marca</title>
+    <style>
+      @font-face {
+        font-family: Outfit;
+        src: url('../../fonts/Outfit-Variable-Latin.woff2') format('woff2');
+        font-weight: 400 600;
+      }
+      * {
+        box-sizing: border-box;
+        letter-spacing: 0;
+      }
+      body {
+        margin: 0;
+        background: #f6f7f9;
+        color: #202630;
+        font:
+          16px Outfit,
+          sans-serif;
+      }
+      main {
+        max-width: 1000px;
+        margin: auto;
+        padding: 32px 20px;
+      }
+      h1 {
+        margin: 0;
+        font-size: 28px;
+        font-weight: 600;
+      }
+      h2 {
+        font-size: 18px;
+        font-weight: 600;
+        margin: 0 0 16px;
+      }
+      header p {
+        color: #566171;
+        line-height: 1.6;
+      }
+      section {
+        padding: 24px 0;
+        border-top: 1px solid #7b8698;
+      }
+      .pair {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
+      figure {
+        margin: 0;
+        min-height: 150px;
+        padding: 20px;
+        background: #fff;
+      }
+      figure.dark {
+        background: #1e2126;
+        color: #f1f3f5;
+      }
+      figcaption {
+        font-size: 13px;
+        margin-bottom: 16px;
+      }
+      .mark {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        font-size: 24px;
+        font-weight: 600;
+      }
+      img {
+        flex: none;
+        width: 72px;
+        height: 72px;
+      }
+      a {
+        color: #1d4ed8;
+      }
+      @media (max-width: 600px) {
+        .pair {
+          grid-template-columns: 1fr;
+        }
+        .mark {
+          font-size: 22px;
+          gap: 12px;
+        }
+        img {
+          width: 56px;
+          height: 56px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>GarageMotor</h1>
+        <p>Identidade escolhida: Atual em azul. Alternativas preservadas para referência.</p>
+      </header>
+      <section>
+        <h2>Atual em azul · Escolhida</h2>
+        <div class="pair">
+          <figure>
+            <figcaption>Claro</figcaption>
+            <div class="mark">
+              <img src="../symbol-blue-light.svg" alt="Símbolo atual azul claro" /><span
+                >GarageMotor</span
+              >
+            </div>
+          </figure>
+          <figure class="dark">
+            <figcaption>Escuro</figcaption>
+            <div class="mark">
+              <img src="../symbol-blue-dark.svg" alt="Símbolo atual azul escuro" /><span
+                >GarageMotor</span
+              >
+            </div>
+          </figure>
+        </div>
+      </section>
+      <section>
+        <h2>Proposta A · G aberto · Não escolhida</h2>
+        <div class="pair">
+          <figure>
+            <figcaption>Claro</figcaption>
+            <div class="mark">
+              <img src="symbol-blue-a-light.svg" alt="Proposta A clara" /><span>GarageMotor</span>
+            </div>
+          </figure>
+          <figure class="dark">
+            <figcaption>Escuro</figcaption>
+            <div class="mark">
+              <img src="symbol-blue-a-dark.svg" alt="Proposta A escura" /><span>GarageMotor</span>
+            </div>
+          </figure>
+        </div>
+      </section>
+      <section>
+        <h2>Proposta B · G conectado · Não escolhida</h2>
+        <div class="pair">
+          <figure>
+            <figcaption>Claro</figcaption>
+            <div class="mark">
+              <img src="symbol-blue-b-light.svg" alt="Proposta B clara" /><span>GarageMotor</span>
+            </div>
+          </figure>
+          <figure class="dark">
+            <figcaption>Escuro</figcaption>
+            <div class="mark">
+              <img src="symbol-blue-b-dark.svg" alt="Proposta B escura" /><span>GarageMotor</span>
+            </div>
+          </figure>
+        </div>
+      </section>
+      <p><a href="../../../../">Voltar ao GarageMotor</a></p>
+    </main>
+  </body>
+</html>

@@ -58,7 +58,7 @@ ou da remediação autorizada de Bug Fixing; não cria processo independente.
 - Não leia, exiba, registre, copie ou sobrescreva o conteúdo do arquivo externo durante validações. Antes de mover ou gravar secrets, falhe fechado se o destino já existir.
 - Não registre tokens, certificados privados, variáveis de ambiente, secrets ou logs integrais.
 - Dependências externas exigem licença permissiva, gratuita, versão fixada e manutenção verificada.
-- Nunca sugira, instale ou adicione biblioteca paga, proprietária, source-available, com licença comercial obrigatória, copyleft ou outra restrição incompatível com a distribuição MIT do GarageMotor. Licença ausente, ambígua ou não verificada bloqueia a dependência.
+- Nunca sugira, instale ou adicione biblioteca paga, proprietária, source-available, com licença comercial obrigatória, copyleft ou outra restrição incompatível com a política de dependências permissivas, gratuitas e verificadas do GarageMotor. O código próprio é AGPL-3.0-only; essa licença não aprova automaticamente dependências copyleft. Licença ausente, ambígua ou não verificada bloqueia a dependência.
 - O padrão arquitetural Mediator é permitido quando houver necessidade comprovada de desacoplar dispatch, handlers e pipelines. Nesses casos, use `Nuuvify.CommonPack.Mediator` com versão centralizada e licença da versão exata verificada; nunca use MediatR.
 - Não adicione broker, cache distribuído, microsserviço ou novo datastore sem ADR e evidência operacional.
 - APIs públicas usam OpenAPI, `application/problem+json` e versionamento explícito.

@@ -269,6 +269,7 @@
                     "enum": [
                         "manual",
                         "fuel",
+                        "electric_charge",
                         "maintenance"
                     ]
                 },
@@ -356,6 +357,96 @@
                         "active",
                         "voided"
                     ]
+                }
+            }
+        },
+        "ElectricChargeAttributes": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "vehicleId",
+                "occurredOn",
+                "energyWh",
+                "odometerKm",
+                "fullAtEnd",
+                "source",
+                "station",
+                "amountMinor",
+                "tariffRateMinorPerKwh",
+                "expenseId",
+                "expenseDate",
+                "state"
+            ],
+            "properties": {
+                "vehicleId": {
+                    "$ref": "#/$defs/Uuid"
+                },
+                "occurredOn": {
+                    "$ref": "#/$defs/Date"
+                },
+                "energyWh": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "odometerKm": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9999999
+                },
+                "fullAtEnd": {
+                    "type": "boolean"
+                },
+                "source": {
+                    "enum": [
+                        "home",
+                        "public"
+                    ]
+                },
+                "station": {
+                    "type": [
+                        "string",
+                        "null"
+                    ],
+                    "maxLength": 200
+                },
+                "amountMinor": {
+                    "$ref": "#/$defs/Money"
+                },
+                "tariffRateMinorPerKwh": {
+                    "type": [
+                        "integer",
+                        "null"
+                    ],
+                    "minimum": 1
+                },
+                "expenseId": {
+                    "$ref": "#/$defs/Uuid"
+                },
+                "expenseDate": {
+                    "$ref": "#/$defs/Date"
+                },
+                "state": {
+                    "enum": [
+                        "active",
+                        "voided"
+                    ]
+                }
+            }
+        },
+        "ElectricityTariffAttributes": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "effectiveFrom",
+                "rateMinorPerKwh"
+            ],
+            "properties": {
+                "effectiveFrom": {
+                    "$ref": "#/$defs/Date"
+                },
+                "rateMinorPerKwh": {
+                    "type": "integer",
+                    "minimum": 1
                 }
             }
         },
@@ -860,6 +951,56 @@
                 }
             }
         },
+        "ElectricChargeResource": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "id",
+                "version",
+                "kind",
+                "attributes"
+            ],
+            "properties": {
+                "id": {
+                    "$ref": "#/$defs/Uuid"
+                },
+                "version": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "kind": {
+                    "const": "electric-charge"
+                },
+                "attributes": {
+                    "$ref": "#/$defs/ElectricChargeAttributes"
+                }
+            }
+        },
+        "ElectricityTariffResource": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+                "id",
+                "version",
+                "kind",
+                "attributes"
+            ],
+            "properties": {
+                "id": {
+                    "$ref": "#/$defs/Uuid"
+                },
+                "version": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "kind": {
+                    "const": "electricity-tariff"
+                },
+                "attributes": {
+                    "$ref": "#/$defs/ElectricityTariffAttributes"
+                }
+            }
+        },
         "MaintenanceResource": {
             "type": "object",
             "additionalProperties": false,
@@ -1029,6 +1170,12 @@
                 },
                 {
                     "$ref": "#/$defs/FuelResource"
+                },
+                {
+                    "$ref": "#/$defs/ElectricChargeResource"
+                },
+                {
+                    "$ref": "#/$defs/ElectricityTariffResource"
                 },
                 {
                     "$ref": "#/$defs/MaintenanceResource"

@@ -50,9 +50,9 @@ Arquivar preserva vínculos e histórico. Novos registros financeiros ou de uso 
 
 ### Despesa e alteração — FR-006–FR-009
 
-`id`, `garage_id`, `vehicle_id`, `spent_on`, `category` fuel/maintenance/insurance/tax/other, `description` 1–500, `amount_minor` nos limites acima, `currency` BRL, `origin` manual/fuel/maintenance, `origin_id` opcional, `state` active/voided, `version`, `created_by`, `changed_by`.
+`id`, `garage_id`, `vehicle_id`, `spent_on`, `category` fuel/maintenance/insurance/tax/other, `description` 1–500, `amount_minor` nos limites acima, `currency` BRL, `origin` manual/fuel/electric_charge/maintenance, `origin_id` opcional, `state` active/voided, `version`, `created_by`, `changed_by`.
 
-Cada abastecimento ou manutenção com custo corresponde a uma despesa única. Despesas manuais de combustível não geram medição de consumo automaticamente. Anulação retira valor dos totais, mas preserva registro até exclusão da garagem. Alterações guardam campos alterados, autoria e instante em histórico restrito; logs operacionais não recebem valores/documentos pessoais.
+Cada abastecimento líquido, recarga elétrica paga ou manutenção com custo corresponde a uma despesa única. Despesas manuais de combustível não geram medição de consumo automaticamente. Anulação retira valor dos totais, mas preserva registro até exclusão da garagem. Alterações guardam campos alterados, autoria e instante em histórico restrito; logs operacionais não recebem valores/documentos pessoais.
 
 Despesas são particionadas mensalmente por `spent_on`. Chave de referência é `(id, spent_on, garage_id)`; filhos carregam a data financeira quando referenciam a despesa. Alteração da data move partição e atualiza os vínculos na mesma transação, com teste de rollback.
 
@@ -63,6 +63,17 @@ Despesas são particionadas mensalmente por `spent_on`. Chave de referência é 
 Volume, custo e despesa são gravados atomicamente. Intervalos válidos começam/terminam em tanque cheio e usam o volume que recompõe o tanque final, somado aos parciais intermediários. Divisão por zero, leituras regressivas sem justificativa, combustível não comparável ou falta de fechamento produzem indicador indisponível/explicitamente parcial.
 
 Inserção histórica justificada não substitui silenciosamente a última leitura; recálculo considera data, sequência estável e registros ativos. Correção/anulação exige versão e atualiza a despesa vinculada uma única vez.
+
+### Recarga elétrica — FR-032
+
+| Entidade | Campos e limites | Regras |
+|---|---|---|
+| ElectricityTariff | id UUID; garage_id; effective_from; rate_minor_per_kwh 1–999.999.999.999 centavos BRL/kWh; changed_by; version | Tarifa doméstica histórica por garagem; única por `(garage_id,effective_from)` e uma vigente em cada data; owner/editor alteram; reader consulta. Nova vigência não sobrescreve a anterior. |
+| ElectricCharge | id; garage_id; vehicle_id; occurred_on; energy_wh inteiro positivo; odometer_km 0–9.999.999; full_at_end boolean; source home/public; station opcional até 200; amount_minor positivo; tariff_rate_minor_per_kwh nullable; expense_id/date; state active/voided; version | Veículo deve ter fuel=electric e estar ativo; criação idempotente por FR-013. Home usa tarifa vigente no dia e guarda snapshot; public usa total cobrado informado, admitindo que o usuário registre 1 centavo (R$ 0,01) quando não houve cobrança. Cada sessão registrada cria exatamente uma Expense (`category=fuel`, `origin=electric_charge`) na mesma transação; despesa zero não é permitida. Não há percentual de bateria nem telemetria externa. |
+
+Energia é persistida em Wh inteiro para evitar `float/double`, exibida em kWh com três casas. Custo doméstico deriva da tarifa histórica e energia da sessão, arredondado uma vez a centavos BRL; atualizações de tarifa não alteram o custo histórico. Eficiência usa dois marcos ativos consecutivos com `full_at_end=true`; soma a energia das sessões posteriores ao marco cheio anterior, incluindo as parciais até o marco final, e divide pela distância positiva entre odômetros. Sem dois marcos cheios, combustível/odômetro incompatível, distância não positiva ou correção histórica não resolvida, o indicador é indisponível/parcial. Correção/anulação atualiza a despesa e invalida o recálculo atomicamente.
+
+Recarga pública sem cobrança é registrada pelo mínimo informado de R$ 0,01; o modelo não aceita despesa de valor zero.
 
 ### Manutenção, plano e compromisso — FR-014–FR-017
 
@@ -84,12 +95,20 @@ Falha entre disco e banco preserva estado pendente para reconciliação; não co
 
 ### Operação, auditoria e exportação — FR-013/FR-023/FR-024/FR-030
 
-- **OperationReceipt**: actor_id, operation_key UUID, operation_name, scope_kind actor/garage, scope_id, garage_id opcional antes da criação, request_hash, created_utc, status pending/succeeded, resource_id e response pública mínima. Scope actor/actor_id para criar garagem sem garagem existente; demais criações usam garage/garage_id. Lock e lookup usam ator, contexto e chave antes da mutação; operation_name e conteúdo normalizado entram no hash, impedindo reuso da chave em outra operação. Criar recurso e recibo na mesma transação; após criação de garagem, vincular garage_id e reautorizar membership em todo replay. Conteúdo diferente retorna 409; resultado idêntico preserva status/id/version originais. Manter recibos enquanto existir a garagem, sem armazenar tokens de convite/sessão. Em partições, lock transacional e busca entre partições antes de criar; não presumir unicidade global. Cobrir garagens, veículos, convites, despesas, abastecimentos, manutenção, planos, compromissos, comprovantes e exportações.
+- **OperationReceipt**: actor_id, operation_key UUID, operation_name, scope_kind actor/garage, scope_id, garage_id opcional antes da criação, request_hash, created_utc, status pending/succeeded, resource_id e response pública mínima. Scope actor/actor_id para criar garagem sem garagem existente; demais criações usam garage/garage_id. Lock e lookup usam ator, contexto e chave antes da mutação; operation_name e conteúdo normalizado entram no hash, impedindo reuso da chave em outra operação. Criar recurso e recibo na mesma transação; após criação de garagem, vincular garage_id e reautorizar membership em todo replay. Conteúdo diferente retorna 409; resultado idêntico preserva status/id/version originais. Manter recibos enquanto existir a garagem, sem armazenar tokens de convite/sessão. Em partições, lock transacional e busca entre partições antes de criar; não presumir unicidade global. Cobrir garagens, veículos, convites, despesas, abastecimentos, recargas elétricas, versões de tarifa elétrica, manutenção, planos, compromissos, comprovantes e exportações.
 - **AuditEvent**: id, garage_id opcional, actor_id pseudônimo, action, target_id, changed_fields sem conteúdo sensível, created_utc. Retenção 90 dias; partições mensais. Sem senhas, tokens, arquivos, payload integral ou valores pessoais em logs.
 - **ExportJob**: id, garage_id, requesting_owner_id, state pending/running/ready/failed/expired, created_utc, expires_utc, arquivo/checksum. Worker interno na mesma aplicação, sem broker; download reautoriza owner. Exportação expira após 24 horas e não inclui hashes de senha, tokens, códigos ou credenciais operacionais.
 - **GarageDeletion**: garage_id, confirmação do owner, requested_utc, deadline_utc=requested_utc+30 dias, completed_utc opcional e estado requested/running/completed/failed. Prazo inclui dados ativos, arquivos e todas as cópias gerenciadas contendo a garagem, inclusive anteriores ao pedido ou criadas durante processamento; criar cópia não reinicia deadline. Não remover dados de outra garagem.
 - **BackupCatalog**: backup_id, created_utc, expires_utc, manifest_hash, location_key privada, garage_ids presentes, state creating/ready/expired/deleting/deleted e effective_deadline_utc. Inventário local na persistência já proposta, sem datastore novo; cada pedido antecipa o prazo das cópias correspondentes para no máximo requested_utc+30 dias. Registrar confirmação de remoção por cópia, sem publicar localização privada.
 - **DeletionAuthority**: sequência monotônica, garage_id, requested_utc, deadline_utc e estado/completed_utc, mantidos como metadados operacionais mínimos sob acesso restrito. Não substituir essa autoridade por dados do dump restaurado. Fonte atual autenticada e coordenada ou exportação operacional independente verificada pelo operador, com sequência/instante/procedência e integridade; ausência de evidência de atualidade bloqueia a restauração. Não exige conta/serviço SaaS. Metadados não entram na exportação familiar nem em logs públicos; retenção acompanha as cópias gerenciadas que ainda poderiam conter a garagem.
+
+### Busca textual — FR-031
+
+- Campos de registros: `Garage.name`; `Vehicle.label/brand/model`; `Expense.description`; `FuelRecord.station`; `Maintenance.description`; `MaintenancePlan.title`; `Commitment.title`. Busca de domínio opera em uma única garagem, somente sobre registros que a membership atual permite consultar; o servidor revalida o contexto em cada consulta.
+- Campos de auditoria: `action`, `actor_id` pseudonimizado, `target_id` e nomes de campos em `changed_fields`, sem valores alterados. Somente owner ativo da garagem pode pesquisar sua auditoria; a autorização é verificada em cada consulta. Respeitar a retenção de 90 dias.
+- Excluir placa, Renavam, chassi, valores monetários, nomes/conteúdo de comprovantes, credenciais e secrets dos documentos de busca. Arquivos não são lidos nem tokenizados.
+- Usar full-text search nativo PostgreSQL com configuração `portuguese`, normalização imutável de acentos e `websearch_to_tsquery` (termos, frases, `OR` e exclusão por `-`); não requer `CREATE EXTENSION`. Criar índices GIN nos campos autorizados; para relações particionadas, o índice do pai deve abranger todas as partições mensais, inclusive default e futuras. Consultas devem usar parâmetros e aplicar `garage_id`/autorização antes de retornar hits.
+- API separa busca de registros e busca de auditoria. Ambas usam `q` limitado a 200 caracteres, limite padrão 50/máximo 100 e cursor opaco estável; registros ordenam por relevância e desempate determinístico por tipo/id, auditoria por instante/id decrescente. Não retornar snippets de campos excluídos.
 
 ## Partições, integridade e retenção
 
@@ -117,4 +136,4 @@ O estado da autoridade inclui `source_instance_id`, `coverage_from_utc`, `verifi
 
 ## Cobertura
 
-US1: identidade/garagem/membros. US2: despesas/totais. US3: abastecimento/recibos. US4: manutenção/compromissos. US5: comprovantes. US6: exportação, recuperação e matriz operacional. As relações acima cobrem FR-001–FR-030; desempenho, Android e acessibilidade serão verificados conforme o plano e quickstart.
+US1: identidade/garagem/membros. US2: despesas/totais. US3: abastecimento/recibos. US8: recarga elétrica/tarifas/eficiência. US4: manutenção/compromissos. US5: comprovantes. US6: exportação, recuperação e matriz operacional. US7: busca textual. As relações acima cobrem FR-001–FR-032; desempenho, Android e acessibilidade serão verificados conforme o plano e quickstart.

@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "verifiedOn": "2026-11-10",
+  "images": [
+    {
+      "component": "postgresql",
+      "image": "docker.io/library/postgres:18.6",
+      "tagMetadata": "https://hub.docker.com/v2/repositories/library/postgres/tags/18.6",
+      "projectLicense": "PostgreSQL License",
+      "licenseSource": "https://github.com/postgres/postgres/blob/REL_18_6/COPYRIGHT",
+      "termsAcceptanceRequired": false,
+      "licenseReview": "gosu 1.19 e moby/sys/user v0.1.0: Apache-2.0; golang.org/x/sys v0.1.0: BSD-3-Clause; ver docs/dependencies.md",
+      "digestsByPlatform": {
+        "linux/amd64": "sha256:e923a22ac074261dd73970c57edf659475bf0497cb9456f17d98ed7cdd3ca913",
+        "linux/arm64": "sha256:a8a18afebc8b2b529112c931f193151b712e566b7a49563dc0f328d51f652087"
+      }
+    },
+    {
+      "component": "nginx",
+      "image": "docker.io/library/nginx:1.30.6",
+      "tagMetadata": "https://hub.docker.com/v2/repositories/library/nginx/tags/1.30.6",
+      "projectLicense": "BSD-2-Clause",
+      "licenseSource": "https://github.com/nginx/nginx/blob/release-1.30.6/LICENSE",
+      "termsAcceptanceRequired": false,
+      "licenseReview": "gettext-runtime/intl-java/libintl.jar: LGPL-2.1+ conforme copyright Debian do gettext 0.23.1-2",
+      "digestsByPlatform": {
+        "linux/amd64": "sha256:909063468649748c84e0fa2a67869c7b0b2d431c72b73cf654e4052f1e2d2937",
+        "linux/arm64": "sha256:7741be97ccd75a002a9a6a86a50fda07fdc990b71c486ee170af517749f0aef1"
+      }
+    },
+    {
+      "component": "node-lockfile-runner",
+      "image": "docker.io/library/node:24.22.2-bookworm-slim",
+      "tagMetadata": "https://hub.docker.com/v2/repositories/library/node/tags/24.22.2-bookworm-slim",
+      "projectLicense": "MIT",
+      "licenseSource": "https://github.com/nodejs/node/blob/v24.22.2/LICENSE",
+      "termsAcceptanceRequired": false,
+      "licenseReview": "binário Node.js 24.22.2: MIT conforme LICENSE oficial; pacotes Debian revisados pelos metadados e avisos da imagem",
+      "digestsByPlatform": {
+        "linux/amd64": "sha256:c0a93797ee78814ae6d32fcca2561fdbbe423149c3f5389aad32d86e9fd85bd4",
+        "linux/arm64": "sha256:5f07e73c8822c93b47ee85fa5e228d7f7b45d3107f8c749f97da46e472efbf91"
+      }
+    },
+    {
+      "component": "dotnet-sdk-lockfile-runner",
+      "image": "docker.io/lzocateli/dotnet-sdk:10.0.403-noble-v1",
+      "imageByPlatform": {
+        "linux/amd64": "docker.io/lzocateli/dotnet-sdk:10.0.403-noble-v1",
+        "linux/arm64": "mcr.microsoft.com/dotnet/sdk:10.0.403-noble"
+      },
+      "tagMetadata": "https://hub.docker.com/v2/repositories/lzocateli/dotnet-sdk/tags/10.0.403-noble-v1",
+      "projectLicense": "MIT",
+      "licenseSource": "https://github.com/lzocateli/containers/blob/main/dotnet-sdk/README.md",
+      "termsAcceptanceRequired": false,
+      "noticesByPlatform": {
+        "linux/amd64": { "pathInImage": "/usr/share/dotnet/ThirdPartyNotices.txt", "sha256": "2dc8f8c5a39401e928b5784ab564eb8b3ceb99ead3df8f260e0cab7e0bbecc7a", "licensePathInImage": "/usr/share/dotnet/LICENSE.txt", "licenseSha256": "cfc21f5e8bd655ae997eec916138b707b1d290b83272c02a95c9f821b8c87310" },
+        "linux/arm64": { "pathInImage": "/usr/share/dotnet/ThirdPartyNotices.txt", "source": "https://github.com/dotnet/dotnet-docker/blob/main/src/sdk/10.0/noble/arm64v8/Dockerfile" }
+      },
+      "tagMetadataByPlatform": {
+        "linux/arm64": "https://mcr.microsoft.com/v2/dotnet/sdk/manifests/10.0.403-noble"
+      },
+      "provenanceLayerDigest": "sha256:72a297a01ebef425c41fcb2ffcceed18571771cc272fdfb7abc5bc749b1e2728",
+      "digestsByPlatform": {
+        "linux/amd64": "sha256:b3a7f0bea815888d9b4516a1d02c6369c140d092608896c53cd3141bebdea315",
+        "linux/arm64": "sha256:c99fcb290d1df5a09f0e4e99904d47d6027f966f50be4004088f14f57cf8ebbc"
+      }
+    },
+    {
+      "component": "dotnet-aspnet-runtime",
+      "image": "docker.io/lzocateli/dotnet-aspnet:10.0.14-noble-v1",
+      "imageByPlatform": {
+        "linux/amd64": "docker.io/lzocateli/dotnet-aspnet:10.0.14-noble-v1",
+        "linux/arm64": "mcr.microsoft.com/dotnet/aspnet:10.0.14-noble"
+      },
+      "tagMetadata": "https://hub.docker.com/v2/repositories/lzocateli/dotnet-aspnet/tags/10.0.14-noble-v1",
+      "projectLicense": "MIT",
+      "licenseSource": "https://github.com/lzocateli/containers/blob/main/dotnet-aspnet/README.md",
+      "termsAcceptanceRequired": false,
+      "noticesByPlatform": {
+        "linux/amd64": { "pathInImage": "/usr/share/dotnet/ThirdPartyNotices.txt", "sha256": "2dc8f8c5a39401e928b5784ab564eb8b3ceb99ead3df8f260e0cab7e0bbecc7a", "licensePathInImage": "/usr/share/dotnet/LICENSE.txt", "licenseSha256": "cfc21f5e8bd655ae997eec916138b707b1d290b83272c02a95c9f821b8c87310" },
+        "linux/arm64": { "pathInImage": "/usr/share/dotnet/ThirdPartyNotices.txt", "source": "https://github.com/dotnet/dotnet-docker/blob/main/src/aspnet/10.0/noble/arm64v8/Dockerfile" }
+      },
+      "tagMetadataByPlatform": {
+        "linux/arm64": "https://mcr.microsoft.com/v2/dotnet/aspnet/manifests/10.0.14-noble"
+      },
+      "provenanceLayerDigest": "sha256:a9b12a6869fe1ca7365b20f872f90a002c44c0864e2f2f5cc225d3d43ca000b7",
+      "digestsByPlatform": {
+        "linux/amd64": "sha256:779a9cbc0ecd4ec5151b63fbf87e51aac6ba875c31a36148f63d841b76d4e621",
+        "linux/arm64": "sha256:974fe714c41fc8892ed224abd671e3c582dcfc22709d1c9cd0a852be6f40287f"
+      }
+    },
+    {
+      "component": "playwright-test-runner",
+      "image": "mcr.microsoft.com/playwright:v1.65.0-noble",
+      "tagMetadata": "https://mcr.microsoft.com/v2/playwright/manifests/v1.65.0-noble",
+      "projectLicense": "Apache-2.0",
+      "licenseSource": "https://github.com/microsoft/playwright/blob/v1.65.0/LICENSE",
+      "termsAcceptanceRequired": false,
+      "licenseReview": "Firefox binário coberto pela orientação de licenciamento Mozilla; componente sem aviso local próprio, não redistribuir imagem nem binário",
+      "manifestListDigest": "sha256:6e3fb709361521eb27161606e6da6d2674e5e89fa16516cb37d6fdd91372273d",
+      "digestsByPlatform": {
+        "linux/amd64": "sha256:bc4fbb329a25287ed23e9216c97063646abdd1bf2da669a9895fa3e2078b2302",
+        "linux/arm64": "sha256:ccf917390e8eea6cad2bb493313b9d8db2856ed41c24db0a6727eacc766fd273"
+      }
+    }
+  ]
+}

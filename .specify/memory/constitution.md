@@ -1,5 +1,14 @@
 # Constituição do GarageMotor
 
+<!-- Relatório temporário de impacto; remover antes do commit.
+- Versão: 1.4.0 -> 2.0.0 (MAJOR, remoção do gate constitucional de auditoria por camada).
+- Princípio III ajustado: imagens continuam fixadas para reprodutibilidade, sem exigir
+	aprovação individual de digest/plataforma nem SBOM/auditoria por camada para uso local.
+- Seções adicionadas: nenhuma.
+- Seções removidas: nenhuma.
+- Acompanhamento: alinhar os scripts e o inventário de imagens à regra revisada via Spec Kit.
+-->
+
 - **Origem**: humano; redação e organização IA assistida.
 - **Revisor humano**: CEO da Altivy e owner do GarageMotor, conforme identificação nesta conversa.
 - **Decisão humana**: em 2026-11-08, o owner solicitou "Mude o licenciamento para AGPL-3.0"
@@ -69,6 +78,47 @@ Essas ferramentas não devem ser distribuídas com o app. A exceção permite a 
 Android sem enfraquecer a regra do código e não autoriza execução fora de containers,
 instalação, publicação ou a cadeia iOS/macOS.
 
+Por decisão humana explícita de 2026-11-09, ficam excepcionalmente aprovados para
+download e uso somente como ferramentas de build/teste, em containers, os seguintes
+artefatos já fixados nos lockfiles da feature `001-garagem-pessoal`:
+
+- `lightningcss@1.33.0`, licença declarada MPL-2.0, integridade npm
+	`sha512-WkUDrojuJs0xkgGf2udWxa3yGBRxPtxUkB79i6aCZLRgc7PM8fZe9TosfPDcvEpQZbuFASnHYmRLBLUbmLOIIA==`.
+- `caniuse-lite@1.0.30001823`, licença declarada CC-BY-4.0, integridade npm
+	`sha512-TQ5s/djDjNk1axreUW+4rULH+BmdCMLiJkhaXnO5wqivG7tITkSUj4ItIdzqdZHKaXcHAV8dhH3JxOM7/7bwqw==`.
+- `Microsoft.Testing.Extensions.CodeCoverage@18.12.0`, `contentHash`
+	`BST/sWYpKk9OXO7Yxktcg6FWORRsHU0EdCbMwZ7d3OqJsMKlrNHIZ30g0Ib4k5T5acJYXRBmg9mNrTU/N6cy1g==`.
+	A licença exata continua não verificada; a aprovação não afirma compatibilidade
+	nem substitui revisão jurídica.
+- `lightningcss-linux-x64-gnu@1.33.0`, variante opcional para Linux x64 glibc,
+	licença declarada MPL-2.0, integridade npm
+	`sha512-ar+Ju7LmcN0Jo4FpL4hpFybwNG9/3A/Br5KW2n2jyODg3MEZXaDYADdemoNS+BDNfMgKvylJLj4S5tyRActuAg==`.
+
+A exceção cobre apenas os identificadores, versões e integridades acima, no uso
+de ferramentas de build/teste desta feature. Não permite incorporar esses pacotes
+ao runtime, distribuí-los com o aplicativo, aceitar contratos automaticamente ou
+adotar outras versões/dependências. Avisos e obrigações aplicáveis, inclusive
+atribuição, devem ser preservados. Todas as demais dependências continuam sujeitas
+à regra de licença permissiva, gratuita e verificada. A exceção não cria precedente
+para outra feature. As demais variantes de plataforma de `lightningcss` presentes
+no lockfile não estão incluídas nesta aprovação.
+
+Imagens de container usadas para desenvolvimento, build, testes, banco, proxy ou
+runtime podem conter camadas com licenças distintas das dependências incorporadas
+ao código da aplicação. Para uso local e self-hosted, não é necessária aprovação
+constitucional individual por imagem, digest ou plataforma, nem SBOM ou auditoria
+de licença camada a camada como pré-requisito. As referências devem continuar
+fixadas em tag/digest no lock aplicável para reprodutibilidade, e mudanças devem
+seguir o fluxo normal de revisão e autorização da feature.
+
+O uso de imagens respeita as licenças e os termos publicados por seus fornecedores;
+isso não altera a política de licenças das bibliotecas incorporadas ao produto nem
+concede direitos adicionais sobre conteúdo de terceiros. Antes de redistribuir ou
+publicar uma imagem upstream ou derivada, a tarefa deve verificar as licenças,
+preservar avisos exigidos e obter aceites contratuais humanos quando aplicáveis.
+SBOMs podem ser geradas quando forem úteis para segurança, manutenção ou distribuição,
+mas não são um gate constitucional geral para uso local/self-hosted.
+
 ### IV. Segurança, confidencialidade e integridade
 
 Secrets devem permanecer exclusivamente no local externo previsto nas
@@ -134,6 +184,12 @@ restrita na constituição antes de fechar o plano", para ferramentas de build/t
 Android. O incremento MINOR registra a ampliação; não altera a licença do código próprio
 ou a autorização necessária para implementar e publicar.
 
+Emenda `2.0.0`, autorizada pelo owner em 2026-11-10, simplifica a governança de imagens:
+remove aprovação constitucional individual por digest/plataforma e o gate obrigatório
+de SBOM/auditoria de licença por camada para uso local/self-hosted. O incremento MAJOR
+registra a remoção de controles incompatíveis com a regra anterior; mantém pins para
+reprodutibilidade e obrigações de terceiros em caso de distribuição.
+
 A constituição registra princípios duradouros; instruções operacionais registram
 procedimentos; specs e tarefas registram mudanças; ADRs registram decisões justificadas.
 Nenhum agente pode alterar aprovação humana ou status histórico sem decisão referenciada.
@@ -148,6 +204,16 @@ devem verificar aderência e registrar conflitos sem resolvê-los silenciosament
 A referência MIT das instruções e da avaliação é histórica e requer reconciliação em
 tarefa Spec Kit separada. Até essa tarefa, a decisão constitucional de AGPL para o código
 próprio é explícita, mas não se deve afirmar que o arquivo LICENSE, os avisos ou a auditoria
-jurídica já foram entregues. A restrição atual de dependências permanece preservada.
+jurídica já foram entregues. A regra de dependências permanece, exceto pelas aprovações
+pontuais e delimitadas das emendas 1.2.0 e 1.3.0 e pela regra de imagens da emenda 2.0.0;
+a exceção de imagens 1.4.0 é histórica e foi substituída.
 
-**Versão**: 1.1.0 | **Ratificada em**: 2026-11-08 | **Última alteração**: 2026-11-08
+**Versão**: 2.0.0 | **Ratificada em**: 2026-11-08 | **Última alteração**: 2026-11-10
+
+## Next Actions
+
+- Retomar `/speckit-implement` após revisão e autorização das tarefas para alinhar
+	`tools/scripts/validate-feature.ps1`, `tools/scripts/start-local.ps1` e
+	`docs/dependencies.md` à remoção do gate obrigatório de auditoria de imagens.
+- Antes de qualquer publicação, verificar se os artefatos finais incorporam conteúdo
+	ou dados sujeitos a MPL-2.0 ou CC-BY-4.0 e cumprir as obrigações correspondentes.

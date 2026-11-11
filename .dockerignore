@@ -1,0 +1,25 @@
+# Repository and build output
+.git/
+Dockerfile*
+.dockerignore
+**/bin/
+**/obj/
+**/node_modules/
+**/dist/
+**/coverage/
+**/.angular/cache/
+**/.gradle/
+**/build/
+
+# Local configuration and secrets
+.env*
+**/secrets.json
+**/*.pem
+**/*.key
+
+# Temporary and local files
+*.log*
+*.tmp
+*.swp
+.DS_Store
+Thumbs.db

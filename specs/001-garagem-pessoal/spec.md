@@ -4,7 +4,7 @@
 
 **Criada em**: 2026-11-08
 
-**Status**: Rascunho para revisão humana; implementação não autorizada
+**Status**: Revisão humana concluída; implementação autorizada em 2026-11-09 conforme plano e tarefas.
 
 **Entrada**: "Pessoas e famílias com veículos, abastecimentos, despesas, manutenção, lembretes e comprovantes. Web, self-hosted e Android primeiro; iOS após resolver a cadeia de build."
 
@@ -16,10 +16,30 @@
 
 ### Session 2026-11-09
 
-- Q: Quais criações devem impedir duplicação quando o usuário repete a mesma operação? → A: Todas as criações de recursos do domínio: garagens, veículos, convites, despesas, abastecimentos, manutenção, planos, compromissos, comprovantes e exportações.
+- Q: Quais criações devem impedir duplicação quando o usuário repete a mesma operação? → A: Todas as criações de recursos do domínio: garagens, veículos, convites, despesas, abastecimentos, recargas de veículos elétricos, versões de tarifa elétrica, manutenção, planos, compromissos, comprovantes e exportações.
 - Q: Qual política de validade e tentativas deve proteger os códigos de recuperação de conta? → A: Códigos aleatórios com ao menos 128 bits, uso único; SMTP válido por 15 minutos; dez códigos offline por lote, válidos por 12 meses; até cinco falhas por conta em 15 minutos e limite adicional por origem. Renovação invalida o lote anterior; recuperação concluída revoga sessões e os demais códigos, sem bloqueio permanente por falhas.
 - Q: Como devem ser contados os prazos para excluir a garagem e impedir sua volta por um backup antigo? → A: Dados ativos, arquivos e backups gerenciados contendo a garagem são eliminados até 30 dias após o pedido. Restauração verifica e reaplica pedidos posteriores ao backup; fica bloqueada se não conseguir verificá-los. O operador responde pelas cópias sob sua gestão, sem garantia do app para cópias particulares externas a esse controle.
 - Q: Qual cenário deve comprovar o tempo de resposta do histórico e dos totais? → A: Dez usuários simultâneos, dois minutos de aquecimento e dez de medição; 80% histórico e 20% totais. Conjunto fictício determinístico de 10.000 despesas em 20 garagens, três veículos por garagem e 12 meses; matriz de 4 vCPU, 8 GiB RAM e SSD; P95 de cada tipo em até dois segundos, sem erros inesperados, medido pelo proxy.
+- Q: Para esclarecer “busca habilitada”, quais dados devem ser pesquisáveis no PostgreSQL? → A: Ambos: eventos de auditoria e registros da garagem, limitados aos dados que o usuário pode consultar conforme suas permissões vigentes.
+- Q: Quais campos textuais dos registros da garagem devem entrar na busca, mantendo a auditoria limitada aos campos já previstos em FR-030? → A: Somente texto descritivo: nome da garagem; label, marca e modelo do veículo; descrição de despesa e manutenção; posto de abastecimento; título de plano e compromisso. Excluir placa, Renavam, chassi, valores, nomes e conteúdo de arquivos, secrets e credenciais.
+- Q: Quem deve poder pesquisar os eventos de auditoria de uma garagem? → A: Somente o proprietário ativo daquela garagem, com verificação de membership e escopo em cada consulta.
+- Q: Como a busca aprovada deve ficar disponível para o usuário? → A: Busca nos dados da garagem pela interface e API no web e Android; busca de auditoria pela aplicação somente para o proprietário ativo da garagem.
+- Q: Quais informações cada recarga deve registrar e quais métricas o app deve calcular? → A: Data, energia em kWh, valor pago, odômetro e tipo/local da recarga; calcular km/kWh e custo/km somente entre leituras válidas.
+- Q: Como o app deve registrar o custo de uma recarga doméstica ou pública? → A: Usar tarifa elétrica configurável para recargas domésticas, preservando a tarifa aplicada em cada sessão; em recargas públicas, permitir informar o valor total cobrado.
+- Q: Como a tarifa doméstica de eletricidade deve ser configurada? → A: Uma tarifa BRL/kWh por garagem com data de vigência e histórico; cada recarga preserva a tarifa aplicada.
+- Q: Quais papéis da garagem podem cadastrar ou alterar a tarifa doméstica de eletricidade? → A: Owner e editor ativos podem alterar a tarifa; reader consulta os registros e custos, mas não altera a configuração.
+- Q: Sem registrar percentual de bateria, que intervalo deve ser considerado válido para calcular km/kWh? → A: Entre dois marcos consecutivos de bateria cheia; somar a energia das recargas parciais intermediárias e da recarga que fecha o intervalo. Sem dois marcos cheios, indicar resultado parcial ou indisponível.
+- Q: Como registrar uma recarga pública sem cobrança, considerando que despesas aceitam somente valores positivos? → A: Não criar valor zero; permitir ao usuário informar o mínimo de R$ 0,01 para registrar a sessão.
+
+### Session 2026-11-11
+
+**Origem**: decisões humanas nesta conversa; registro IA assistida. **Revisor humano**: CEO da Altivy e owner do GarageMotor. O owner respondeu às quatro pendências Android apresentadas: "1. Esta aceito; 2. Minimo 15; 3. use o recomendado; 4. A garda da chave devera ser em vault da empresa e disponivel no github de forma segura para deploy".
+
+- Q: O responsável autorizado aceita os termos do Android SDK identificados como `android-sdk-license` para os artefatos fixados da toolchain? → A: Aceito pelo owner em 2026-11-11; registrar a decisão humana, sem aceite automático de outros contratos ou versões.
+- Q: Qual versão mínima do Android será suportada? → A: Android 15 (API 35), mantendo Android 15/16 na matriz inicial.
+- Q: Qual identificador permanente será utilizado no app Android? → A: Adotar o recomendado `it.altivy.garagemotor`.
+- Q: Onde deve ficar a chave de assinatura Android e como disponibilizá-la para deploy? → A: Guarda no vault corporativo e acesso seguro pelo GitHub para deploy; nunca versionar chave ou senhas. As opções corporativas indicadas são Azure Key Vault ou 1Password via `op`; escolha operacional e integração ainda precisam ser definidas. Essa diretriz não autoriza publicar ou executar deploy.
+- Q: Qual solução de vault a Altivy utiliza para essa guarda? → A: O owner indicou "Azure Vault ou 1password via op". Registrar Azure Key Vault e 1Password via `op` como alternativas, sem inferir seleção definitiva, uso simultâneo ou autorização para instalar ferramentas, acessar secrets ou criar recursos.
 
 ## Cenários de Usuário e Testes *(obrigatório)*
 
@@ -67,6 +87,24 @@ O usuário registra abastecimentos e acompanha volume, gasto e consumo quando ex
 2. **Dado** abastecimentos parciais entre dois completos, **Quando** consulta consumo, **Então** usa o volume acumulado correspondente ao intervalo; sem fechamento válido, o consumo fica indisponível.
 3. **Dado** repetição do envio ou odômetro regressivo, **Quando** registra, **Então** não duplica a operação e exige correção ou justificativa explícita para uma leitura histórica fora de sequência.
 
+### História de Usuário 8 - Registrar recargas de carros elétricos (Prioridade: P1)
+
+O usuário registra recargas de um carro elétrico, acompanha energia e custo e consulta eficiência somente quando as leituras de odômetro permitem um intervalo válido.
+
+**Motivo da prioridade**: incluir recarga como jornada própria para veículos elétricos, sem tratá-la como abastecimento de combustível líquido.
+
+**Teste independente**: registrar recargas fictícias em casa e em ponto público, conferir kWh/custo e a eficiência em um intervalo válido de odômetro; verificar que intervalo inválido não apresenta métrica completa.
+
+**Cenários de aceitação**:
+
+1. **Dado** um veículo elétrico ativo, **Quando** registra uma recarga, **Então** informa data, kWh, valor pago, odômetro e tipo/local; ponto de recarga pode ser informado quando aplicável.
+2. **Dado** uma recarga repetida após falha de rede, **Quando** repete a mesma operação autorizada, **Então** recebe o resultado anterior sem duplicar recarga ou despesa.
+3. **Dado** odômetro ausente, regressivo ou insuficiente para formar intervalo válido, **Quando** consulta eficiência, **Então** vê indicador indisponível ou parcial, nunca km/kWh ou custo/km apresentado como completo.
+4. **Dado** uma recarga doméstica, **Quando** calcula o custo, **Então** usa a única tarifa BRL/kWh da garagem vigente na data e preserva a tarifa aplicada; alterações de tarifa não recalculam sessões anteriores. Para recarga pública, aceita o valor total cobrado ou o mínimo de R$ 0,01 quando não houve cobrança, sem despesa de valor zero.
+5. **Dado** uma garagem com owner, editor e reader, **Quando** altera a tarifa doméstica, **Então** owner/editor ativos podem fazê-lo e reader recebe recusa sem modificar a tarifa.
+6. **Dado** dois marcos consecutivos de bateria cheia com recargas parciais entre eles, **Quando** calcula km/kWh, **Então** soma os kWh das sessões posteriores ao marco cheio anterior até a sessão que fecha o intervalo; sem dois marcos cheios, não apresenta eficiência como completa.
+7. **Dado** uma mudança de tarifa enviada com resposta perdida, **Quando** owner/editor repete a mesma criação com o mesmo Idempotency-Key, **Então** recebe a mesma versão tarifária sem duplicar vigências.
+
 ### História de Usuário 4 - Planejar manutenção e compromissos (Prioridade: P2)
 
 O usuário acompanha manutenção preventiva/corretiva e compromissos de óleo, revisão, seguro e licenciamento por data ou quilometragem.
@@ -109,6 +147,20 @@ Uma pessoa usa a garagem no navegador e Android, conectada ao serviço gerenciad
 2. **Dado** indisponibilidade de rede, **Quando** tenta gravar, **Então** a interface informa falha e não declara sucesso nem gera duplicação ao repetir após reconectar.
 3. **Dado** uma cópia válida do histórico e dos comprovantes e o estado verificado dos pedidos de exclusão posteriores à cópia, **Quando** restaura em instância limpa, **Então** recupera relações, valores e arquivos ainda autorizados, reaplica as exclusões e não inclui secrets na exportação; sem conseguir verificar esses pedidos, a restauração fica bloqueada antes de disponibilizar dados.
 
+### História de Usuário 7 - Pesquisar registros e atividade (Prioridade: P2)
+
+O usuário localiza registros da garagem pela web ou Android; o proprietário ativo também consulta a auditoria da própria garagem.
+
+**Motivo da prioridade**: localizar dados históricos e atividade autorizada sem expor registros ou campos fora do escopo de busca.
+
+**Teste independente**: popular duas garagens com termos fictícios e acentuados; confirmar resultados autorizados no web/API e Android, busca de auditoria apenas para owner e ausência de resultados por campos excluídos ou da outra garagem.
+
+**Cenários de aceitação**:
+
+1. **Dado** um membro ativo e registros da garagem com termos pesquisáveis, **Quando** pesquisa pelo web ou Android, **Então** encontra somente registros acessíveis daquela garagem nos campos descritivos de FR-031.
+2. **Dado** o proprietário ativo da garagem, **Quando** pesquisa a auditoria, **Então** encontra eventos apenas pelos campos permitidos de FR-030; membro sem papel owner recebe recusa sem dados.
+3. **Dado** uma consulta por placa, Renavam, chassi, valor ou conteúdo/nome de comprovante, **Quando** pesquisa, **Então** a busca não usa esses campos para localizar nem expõe esses dados nos resultados.
+
 ### Casos de Borda
 
 - Convite expirado, reutilizado, revogado ou aceito por identidade diferente; último proprietário não pode sair sem transferência.
@@ -137,7 +189,7 @@ Uma pessoa usa a garagem no navegador e Android, conectada ao serviço gerenciad
 - **FR-010**: Registrar abastecimento com data, volume positivo em litros, valor positivo, odômetro, combustível, tanque cheio e posto opcional.
 - **FR-011**: Calcular consumo entre dois registros de tanque cheio com volume que recompõe o tanque, incluindo parciais intermediários; distinguir combustível e excluir intervalos inválidos ou incompletos.
 - **FR-012**: Tratar odômetro regressivo/histórico com validação e justificativa, recalculando os intervalos afetados sem alterar dados de outra garagem.
-- **FR-013**: Impedir duplicação em repetição da mesma criação de garagem, veículo, convite, despesa, abastecimento, manutenção, plano, compromisso, comprovante ou exportação. Mesma operação, ator, contexto e conteúdo retorna o resultado anterior após revalidar acesso; conteúdo diferente para a mesma operação e edição com versão divergente são recusados como conflito, com informação recuperável ao usuário. Cadastro de conta e abertura de sessão têm regras próprias e não pertencem a essa lista de recursos do domínio.
+- **FR-013**: Impedir duplicação em repetição da mesma criação de garagem, veículo, convite, despesa, abastecimento, recarga de veículo elétrico, versão de tarifa elétrica, manutenção, plano, compromisso, comprovante ou exportação. Mesma operação, ator, contexto e conteúdo retorna o resultado anterior após revalidar acesso; conteúdo diferente para a mesma operação e edição com versão divergente são recusados como conflito, com informação recuperável ao usuário. Cadastro de conta e abertura de sessão têm regras próprias e não pertencem a essa lista de recursos do domínio.
 - **FR-014**: Registrar manutenção preventiva/corretiva, conclusão, data, odômetro e despesa vinculada sem contabilização duplicada.
 - **FR-015**: Definir planos e compromissos por data, quilometragem ou ambos; vence pelo primeiro limite atingido e recorrência parte da conclusão registrada.
 - **FR-016**: Exibir lembretes próximos, vencidos e concluídos, com critério e última leitura usados; janela inicial de proximidade é 30 dias ou 500 km.
@@ -145,7 +197,7 @@ Uma pessoa usa a garagem no navegador e Android, conectada ao serviço gerenciad
 - **FR-018**: Associar até cinco comprovantes PDF, JPG ou PNG por despesa/manutenção, com no máximo 10 MiB cada, sem processamento OCR.
 - **FR-019**: Validar conteúdo, tipo, tamanho e destino autorizado dos arquivos; impedir navegação de diretório e execução inline; nunca expor caminho real de armazenamento.
 - **FR-020**: Exigir autorização em cada recuperação de arquivo e preservar integridade/consistência entre vínculo e conteúdo, inclusive após falhas ou exclusão.
-- **FR-021**: Oferecer o núcleo US1–US5 no navegador e Android, com conexão necessária para gravação; seleção de instância própria deve separar sessão e dados de instâncias anteriores.
+- **FR-021**: Oferecer o núcleo US1–US8 no navegador e Android 15 (API 35) ou superior, com conexão necessária para gravação; seleção de instância própria deve separar sessão e dados de instâncias anteriores.
 - **FR-022**: Validar conexão e versão compatível antes do uso; não aceitar silenciosamente certificado inválido ou servidor incompatível nem declarar sucesso quando a gravação falhar.
 - **FR-023**: Disponibilizar exportação estruturada de dados da garagem ao proprietário, sem credenciais; oferecer procedimento de backup/restauração que inclua comprovantes e verifique integridade. Antes de disponibilizar dados restaurados, verificar e reaplicar pedidos de exclusão posteriores ao backup; sem estado verificável desses pedidos, bloquear a restauração, sem depender obrigatoriamente de SaaS para essa verificação.
 - **FR-024**: Permitir solicitar exclusão da garagem após confirmação e exportação opcional. Dados ativos, comprovantes e backups gerenciados que contenham a garagem devem ser eliminados até 30 dias após o pedido, inclusive cópias criadas durante seu processamento. O operador SaaS ou self-hosted responde pelas cópias sob sua gestão; cópias particulares fora desse controle não têm eliminação garantida pelo app, e essa limitação deve ser informada ao proprietário. Término de suporte não bloqueia direitos ou acesso aos próprios dados.
@@ -155,6 +207,8 @@ Uma pessoa usa a garagem no navegador e Android, conectada ao serviço gerenciad
 - **FR-028**: Distribuir código próprio sob AGPL-3.0-only com avisos, licença e acesso ao código correspondente nos termos aplicáveis; preservar direitos/avisos de terceiros e separar dados/secrets do material publicado.
 - **FR-029**: Publicar matriz de capacidade testada e procedimento de instalação, atualização e recuperação; os limites testados não constituem restrição legal de veículos.
 - **FR-030**: Registrar eventos de segurança e alterações relevantes sem conteúdo de comprovantes, credenciais ou dados pessoais desnecessários, com acesso restrito e retenção documentada.
+- **FR-031**: Oferecer busca textual na interface e API web/Android para campos descritivos da garagem (nome), veículo (label, marca e modelo), despesa e manutenção (descrição), abastecimento (posto) e plano/compromisso (título). Oferecer busca de auditoria somente ao proprietário ativo da garagem e somente nos campos permitidos por FR-030. Retornar registros autorizados pela membership e pelo contexto da garagem, revalidados em cada consulta. Excluir placa, Renavam, chassi, valores, nomes/conteúdo de arquivos, secrets e credenciais da busca.
+- **FR-032**: Permitir registrar recargas de veículos elétricos com data, energia positiva em kWh, odômetro, tipo/local (casa ou público), indicador de bateria cheia ao fim da sessão e ponto opcional. Manter uma tarifa BRL/kWh por garagem com data de vigência e histórico; owner/editor ativos podem alterá-la, reader não. Recarga doméstica usa a tarifa vigente na data e salva seu snapshot, sem recálculo retroativo após mudança. Recarga pública registra o total cobrado; sem cobrança, usuário pode informar o mínimo de R$ 0,01, nunca valor zero. Cada recarga paga/registrada cria exatamente uma despesa vinculada. Calcular km/kWh somente entre marcos consecutivos de bateria cheia, somando kWh das sessões parciais intermediárias; calcular custo/km no mesmo intervalo. Sem intervalo válido, indicar cobertura parcial ou indisponibilidade, sem apresentar resultado incompleto como completo.
 
 ### Entidades Principais *(se a funcionalidade envolver dados)*
 
@@ -163,6 +217,8 @@ Uma pessoa usa a garagem no navegador e Android, conectada ao serviço gerenciad
 - **Veículo**: identificação e estado ativo/arquivado, ligado a uma garagem.
 - **Despesa**: valor, categoria, período, origem e histórico de correção/anulação.
 - **Abastecimento**: medição e condição de tanque, ligado a uma única despesa de combustível.
+- **Recarga veicular**: sessão elétrica com energia, tarifa/valor aplicado, odômetro e local/tipo, ligada a veículo elétrico e a uma única despesa.
+- **Tarifa elétrica da garagem**: valor BRL/kWh e data de vigência; uma tarifa vigente por garagem, com histórico preservado para cálculo de recargas domésticas.
 - **Manutenção/Plano/Compromisso**: execução, recorrência e vencimento com despesa opcional única.
 - **Comprovante**: evidência privada com tipo, tamanho, integridade e vínculo autorizado.
 - **Evento de auditoria**: ação relevante e autoria mínima, separado do conteúdo sensível.
@@ -177,8 +233,10 @@ Uma pessoa usa a garagem no navegador e Android, conectada ao serviço gerenciad
 - **SC-004**: Repetição das criações abrangidas por FR-013 não duplica recursos ou valores; conflitos de conteúdo/versão não sobrescrevem mudanças silenciosamente, e acesso revogado impede a recuperação do resultado anterior em todos os cenários de concorrência definidos.
 - **SC-005**: Dez usuários simultâneos consultam dados autorizados pelo proxy, com dois minutos de aquecimento excluídos da medição e dez minutos de medição; 80% das consultas são de histórico e 20% de totais. Usar conjunto fictício determinístico de 10.000 despesas, distribuídas por 20 garagens com três veículos cada e por 12 meses, na matriz de 4 vCPU, 8 GiB RAM e SSD. O percentil 95 de cada tipo de consulta deve ser de até dois segundos, sem erros inesperados; registrar separadamente resultados, conjunto e parâmetros para repetição.
 - **SC-006**: Backup/restauração recupera 100% dos valores, relações e arquivos ainda autorizados do conjunto de teste, reaplicando os pedidos de exclusão posteriores ao backup sem reintroduzir garagens excluídas. Cópia inválida ou estado de exclusões não verificável é recusado antes de substituir ou disponibilizar dados; todos os backups gerenciados contendo a garagem respeitam a data-limite de 30 dias após seu pedido.
-- **SC-007**: As seis jornadas de aceite passam no navegador e Android na matriz inicial; teclado e auditoria de acessibilidade não apontam falhas AA bloqueantes nas jornadas web.
+- **SC-007**: As oito jornadas de aceite passam no navegador e Android na matriz inicial; teclado e auditoria de acessibilidade não apontam falhas AA bloqueantes nas jornadas web.
 - **SC-008**: Uma instalação própria executa o núcleo sem licença online, SaaS, push ou IA; documentação e pacote de fonte incluem instruções reproduzíveis e avisos exigidos.
+- **SC-009**: No web e Android, a busca retorna todos os registros correspondentes nos campos permitidos de FR-031 e nenhum registro fora das permissões atuais do usuário; somente owner ativo consulta auditoria da própria garagem. Consultas por campos excluídos ou de outra garagem não revelam nem retornam esses dados.
+- **SC-010**: Em 100% dos casos de recarga válidos, energia e custo (calculado pela tarifa da garagem vigente e preservada na sessão, ou pelo total informado em público; R$ 0,01 é o mínimo registrado sem cobrança) correspondem ao registro e à despesa única; mudança de tarifa não altera custo histórico e repetição de recarga/tarifa não duplica registros ou valores. km/kWh e custo/km são calculados somente entre marcos consecutivos de bateria cheia, incluindo recargas parciais intermediárias; sem dois marcos cheios, casos inválidos são explicitamente indisponíveis ou parciais.
 
 ## Premissas
 
@@ -188,5 +246,6 @@ Uma pessoa usa a garagem no navegador e Android, conectada ao serviço gerenciad
 - Convites são aceitos por conta correspondente; autenticação e recuperação devem funcionar conforme configuração da instalação, sem serviço SaaS obrigatório.
 - Registros anulados permanecem até exclusão da garagem. Dados ativos, arquivos e backups gerenciados contendo a garagem são eliminados até 30 dias após o pedido, sem reiniciar o prazo pela criação de nova cópia. Restauração exige verificar/reaplicar pedidos posteriores ao backup; o operador deve informar o alcance e as limitações de sua gestão de cópias.
 - OCR, chat, predição, cofre documental genérico, cobrança automática, edição proprietária e preços anteriores não pertencem à feature.
+- Recarga pública sem cobrança é registrada pelo mínimo informado de R$ 0,01; o modelo não aceita despesa de valor zero.
 - Stack e integração mobile seguem constituição e plano. Em esclarecimento de 2026-11-08, o owner escolheu código compartilhado com componentes próprios, sem obrigatoriedade de componentes Ionic e sem substituir a identidade Altivy/Dokpod.
 - Os critérios acima são critérios de aceite propostos, não evidência de implementação, desempenho ou adesão já obtida.

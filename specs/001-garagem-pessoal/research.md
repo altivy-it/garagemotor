@@ -1,7 +1,7 @@
 # Pesquisa Técnica: Garagem pessoal e familiar
 
 **Feature**: [spec.md](spec.md). **Data**: 2026-11-08.
-**Status**: Fase 0 concluída para desenho; histórico de bloqueios preservado abaixo. Instalação, implementação e publicação permanecem não autorizadas.
+**Status**: Fase 0 concluída para desenho; histórico de bloqueios preservado abaixo. A implementação das tarefas foi autorizada pelo owner em 2026-11-09. Builds/testes da aplicação, instalação de produção e publicação ainda não foram executados ou autorizados.
 **Origem**: IA assistida, incluindo pesquisa delegada somente leitura.
 **Revisor humano**: CEO da Altivy e owner do GarageMotor.
 
@@ -35,7 +35,7 @@ O agente Explore foi acionado pela Fase 0, somente leitura e sem consultas Web, 
 - Frontend declara Angular 22.2.3, Node `>=24.22.1 <25` e TypeScript `~6.0.2`; não foi encontrado lockfile npm. Essas declarações não comprovam resolução, suporte ou licença da versão exata.
 - DS próprio contém button, card, charts, checkbox, data-grid, drawer, empty-state, field, format, icon, key-value, kpi, progress, search, select, status, tabs e toast, com tokens/styles separados.
 - ADR próprio do Dokpod registra derivação Altivy, vidro limitado e WCAG 2.2 AA. Isso informa a referência, não transfere aprovação de dependências ou ADRs ao GarageMotor.
-- Outfit/JetBrains Mono têm avisos OFL locais; `axe-core` é MPL-2.0 e somente de teste no Dokpod. Esse aceite não vale automaticamente aqui, onde a política de dependências permanece restritiva.
+- Outfit/JetBrains Mono têm avisos OFL locais; `axe-core` é MPL-2.0 e somente de teste no Dokpod. Esse aceite não vale automaticamente aqui; as únicas exceções posteriores são os artefatos nominais de build/teste das emendas constitucionais 1.2.0 e 1.3.0.
 - Dokpod está em prévia, sem release estável. Seus componentes não devem ser adotados como biblioteca externa estável sem avaliação de direitos, proveniência, manutenção e testes.
 
 ## Candidato backend confirmado parcialmente
@@ -75,7 +75,7 @@ O endpoint `latest` foi apenas tentativa de descoberta de versão, não tag flut
 
 ## Verificações propostas na primeira rodada
 
-Conseguir acesso verificável às fontes aprovadas ou fornecer inventário confiável de versão/licença com proveniência. Resolver os três bloqueios, rever o gate constitucional e somente então executar a Fase 1 de `/speckit-plan`. Não há contratos, tarefas executáveis ou análise SDD completa enquanto a pesquisa estiver incompleta.
+Registro histórico da primeira rodada: conseguir acesso verificável às fontes aprovadas ou fornecer inventário confiável de versão/licença com proveniência; resolver os bloqueios e rever o gate constitucional antes do desenho. Essas pendências foram subsequentemente resolvidas para produzir os artefatos atuais; a execução permanece condicionada aos gates técnicos e tarefas descritos abaixo.
 
 ## Fechamento da Fase 0 — 2026-11-08
 
@@ -87,7 +87,7 @@ As duas pesquisas delegadas foram somente leitura. Seus resultados foram conferi
 
 | Componente | Versão fixa | Licença/fundamento verificado | Compatibilidade e decisão |
 |---|---|---|---|
-| .NET SDK/runtime/ASP.NET Core | 10.0.403 / 10.0.14 | Metadata Microsoft da linha LTS; runtime e ASP.NET Core MIT na tag v10.0.14 | Suporte até 2028-11-14; inventário completo das imagens continua gate antes de uso |
+| .NET SDK/runtime/ASP.NET Core | 10.0.403 / 10.0.14 | Metadata Microsoft da linha LTS; runtime e ASP.NET Core MIT na tag v10.0.14 | Suporte até 2028-11-14; imagens e SBOMs por digest/plataforma registrados em `deploy/images.lock.json` e `deploy/sboms/` |
 | Angular framework | 22.2.5 | MIT em angular/angular, v22.2.5 | Release não prerelease de 2026-11-06; major obrigatória do owner |
 | Angular CLI/build | 22.2.6 | MIT em angular/angular-cli, v22.2.6 | Linha 22; source usa placeholders de publicação, não versão 0.0.0 real |
 | TypeScript | 6.0.3 | Apache-2.0 em microsoft/TypeScript, v6.0.3 | Satisfaz >=6.0 <6.1 de compiler-cli/build; TypeScript 7 foi rejeitado |
@@ -152,8 +152,8 @@ Pesquisa delegada somente leitura confrontou as quatro decisões da spec com os 
 
 ### Decisão — recuperação de conta
 
-- **Escolha**: APIs do framework para RNG128bits/base64url22caracteres/hash/tempo constante; SMTP15min, dez códigos offline12meses, lote revogável, cinco falhas em janela móvel15min e 100 falhas/origem15min como parâmetro operacional definido nesta revisão. Nenhuma criptografia própria.
-- **Justificativa**: Q2 e FR-001; teto adicional por origem reduz abuso sem a restrição de cinco compartilhada entre usuários em NAT. Valores de validade/revogação são humanos; teto por origem é decisão técnica revisável sem remover o limite por conta.
+- **Proposta técnica**: APIs do framework para RNG128bits/base64url22caracteres/hash/tempo constante; SMTP15min, dez códigos offline12meses, lote revogável e cinco falhas em janela móvel15min conforme Q2. O teto adicional de 100 falhas/origem15min é configurável e permanece uma proposta técnica, não uma decisão humana nem requisito numérico da spec; revisar na avaliação de segurança antes da promoção. Nenhuma criptografia própria.
+- **Justificativa**: Q2 e FR-001 confirmam as regras de validade/revogação e o limite por conta; um teto adicional por origem reduz abuso sem compartilhar o limite de cinco entre usuários em NAT. O valor por origem não foi confirmado pelo humano e não deve ser tratado como aprovado.
 - **Alternativas rejeitadas**: código offline sem prazo, valores plaintext persistidos, reset de falhas em nova solicitação e bloqueio permanente da conta.
 
 ### Decisão — exclusão e restauração
@@ -175,4 +175,22 @@ Pesquisa delegada somente leitura confrontou as quatro decisões da spec com os 
 - **Justificativa**: corrigir a dependência entre T003 e T005 sem reduzir a auditoria ou executar targets/scripts de pacotes antes do gate.
 - **Alternativas rejeitadas**: exigir lock final sem manifests existentes ou liberar scripts de dependências para resolver essa ordem.
 
-Fase0 concluída para revisar o desenho, sem pendências de escolha de stack. Plano/modelo/contratos/quickstart e tasks.md foram sincronizados; a análise não destrutiva `/speckit-analyze` continua pendente. Gate de implementação permanece humano.
+### Proposta técnica — busca textual e partições
+
+- **Referência examinada**: no Dokpod, a migration `202610150002_AuditFullTextSearch` usa full-text nativo do PostgreSQL com configuração portuguesa, normalização imutável de acentos e índice GIN; `PostgresAuditEventReader` combina a consulta textual com filtros de escopo e paginação por cursor. A migration `202609220002_ScheduleTemporalPartitions` prepara partições mensais e trata a partição default. Os arquivos foram consultados como referência arquitetural local; nenhum código foi copiado.
+- **Proposta para GarageMotor**: full-text search nativo, sem `CREATE EXTENSION`, com endpoints separados para registros e auditoria, interface web/Android e GIN nos campos de FR-031; índices devem cobrir partições mensais existentes, default e futuras. Auditoria pesquisável somente pelo owner ativo da garagem; busca de domínio respeita membership em cada consulta.
+- **Limites**: não indexar placa, Renavam, chassi, valores, nomes/conteúdo de arquivos, secrets ou credenciais. Auditoria usa somente ação, ator pseudonimizado, alvo e nomes dos campos alterados, sem valores. A aplicação da busca a todos os registros do domínio é mais ampla que a busca de auditoria do Dokpod e deriva da decisão humana registrada na spec.
+- **Alternativas rejeitadas**: extensão adicional sem necessidade, busca sobre payloads/documentos sensíveis, endpoint único que misture auditoria e registros sem autorização distinta.
+
+### Proposta técnica — recarga de veículos elétricos
+
+- **Base funcional**: a spec define registro separado de abastecimento líquido, energia inteira em Wh, tarifa doméstica BRL/kWh com vigência por garagem, valor público informado, snapshot de tarifa por sessão e eficiência entre dois marcos de bateria cheia com recargas parciais incluídas.
+- **Proposta de armazenamento**: `ElectricCharge` como entidade própria, partição mensal por `occurred_on`, energia inteira Wh, marcador `full_at_end`, relação transacional a uma única despesa existente (`category=fuel`, `origin=electric_charge`) e idempotência por sessão. Tarifa é entidade histórica identificada por garagem/data de vigência; valor usado é copiado para a sessão para não reprecificar passado.
+- **Sem dependência externa**: sem integração com carregador, operadora elétrica, CPO ou telemetria. Energia, odômetro, local/tipo e tarifa/total são entradas do usuário; cálculos usam somente registros autorizados e válidos.
+- **Decisão humana**: recarga pública sem cobrança pode ser registrada com o mínimo de R$ 0,01 porque Expense exige valor positivo; não há sessão/despesa de valor zero. Nenhuma integração ou tarifa automática externa é incluída.
+
+Fase 0 segue concluída para o desenho, sem novas dependências de stack. As propostas de busca e recarga foram incorporadas à spec, plano, modelo, contratos, quickstart e tarefas. A autorização de implementação foi registrada pelo owner; `/speckit-analyze` foi repetido antes de retomar após as emendas de dependências. Nenhum build/teste da aplicação ou release foi aprovado por esta pesquisa.
+
+### Emendas de dependências — 2026-11-09
+
+As emendas constitucionais 1.2.0 e 1.3.0 autorizaram nominalmente quatro artefatos para ferramentas de build/teste em containers: `lightningcss@1.33.0`, `lightningcss-linux-x64-gnu@1.33.0`, `caniuse-lite@1.0.30001823` e `Microsoft.Testing.Extensions.CodeCoverage@18.12.0`. A licença exata do último continua não verificada. As variantes de lightningcss para outras plataformas não foram autorizadas. Não há exceção para runtime, distribuição do app, versões diferentes ou outras dependências.

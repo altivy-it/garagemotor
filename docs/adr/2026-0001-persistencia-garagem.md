@@ -1,6 +1,6 @@
 # ADR 2026-0001: PostgreSQL e volume privado para a garagem pessoal
 
-**Status:** proposed
+**Status:** accepted
 
 **Data:** 2026-11-08
 **Responsáveis:** Altivy
@@ -8,7 +8,7 @@
 **Revisor humano:** CEO da Altivy e owner do GarageMotor
 **Relacionado:** [spec](../../specs/001-garagem-pessoal/spec.md), [plano](../../specs/001-garagem-pessoal/plan.md) e [pesquisa](../../specs/001-garagem-pessoal/research.md)
 
-**Revisão:** 2026-11-09, incorporando os esclarecimentos sem aceite automático do datastore.
+**Revisão:** 2026-11-09. O owner aprovou explicitamente este ADR nesta conversa e autorizou seguir à próxima etapa do Spec Kit. A aprovação cobre a decisão de datastore, não validação operacional nem aprovação das demais superfícies de segurança.
 
 ## Contexto
 
@@ -33,9 +33,9 @@ Banco embarcado simplifica instalação mínima, mas não oferece o particioname
 
 ## Decisão
 
-Propor PostgreSQL 18.6, Npgsql 10.0.3 e volume privado local. Um backend modular, sem novo broker/cache/microsserviço. Usar SQL parametrizado e migrations expand-contract; não adicionar ORM por conveniência.
+Adotar PostgreSQL 18.6, Npgsql 10.0.3 e volume privado local. Um backend modular, sem novo broker/cache/microsserviço. Usar SQL parametrizado e migrations expand-contract; não adicionar ORM por conveniência.
 
-Este ADR não está aceito. A revisão humana deve confirmar datastore, matriz e condições abaixo antes de implementar. Volume compartilhado/múltiplas réplicas não fazem parte da matriz inicial.
+Este ADR foi aceito pelo owner em 2026-11-09. A matriz e as condições abaixo continuam sujeitas aos gates técnicos e operacionais antes de promoção. Volume compartilhado/múltiplas réplicas não fazem parte da matriz inicial.
 
 ## Consequências
 
@@ -57,7 +57,7 @@ Role runtime sem superuser/BYPASSRLS, membership por operação e contexto trans
 
 ## Dados, protocolo e compatibilidade
 
-Despesas, histórico, recibos e auditoria particionados mensalmente; doze meses anteriores, três futuros e default seguro. Chaves/relacionamentos incluem a data da partição quando necessário. Não presumir constraint de unicidade global inexistente; idempotência combina lock transacional e busca entre partições.
+Despesas, abastecimentos, recargas elétricas, recibos e auditoria particionados mensalmente; doze meses anteriores, três futuros e default seguro. Chaves/relacionamentos incluem a data da partição quando necessário. Não presumir constraint de unicidade global inexistente; idempotência combina lock transacional e busca entre partições. A tarifa elétrica é versionada por garagem/data efetiva e não é particionada.
 
 Retenção financeira até exclusão da garagem; auditoria90dias. Pedido fixa requestedUtc+30dias para dados ativos, arquivos e todos os backups sob gestão contendo a garagem, inclusive anteriores ao pedido ou criados durante processamento; novo snapshot não reinicia o prazo. APIs públicas versionadas e problem+json; mudanças de schema usam expand-contract e testes reais.
 

@@ -1,0 +1,32 @@
+location = /garagemotor {
+    return 308 /garagemotor/;
+}
+
+location ^~ /garagemotor/api/v1/ {
+    set $garagemotor_api_host garagemotor-api;
+    rewrite ^/garagemotor(/.*)$ $1 break;
+    proxy_pass http://$garagemotor_api_host:8080;
+    proxy_intercept_errors off;
+    proxy_http_version 1.1;
+    proxy_set_header Host $http_host;
+    proxy_set_header X-Forwarded-Host $http_host;
+    proxy_set_header X-Forwarded-Proto https;
+    proxy_set_header X-Forwarded-For $remote_addr;
+    proxy_set_header X-Forwarded-Prefix /garagemotor;
+    proxy_connect_timeout 5s;
+    proxy_read_timeout 60s;
+}
+
+location ^~ /garagemotor/ {
+    set $garagemotor_web_host garagemotor-web;
+    proxy_pass http://$garagemotor_web_host:4200;
+    proxy_http_version 1.1;
+    proxy_set_header Host $http_host;
+    proxy_set_header X-Forwarded-Host $http_host;
+    proxy_set_header X-Forwarded-Proto https;
+    proxy_set_header X-Forwarded-For $remote_addr;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection $connection_upgrade;
+    proxy_connect_timeout 5s;
+    proxy_read_timeout 60s;
+}

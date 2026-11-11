@@ -1,0 +1,76 @@
+@font-face {
+  font-family: 'Outfit';
+  src: url('../../assets/fonts/Outfit-Variable-Latin.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+}
+
+:root {
+  --gm-radius: 8px;
+  --gm-font: 'Outfit', 'Avenir Next', 'Segoe UI', sans-serif;
+  --gm-mono: 'SFMono-Regular', Consolas, monospace;
+  --gm-forest: var(--gm-primary);
+  --gm-forest-dark: var(--gm-primary-hover);
+  --gm-lime: var(--gm-accent-soft);
+}
+
+:root,
+:root[data-theme='light'] {
+  color-scheme: light;
+  --gm-ink: #202630;
+  --gm-ink-muted: #566171;
+  --gm-paper: #f6f7f9;
+  --gm-surface: #ffffff;
+  --gm-line: #7b8698;
+  --gm-primary: #2563eb;
+  --gm-primary-hover: #1d4ed8;
+  --gm-accent-soft: #dbeafe;
+  --gm-coral: #bf5847;
+  --gm-focus: #1d4ed8;
+  --gm-on-primary: #ffffff;
+  --gm-surface-muted: #eceff3;
+  --gm-success: #205e49;
+  --gm-warning: #795409;
+  --gm-error: #a23c2e;
+  --gm-info: #1d4ed8;
+  --gm-success-surface: #eff5ec;
+  --gm-error-surface: #fff1ed;
+  --gm-grid: rgb(37 99 235 / 4%);
+  --gm-shadow: rgb(20 25 32 / 7%);
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --gm-ink: #f1f3f5;
+  --gm-ink-muted: #b7bfc9;
+  --gm-paper: #141619;
+  --gm-surface: #1e2126;
+  --gm-line: #7d8999;
+  --gm-primary: #93c5fd;
+  --gm-primary-hover: #bfdbfe;
+  --gm-accent-soft: #233c59;
+  --gm-coral: #ffb6a4;
+  --gm-focus: #93c5fd;
+  --gm-on-primary: #10233f;
+  --gm-surface-muted: #2b2f36;
+  --gm-success: #a9deb8;
+  --gm-warning: #ffd479;
+  --gm-error: #ffb6a4;
+  --gm-info: #a5d6fb;
+  --gm-success-surface: #243c2c;
+  --gm-error-surface: #352620;
+  --gm-grid: rgb(37 99 235 / 4%);
+  --gm-shadow: rgb(0 0 0 / 20%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0s !important;
+  }
+}

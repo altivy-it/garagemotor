@@ -814,6 +814,178 @@
                 }
             }
         },
+        "/garages/{garageId}/charging-sessions": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/GarageId"
+                },
+                {
+                    "$ref": "#/components/parameters/Limit"
+                },
+                {
+                    "$ref": "#/components/parameters/Cursor"
+                },
+                {
+                    "$ref": "#/components/parameters/From"
+                },
+                {
+                    "$ref": "#/components/parameters/To"
+                },
+                {
+                    "$ref": "#/components/parameters/VehicleFilter"
+                }
+            ],
+            "get": {
+                "operationId": "listElectricCharges",
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Collection"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            },
+            "post": {
+                "operationId": "createElectricCharge",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/OperationKey"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ElectricChargeInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "$ref": "#/components/responses/Item"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            }
+        },
+        "/garages/{garageId}/charging-sessions/{id}": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/GarageId"
+                },
+                {
+                    "$ref": "#/components/parameters/Id"
+                }
+            ],
+            "get": {
+                "operationId": "getElectricCharge",
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Item"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            },
+            "put": {
+                "operationId": "updateElectricCharge",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/IfMatch"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ElectricChargeInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Item"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "voidElectricCharge",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/IfMatch"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Item"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            }
+        },
+        "/garages/{garageId}/electricity-tariffs": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/GarageId"
+                },
+                {
+                    "$ref": "#/components/parameters/Limit"
+                },
+                {
+                    "$ref": "#/components/parameters/Cursor"
+                }
+            ],
+            "get": {
+                "operationId": "listElectricityTariffs",
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Collection"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            },
+            "post": {
+                "operationId": "createElectricityTariff",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/OperationKey"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ElectricityTariffInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "$ref": "#/components/responses/Item"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            }
+        },
         "/garages/{garageId}/maintenance": {
             "parameters": [
                 {
@@ -1137,6 +1309,60 @@
                 }
             }
         },
+        "/garages/{garageId}/search": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/GarageId"
+                },
+                {
+                    "$ref": "#/components/parameters/SearchQuery"
+                },
+                {
+                    "$ref": "#/components/parameters/Limit"
+                },
+                {
+                    "$ref": "#/components/parameters/Cursor"
+                }
+            ],
+            "get": {
+                "operationId": "searchGarageRecords",
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/Collection"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            }
+        },
+        "/garages/{garageId}/audit/search": {
+            "parameters": [
+                {
+                    "$ref": "#/components/parameters/GarageId"
+                },
+                {
+                    "$ref": "#/components/parameters/SearchQuery"
+                },
+                {
+                    "$ref": "#/components/parameters/Limit"
+                },
+                {
+                    "$ref": "#/components/parameters/Cursor"
+                }
+            ],
+            "get": {
+                "operationId": "searchGarageAudit",
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/AuditCollection"
+                    },
+                    "default": {
+                        "$ref": "#/components/responses/Problem"
+                    }
+                }
+            }
+        },
         "/garages/{garageId}/attachments": {
             "parameters": [
                 {
@@ -1392,6 +1618,17 @@
                     "maxLength": 512
                 }
             },
+            "SearchQuery": {
+                "name": "q",
+                "in": "query",
+                "required": true,
+                "description": "Consulta full-text em português; aceita frases entre aspas, OR e exclusão com hífen",
+                "schema": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 200
+                }
+            },
             "From": {
                 "name": "from",
                 "in": "query",
@@ -1457,6 +1694,36 @@
                                         "string",
                                         "null"
                                     ]
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "AuditCollection": {
+                "description": "Eventos da auditoria da garagem; acesso somente ao owner ativo; limite padrão 50, máximo 100",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "required": [
+                                "items",
+                                "nextCursor"
+                            ],
+                            "properties": {
+                                "items": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/AuditSearchItem"
+                                    }
+                                },
+                                "nextCursor": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ],
+                                    "maxLength": 512
                                 }
                             }
                         }
@@ -1878,6 +2145,123 @@
                     }
                 }
             },
+            "ElectricChargeInput": {
+                "oneOf": [
+                    {
+                        "$ref": "#/components/schemas/HomeElectricChargeInput"
+                    },
+                    {
+                        "$ref": "#/components/schemas/PublicElectricChargeInput"
+                    }
+                ]
+            },
+            "HomeElectricChargeInput": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                    "vehicleId",
+                    "occurredOn",
+                    "energyWh",
+                    "odometerKm",
+                    "fullAtEnd",
+                    "source"
+                ],
+                "properties": {
+                    "vehicleId": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "occurredOn": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "energyWh": {
+                        "type": "integer",
+                        "minimum": 1
+                    },
+                    "odometerKm": {
+                        "$ref": "#/components/schemas/Odometer"
+                    },
+                    "fullAtEnd": {
+                        "type": "boolean"
+                    },
+                    "source": {
+                        "const": "home"
+                    },
+                    "station": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "maxLength": 200
+                    }
+                }
+            },
+            "PublicElectricChargeInput": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                    "vehicleId",
+                    "occurredOn",
+                    "energyWh",
+                    "odometerKm",
+                    "fullAtEnd",
+                    "source",
+                    "amountMinor"
+                ],
+                "properties": {
+                    "vehicleId": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "occurredOn": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "energyWh": {
+                        "type": "integer",
+                        "minimum": 1
+                    },
+                    "odometerKm": {
+                        "$ref": "#/components/schemas/Odometer"
+                    },
+                    "fullAtEnd": {
+                        "type": "boolean"
+                    },
+                    "source": {
+                        "const": "public"
+                    },
+                    "station": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "maxLength": 200
+                    },
+                    "amountMinor": {
+                        "$ref": "#/components/schemas/PositiveMoney"
+                    }
+                }
+            },
+            "ElectricityTariffInput": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                    "effectiveFrom",
+                    "rateMinorPerKwh"
+                ],
+                "properties": {
+                    "effectiveFrom": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "rateMinorPerKwh": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 999999999999
+                    }
+                }
+            },
             "MaintenanceInput": {
                 "type": "object",
                 "required": [
@@ -2120,6 +2504,52 @@
             },
             "Resource": {
                 "$ref": "resources.schema.json#/$defs/Resource"
+            },
+            "AuditSearchItem": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                    "id",
+                    "occurredUtc",
+                    "action",
+                    "actorId",
+                    "targetId",
+                    "changedFields"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "occurredUtc": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "action": {
+                        "type": "string",
+                        "maxLength": 100
+                    },
+                    "actorId": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "description": "Identificador pseudonimizado; nunca e-mail ou IP"
+                    },
+                    "targetId": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "maxLength": 100
+                    },
+                    "changedFields": {
+                        "type": "array",
+                        "uniqueItems": true,
+                        "items": {
+                            "type": "string",
+                            "maxLength": 100
+                        }
+                    }
+                }
             },
             "Summary": {
                 "type": "object",
