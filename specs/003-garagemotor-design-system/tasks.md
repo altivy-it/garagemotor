@@ -14,7 +14,7 @@
 
 **Continuidade autorizada em 2026-11-12**: o owner aprovou as recomendações da análise nesta conversa: "Suas recomendações estão aprovadas, siga com spec". O escopo compreende os três ajustes documentais propostos e a retomada de T010 e T026; não autoriza executar T015, T016 ou T028, a T067 da feature 001, publicação ou deploy.
 
-**Estado consolidado em 2026-11-12**: conforme o [resultado integrado posterior](quickstart.md#resultado-integrado-posterior), T027 está concluída para os perfis `quality` e `web-e2e` então executados. A suíte de tema está incluída no runner compartilhado e passou na execução direta, mas T010 permanece aberta até executar o perfil oficial. T026 foi validada com sessão real e fixture de acessibilidade. T015, T016 e T028 permanecem abertas por dependerem da entrega Android da feature 001; o aceite humano do SDK já foi registrado. Os registros históricos abaixo preservam bloqueios e estados conhecidos em cada momento, não o estado consolidado.
+**Estado consolidado em 2026-11-12**: conforme o [resultado integrado posterior](quickstart.md#resultado-integrado-posterior), T010, T026 e T027 estão concluídas para as validações registradas. T015, T016 e T028 permanecem abertas por dependerem da entrega Android da feature 001; o aceite humano do SDK já foi registrado. Os registros históricos abaixo preservam bloqueios e estados conhecidos em cada momento, não o estado consolidado.
 
 **Testes**: esta mudança altera comportamento e fluxo de usuário; incluir testes Playwright e verificações de build/acessibilidade aplicáveis. Não adicionar runner unitário frontend sem necessidade e auditoria de dependência.
 
@@ -62,7 +62,7 @@
 - [X] T007 [US1] Implementar preferência `light | dark | system`, chave `gm.theme.v1`, fallback efetivo Claro, atualização por `matchMedia` e inicialização sem flash em `frontend/web/src/app/core/theme.service.ts` e `frontend/web/src/main.ts`.
 - [X] T008 [US1] Criar seletor de tema acessível por teclado/toque e com estado selecionado anunciado em `frontend/web/src/app/design-system/theme-picker.component.ts`.
 - [X] T009 [US1] Integrar `ThemePicker` à shell e às jornadas autenticada/não autenticada em `frontend/web/src/app/app.component.ts` e `frontend/web/src/app/features/auth/auth.component.ts`, sem reinicializar sessão ou formulário ao trocar tema.
-- [ ] T010 [US1] Executar `pwsh -NoProfile -File tools/scripts/validate-feature.ps1 -FeatureDirectory specs/003-garagemotor-design-system -Profile web-e2e` para validar T006-T009 pela borda nginx em container; se pré-requisitos da T067 da feature 001 faltarem, registrar bloqueio sem iniciar HTTP fora do proxy.
+- [X] T010 [US1] Executar `pwsh -NoProfile -File tools/scripts/validate-feature.ps1 -FeatureDirectory specs/003-garagemotor-design-system -Profile web-e2e` para validar T006-T009 pela borda nginx em container. Em 2026-11-12, o perfil oficial passou (exit 0), sem expor logs ou secrets.
 
 **Checkpoint**: tema e persistência podem ser demonstrados isoladamente; preferência explícita não muda quando o sistema operacional alterna.
 
