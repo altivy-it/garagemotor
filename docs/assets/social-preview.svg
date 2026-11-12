@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640" role="img" aria-labelledby="t d">
+  <title id="t">GarageMotor</title>
+  <desc id="d">Gestão de veículos, abastecimentos, despesas e manutenção. SaaS e self-hosted.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0f1b3d"/>
+      <stop offset="1" stop-color="#0b1120"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.82" cy="0.18" r="0.6">
+      <stop offset="0" stop-color="#2563eb" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#2563eb" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1280" height="640" fill="url(#bg)"/>
+  <rect width="1280" height="640" fill="url(#glow)"/>
+
+  <g transform="translate(96 120)">
+    <rect width="168" height="168" rx="32" fill="#2563eb"/>
+    <g transform="translate(21 17.5) scale(2.625)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 22 24 7l19 15M11 20v21h26V20" stroke="#ffffff" stroke-width="3.5"/>
+      <path d="M29 25h-9v10h10v-5h-5" stroke="#ffffff" stroke-width="3"/>
+      <path d="M17 41h14" stroke="#ffb6a4" stroke-width="3.5"/>
+    </g>
+  </g>
+
+  <text x="300" y="232" fill="#f1f3f5" font-family="Outfit, Inter, 'DejaVu Sans', sans-serif" font-size="96" font-weight="700" letter-spacing="-1">GarageMotor</text>
+
+  <rect x="96" y="352" width="10" height="120" rx="5" fill="#93c5fd"/>
+  <text font-family="Inter, 'DejaVu Sans', sans-serif" font-size="38" fill="#cbd5e1">
+    <tspan x="134" y="398">Gestão de veículos, abastecimentos,</tspan>
+    <tspan x="134" y="450">despesas e manutenção preventiva.</tspan>
+  </text>
+
+  <g font-family="Inter, 'DejaVu Sans', sans-serif" font-size="26" font-weight="600" fill="#bfdbfe">
+    <rect x="96" y="520" width="132" height="52" rx="26" fill="#1e3a8a" fill-opacity="0.55" stroke="#3b82f6"/>
+    <text x="162" y="555" text-anchor="middle">SaaS</text>
+    <rect x="244" y="520" width="214" height="52" rx="26" fill="#1e3a8a" fill-opacity="0.55" stroke="#3b82f6"/>
+    <text x="351" y="555" text-anchor="middle">Self-hosted</text>
+    <rect x="474" y="520" width="216" height="52" rx="26" fill="#1e3a8a" fill-opacity="0.55" stroke="#3b82f6"/>
+    <text x="582" y="555" text-anchor="middle">AGPL-3.0</text>
+  </g>
+
+  <text x="1184" y="555" text-anchor="end" font-family="Inter, 'DejaVu Sans', sans-serif" font-size="26" fill="#64748b">github.com/altivy-it/garagemotor</text>
+</svg>
