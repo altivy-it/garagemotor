@@ -74,7 +74,7 @@ Executar os fluxos web quando os pré-requisitos do perfil estiverem satisfeitos
 pwsh -NoProfile -File tools/scripts/validate-feature.ps1 -FeatureDirectory specs/003-garagemotor-design-system -Profile web-e2e -Engine podman
 ```
 
-Resultado atual do perfil: quatro testes de contratos e duas jornadas reais de cadastro/login/CSRF/códigos offline/logout, incluindo troca Claro/Escuro/Sistema, foco, sessão preservada e ausência de overflow em desktop/móvel. Persistência do tema após reload, atualização do sistema, assets e demais controles continuam cobertos pela suíte isolada descrita acima, não por este perfil reduzido. O serviço HTTP e o navegador usam exclusivamente a borda nginx compartilhada em container. Use `-KeepRunning` para manter API/web disponíveis após a execução.
+Resultado histórico do perfil em 2026-11-11: quatro testes de contratos e duas jornadas reais de cadastro/login/CSRF/códigos offline/logout, incluindo troca Claro/Escuro/Sistema, foco, sessão preservada e ausência de overflow em desktop/móvel. A configuração atual do runner também inclui a suíte de tema; o resultado direto posterior está registrado abaixo e não substitui a execução do perfil oficial. O serviço HTTP e o navegador usam exclusivamente a borda nginx compartilhada em container. Use `-KeepRunning` para manter API/web disponíveis após a execução.
 
 Executar a validação Android somente após o gate estar liberado:
 
@@ -126,3 +126,19 @@ Os bloqueios históricos acima foram superados por bootstrap compartilhado e int
 `quality`: `passed`, exit 0. `web-e2e`: `passed`, exit 0, seis testes (quatro contratos estáticos e duas jornadas reais, 1280x900/390x844). Dois testes unitários .NET passaram. TLS foi validado com a CA pública existente, sem bypass; cookies seguros, CSRF inclusive no logout, códigos offline e preservação de sessão/foco durante troca de tema foram verificados. O runner desativa trace/vídeo/capturas e limpa a página antes dos diagnósticos finais. A prontidão do bootstrap público é aguardada de forma limitada antes de preencher credenciais; mutações não têm retry.
 
 T027 registra somente os dois perfis executados. T010 continua pendente de incorporar a suíte completa T006-T009 ao perfil compartilhado; T026 mantém evidência parcial, agora também com sessão real em teste complementar `frontend/tests/integrated/auth-session.spec.ts`, mas sem reexecutar os arquivos originalmente previstos contra essa stack. T015/T016/T028 dependem da entrega Android ainda ausente; o aceite humano do SDK já foi registrado, não é mais o bloqueio. Não declarar feature 003 ou T067 inteira concluídas. SMTP e restauração de sessão após reload também não foram validados.
+
+### Retomada de T010 e T026 em 2026-11-12
+
+A suíte de tema já estava incluída na configuração compartilhada, mas navegava para a raiz do host em vez de respeitar o subcaminho `/garagemotor/`. Em um nginx isolado, os dois casos de Sistema falharam antes da alteração: a raiz retornou 404, enquanto a aplicação no subcaminho retornou 200. Após a correção, os 16 testes de tema passaram no subcaminho com Chromium e Firefox e também na raiz com Chromium. Os seis testes de acessibilidade passaram com Chromium e Firefox no fixture separado.
+
+O runner compartilhado passou a gravar seus resultados em diretório temporário, preservando resultados existentes no repositório; quatro testes de contrato passaram com o repositório montado somente para leitura. O teste de sessão real foi ampliado para conferir também a preservação do formulário autenticado durante a troca de tema, sem exibir seu valor.
+
+Esses resultados usaram containers e nginx isolados, sem API ou sessão real. Na verificação inicial desta retomada, a stack compartilhada estava parada; o perfil `web-e2e` e a alteração no teste de sessão real ainda não haviam sido reexecutados.
+
+Após autorização humana, os containers compartilhados existentes foram iniciados sem recriação e o runner compartilhado foi executado diretamente: 20 dos 23 testes passaram (16 de tema e quatro de contrato); as três jornadas de sessão falharam com HTTP 400 na renovação de códigos offline. Foram criadas três contas fictícias persistentes para o teste. O perfil oficial `web-e2e` não foi executado nesta tentativa.
+
+O endereço do gateway divergia do proxy confiável configurado no container existente da API. Uma consulta pela borda nginx retornou o cookie CSRF sem `Secure`, compatível com a falha observada.
+
+Com nova autorização humana, somente a API foi recriada a partir da imagem local, sem rebuild ou remoção de volumes; o proxy confiável passou a corresponder ao gateway e o cookie CSRF passou a incluir `Secure`. A execução direta do runner compartilhado passou os 23 testes: 16 de tema, quatro de contrato e três jornadas reais de sessão nos viewports 1280, 390 e 276 px. As jornadas confirmaram sessão, formulário e foco durante a troca de tema; três contas fictícias adicionais foram criadas, totalizando seis contas persistentes nas duas tentativas. T026 está concluída com essa evidência e os testes de acessibilidade isolados acima.
+
+T010 permanece aberta: o perfil oficial não foi executado nesta retomada e seu launcher recria API e web, além de executar `npm ci`; a execução direta não substitui esse comando. T015, T016 e T028 continuam dependentes da entrega Android. Por decisão humana, os serviços iniciados para a validação foram mantidos ativos.

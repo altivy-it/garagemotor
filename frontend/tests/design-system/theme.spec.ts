@@ -27,7 +27,7 @@ for (const viewport of [
           externalRequests.push(url.origin);
         }
       });
-      await page.goto('/');
+      await page.goto('./');
       const wordmark = page.getByRole('link', { name: 'GarageMotor, início' });
       const picker = page.getByRole('button', { name: /^Tema:/ });
       await expect(wordmark).toBeVisible();
@@ -61,7 +61,7 @@ for (const viewport of [
 
     test('Sistema acompanha o dispositivo sem substituir a seleção', async ({ page }) => {
       await page.emulateMedia({ colorScheme: 'dark' });
-      await page.goto('/');
+      await page.goto('./');
       const picker = page.getByRole('button', { name: 'Tema: Sistema' });
       await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
       await page.emulateMedia({ colorScheme: 'light' });
@@ -77,7 +77,7 @@ for (const viewport of [
 
     for (const selected of ['light', 'dark'] as const) {
       test(`preferência ${selected} persiste e ignora mudanças do dispositivo`, async ({ page }) => {
-        await page.goto('/');
+        await page.goto('./');
         await selectTheme(page, selected);
         await page.reload();
         await expect(page.getByRole('button', { name: `Tema: ${themeLabels[selected]}` })).toBeVisible();
@@ -90,7 +90,7 @@ for (const viewport of [
     test('descarta uma preferência inválida', async ({ page }) => {
       await page.addInitScript(() => localStorage.setItem('gm.theme.v1', 'invalid'));
       await page.emulateMedia({ colorScheme: 'light' });
-      await page.goto('/');
+      await page.goto('./');
       await expect(page.getByRole('button', { name: 'Tema: Sistema' })).toBeVisible();
       await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
       expect(await page.evaluate(() => localStorage.getItem('gm.theme.v1'))).toBeNull();
@@ -104,7 +104,7 @@ for (const viewport of [
           },
         });
       });
-      await page.goto('/');
+      await page.goto('./');
       await expect(page.getByRole('button', { name: 'Tema: Sistema' })).toBeVisible();
       await selectTheme(page, 'dark');
       await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
@@ -115,13 +115,13 @@ for (const viewport of [
       await page.addInitScript(() => {
         Object.defineProperty(window, 'matchMedia', { value: undefined });
       });
-      await page.goto('/');
+      await page.goto('./');
       await expect(page.getByRole('button', { name: 'Tema: Sistema' })).toBeVisible();
       await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
     });
 
     test('trocar tema preserva formulário, foco e largura móvel', async ({ page }) => {
-      await page.goto('/');
+      await page.goto('./');
       await page.getByLabel('E-mail', { exact: true }).fill('pessoa@example.invalid');
       await page.getByLabel('Senha', { exact: true }).fill('senha-ficticia-de-teste');
       await page.getByRole('button', { name: /^Tema:/ }).click();

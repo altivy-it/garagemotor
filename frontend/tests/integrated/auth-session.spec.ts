@@ -47,6 +47,9 @@ for (const viewport of [
       const sessionCookie = (await context.cookies()).find(cookie => cookie.name === '__Host-gm-session');
       expect(!!sessionCookie).toBe(true);
       expect({ secure: sessionCookie?.secure, httpOnly: sessionCookie?.httpOnly, path: sessionCookie?.path, sameSite: sessionCookie?.sameSite }).toEqual({ secure: true, httpOnly: true, path: '/', sameSite: 'Strict' });
+      const recoveryPassword = page.getByLabel('Senha atual para renovar códigos');
+      await expect.poll(() => recoveryPassword.evaluate(field => field instanceof HTMLInputElement && field.value === '')).toBe(true);
+      await fillSecret(recoveryPassword, password);
       const picker = page.getByRole('button', { name: /^Tema:/ });
       await page.emulateMedia({ reducedMotion: 'reduce' });
       await picker.click();
@@ -70,13 +73,13 @@ for (const viewport of [
         await expect(option).toBeChecked();
         await expect(option).toBeFocused();
         await expect(page.getByRole('heading', { name: 'Sua garagem está pronta.' })).toBeVisible();
+        expect(await recoveryPassword.evaluate((field, value) => field instanceof HTMLInputElement && field.value === value, password)).toBe(true);
         expect((await context.cookies()).some(cookie => cookie.name === '__Host-gm-session' && cookie.value === sessionCookie?.value)).toBe(true);
       }
       expect(await page.evaluate(() => Object.keys(localStorage).some(key => /token|session|bearer/i.test(key)))).toBe(false);
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
       const missingCsrf = await page.request.delete('api/v1/sessions', { headers: { Origin: 'https://localhost:7443' } });
       expect(missingCsrf.status()).toBe(400);
-      await fillSecret(page.getByLabel('Senha atual para renovar códigos'), password);
       const recovery = page.waitForResponse(response => response.url().endsWith('/garagemotor/api/v1/recovery-codes'));
       await page.getByRole('button', { name: 'Renovar códigos offline' }).click();
       expect((await recovery).status()).toBe(200);

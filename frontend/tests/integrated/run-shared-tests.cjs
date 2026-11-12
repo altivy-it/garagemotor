@@ -29,7 +29,7 @@ const bridge = createServer((client) => {
   client.pipe(upstream).pipe(client);
 });
 bridge.listen(7443, '0.0.0.0', () => {
-  const child = spawn(process.execPath, [cli, 'test', '--config', path.resolve(__dirname, '../shared.playwright.config.ts'), ...process.argv.slice(2)], {
+  const child = spawn(process.execPath, [cli, 'test', '--config', path.resolve(__dirname, '../shared.playwright.config.ts'), '--output', path.join(runtime, 'test-results'), ...process.argv.slice(2)], {
     cwd: path.resolve(__dirname, '..'),
     env: environment,
     stdio: 'inherit',
