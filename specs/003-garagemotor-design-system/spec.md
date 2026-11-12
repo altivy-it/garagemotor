@@ -14,6 +14,12 @@
 
 O owner solicitou azul como cor geral do tema no lugar do verde e arquivos alternativos de marca para escolha, com o traço interno do G inspirado no triângulo invertido do A Altivy. Esta solicitação autoriza a alteração de paleta e a exploração do motivo triangular, não a adoção automática de uma nova geometria de marca. O azul de referência é `#2563EB`; superfícies, foco e variantes escuras devem preservar contraste AA. Verde pode permanecer exclusivamente como cor semântica de sucesso, sem dominar o tema. Preservar os assets anteriores e criar propostas separadas; não incorporar o logotipo Altivy completo nem confundir os produtos. O uso desse motivo nas propostas é a exceção expressamente solicitada ao limite de FR-010, sem ampliar direitos sobre outros ativos.
 
+## Clarifications
+
+### Session 2026-11-12
+
+- Q: Quais jornadas principais entram na validação do seletor de tema? → A: A autenticação antes da entrada e a shell/tela principal após a entrada, na web e no Android. Decisão humana; registro IA assistida.
+
 ## Cenários de Usuário e Testes *(obrigatório)*
 
 ### História de Usuário 1 - Usar GarageMotor no tema escolhido (Prioridade: P1)
@@ -70,7 +76,7 @@ Uma pessoa usa controles previsíveis e acessíveis nas jornadas existentes, enq
 ### Requisitos Funcionais
 
 - **FR-001**: O GarageMotor DEVE oferecer as opções de aparência Claro, Escuro e Sistema na web e no Android.
-- **FR-002**: O seletor de tema DEVE permanecer acessível nas jornadas principais, inclusive antes da autenticação e após a entrada, por mouse, toque e teclado.
+- **FR-002**: O seletor de tema DEVE permanecer acessível nas jornadas principais: autenticação antes da entrada e shell/tela principal após a entrada, na web e no Android, por mouse, toque e teclado.
 - **FR-003**: Em Sistema, a aparência efetiva DEVE acompanhar mudanças da preferência de tema do dispositivo; escolhas explícitas de Claro ou Escuro DEVEM persistir entre recargas e reinicializações até nova alteração.
 - **FR-004**: A preferência de tema DEVE ser isolada por instalação/instância e NÃO DEVE conter credenciais, tokens ou dados de domínio.
 - **FR-005**: O GarageMotor DEVE possuir logotipo, símbolo e ícones de aplicação originais, coerentes entre web e Android, com variações que mantenham legibilidade nos temas claro e escuro.

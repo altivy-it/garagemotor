@@ -33,7 +33,7 @@ Estabelecer um design system GarageMotor para a aplicação Angular compartilhad
 
 **Tipo de Projeto**: aplicação frontend Angular standalone, sem alteração de API.
 
-**Metas de Desempenho**: sem regressão mensurável no carregamento da aplicação; assets locais e leves, sem requisições remotas para fonte, logo ou ícones.
+**Metas de Desempenho**: nenhuma meta quantitativa nesta feature; fonte, logo e ícones devem ser carregados localmente, sem requisições remotas em runtime.
 
 **Restrições**: manter APIs/rotas e estado de autenticação; não guardar dados além da preferência de tema; respeitar `prefers-reduced-motion`, foco por teclado e WCAG 2.2 AA; não reutilizar logotipos ou símbolos Altivy/Dokpod; não adicionar dependências sem licença permissiva, gratuita, fixada e verificada. O kit de app Altivy não foi validado no tema claro. O perfil Android está bloqueado até seus pré-requisitos e aceite estarem presentes.
 

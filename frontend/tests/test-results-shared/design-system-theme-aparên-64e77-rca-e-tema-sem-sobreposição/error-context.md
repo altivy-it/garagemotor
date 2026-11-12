@@ -22,8 +22,8 @@ Error: element(s) not found
 Call log:
   - Expect "toBeVisible" getByRole('link', { name: 'GarageMotor, início' }) with timeout 10000ms
   - waiting for getByRole('link', { name: 'GarageMotor, início' })
-    - waiting for "https://localhost:7443/realms/master/protocol/openid-connect/auth?client_id=security-admin-console&redirect_uri=https%3A%2F%2Flocalhost%3A7443%2Fadmin%2Fmaster%2Fconsole%2F&state=4230c8ab-4be3-42e6-9…" navigation to finish...
-    - navigated to "https://localhost:7443/realms/master/protocol/openid-connect/auth?client_id=security-admin-console&redirect_uri=https%3A%2F%2Flocalhost%3A7443%2Fadmin%2Fmaster%2Fconsole%2F&state=4230c8ab-4be3-42e6-9…"
+    - waiting for "https://localhost:7443/realms/master/protocol/openid-connect/auth?client_id=security-admin-console&redirect_uri=https%3A%2F%2Flocalhost%3A7443%2Fadmin%2Fmaster%2Fconsole%2F&state=9b91e092-641d-4484-b…" navigation to finish...
+    - navigated to "https://localhost:7443/realms/master/protocol/openid-connect/auth?client_id=security-admin-console&redirect_uri=https%3A%2F%2Flocalhost%3A7443%2Fadmin%2Fmaster%2Fconsole%2F&state=9b91e092-641d-4484-b…"
 
 ```
 
