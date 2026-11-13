@@ -7,9 +7,9 @@ description: "Tarefas para remover SBOMs versionados e migrar os testes backend 
 **Entrada**: Documentos de design em `specs/002-remove-sboms-xunit/`.
 **Pré-requisitos**: [spec](spec.md), [plano](plan.md), [pesquisa](research.md), [modelo](data-model.md) e [quickstart](quickstart.md).
 **Origem**: solicitação humana. **Revisor humano**: CEO da Altivy e owner do GarageMotor.
-**Estado**: execução autorizada pelo owner em 2026-11-11; T001–T014 executadas. Build, formato, suíte direta e perfis oficiais `quality`/`unit` passaram; `integration` bloqueia pela ausência de `deploy/Dockerfile.api` prevista em T067 da feature 001.
+**Estado**: execução autorizada pelo owner em 2026-11-11; T001–T014 estão marcadas como executadas. Na validação oficial de 2026-11-12, `quality` e `unit` passaram (exit 0), enquanto `integration` falhou (exit 1). O runner suprimiu a saída detalhada; a causa não foi confirmada e a validação final permanece pendente.
 
-**Atualização de validação (2026-11-11)**: após formatação Prettier dos quatro arquivos listados em T013, o perfil oficial `quality` passou. O perfil `unit` também passou. O perfil `integration` agora ultrapassa o gate de digest, mas continua bloqueado por `deploy/Dockerfile.api` ausente; não acessou secrets nem iniciou serviços pelo script.
+**Registro histórico de validação (2026-11-11)**: após formatação Prettier dos quatro arquivos listados em T013, o perfil oficial `quality` passou. O perfil `unit` também passou. O perfil `integration` ultrapassou o gate de digest, mas foi registrado como bloqueado por `deploy/Dockerfile.api` ausente. Essa causa é histórica: a T067 da feature 001 registra posteriormente que o Dockerfile foi criado. A saída da execução de 2026-11-12 não confirmou a causa atual.
 
 ## Formato: `[ID] [P?] [Story] Descrição`
 
@@ -75,7 +75,7 @@ description: "Tarefas para remover SBOMs versionados e migrar os testes backend 
 
 **Objetivo**: executar os gates da feature de ponta a ponta e registrar os resultados.
 
-- [X] T013 Executar os perfis `quality`, `unit` e `integration` de `tools/scripts/validate-feature.ps1` para `specs/002-remove-sboms-xunit`, validar links e conteúdo de `docs/dependencies.md` e registrar evidências sanitizadas nesta feature; não ler secrets nem iniciar HTTP fora da borda nginx. Resultado após T014: unit passou; integration bloqueia por `deploy/Dockerfile.api` ausente antes de acessar secrets; quality falha em `prettier --check` em `frontend/web/src/app/app.routes.ts`, `frontend/web/src/app/core/api-client.ts`, `frontend/web/src/app/core/session.ts` e `frontend/web/src/app/features/auth/auth.component.ts`, sem alterá-los. A remoção do gate de camada foi confirmada; a validação direta passou build/format dos testes, Unit 2/2, Integration 15/15, suíte 17/17, parser JSON e link local.
+- [X] T013 Executar os perfis `quality`, `unit` e `integration` de `tools/scripts/validate-feature.ps1` para `specs/002-remove-sboms-xunit`, validar links e conteúdo de `docs/dependencies.md` e registrar evidências sanitizadas nesta feature; não ler secrets nem iniciar HTTP fora da borda nginx. O histórico detalhado de execuções anteriores está preservado na seção “Validações históricas” ao final deste arquivo; o resultado atual consta em “Validação mais recente”.
 
 ## Dependências e Ordem de Execução
 
@@ -125,6 +125,40 @@ Task: migrar OperationStoreTests e categorizar cada método
 
 ## Phase 6: Convergence
 
-- [X] T014 Remover o gate obrigatório de `imageLayerLicenseInventoryByPlatform` em `tools/scripts/validate-feature.ps1` e `tools/scripts/start-local.ps1`, conforme Constituição III; preservar a exigência de digests/plataformas fixados, os gates reais de dependências/termos, a borda nginx e a injeção externa de secrets (Constitution III, contradicts). Parser PowerShell passou; o perfil unit oficial passou; integration passou o preflight de imagem e bloqueou no Dockerfile ausente; quality também passou o gate de imagem e chegou ao Prettier.
+- [X] T014 Remover o gate obrigatório de `imageLayerLicenseInventoryByPlatform` em `tools/scripts/validate-feature.ps1` e `tools/scripts/start-local.ps1`, conforme Constituição III; preservar a exigência de digests/plataformas fixados, os gates reais de dependências/termos, a borda nginx e a injeção externa de secrets (Constitution III, contradicts). Parser PowerShell passou. Os resultados históricos de perfis estão registrados ao final deste arquivo; o estado atual consta em “Validação mais recente”.
 
-**Evidência posterior de T014**: `validate-feature.ps1 -Profile quality` e `-Profile unit` passaram após tornar `Ensure-NuGetCache` idempotente para volume já existente. `-Profile integration` retorna `blocked` somente por `deploy/Dockerfile.api` ausente.
+**Evidência posterior de T014**: `validate-feature.ps1 -Profile quality` e `-Profile unit` passaram após tornar `Ensure-NuGetCache` idempotente para volume já existente. Naquela execução, `-Profile integration` retornou `blocked` por `deploy/Dockerfile.api` ausente; esse bloqueio foi superado pela criação posterior do Dockerfile registrada em T067 da feature 001.
+
+## Rastreabilidade
+
+| Requisito / Critério | Tarefas |
+|---|---|
+| FR-001 | T001, T003–T008 |
+| FR-002 | T003–T008 |
+| FR-003 | T007–T008 |
+| FR-004 | T009–T012 |
+| FR-005 | T011–T012 |
+| FR-006 | T010, T012 |
+| SC-001 | T008 |
+| SC-002 | T003–T008 |
+| SC-003 | T009–T012 |
+| SC-004 | T010, T012 |
+| SC-005 | T011–T012 |
+
+## Validação mais recente (2026-11-12)
+
+Execução dos perfis oficiais para `specs/002-remove-sboms-xunit`:
+
+| Perfil | Resultado | Evidência |
+|---|---|---|
+| `quality` | PASS (exit 0) | Runner oficial concluiu. |
+| `unit` | PASS (exit 0) | Runner oficial concluiu. |
+| `integration` | FAIL (exit 1) | Runner retornou resumo sanitizado de falha/bloqueio; a causa específica não foi exposta nem confirmada. |
+
+O perfil `integration` foi invocado pela validação oficial do projeto, que gerencia containers e nginx. A causa não deve ser inferida do registro histórico de ausência do Dockerfile; será necessário obter diagnóstico sanitizado e seguro antes de atribuir um novo bloqueio. Nenhum conteúdo de configuração externa ou secret foi exibido ou registrado na sessão.
+
+## Validações históricas
+
+As evidências abaixo descrevem execuções anteriores e não substituem a tabela de validação mais recente.
+
+**T013 (2026-11-11)**: registros anteriores mencionaram tanto aprovação quanto falha do perfil `quality` em verificações Prettier de `frontend/web/src/app/app.routes.ts`, `frontend/web/src/app/core/api-client.ts`, `frontend/web/src/app/core/session.ts` e `frontend/web/src/app/features/auth/auth.component.ts`, arquivos fora do escopo desta feature. A validação direta do projeto de testes passou em build/formato, Unit 2/2, Integration 15/15, suíte 17/17, parser JSON e link local. Esses resultados não substituem a execução oficial atual dos perfis.

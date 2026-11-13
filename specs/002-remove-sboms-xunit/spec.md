@@ -6,6 +6,8 @@
 
 **Status**: Rascunho
 
+**Estado da implementação (2026-11-12)**: T001–T014 estão marcadas como executadas em `tasks.md`. Os perfis oficiais `quality` e `unit` passaram nesta data; `integration` terminou com código 1 e saída sanitizada, sem causa específica confirmada. A validação final da feature permanece pendente.
+
 **Entrada**: Remover do repositório os SBOMs que não precisam mais ser mantidos, registrar essa política na documentação e migrar os testes do backend .NET para xUnit, categorizando todos os testes.
 
 **Origem**: solicitação humana. **Revisor humano**: CEO da Altivy e owner do GarageMotor.
