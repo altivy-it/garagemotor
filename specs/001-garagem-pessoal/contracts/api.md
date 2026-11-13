@@ -14,6 +14,8 @@ Base `/api/v1`; JSON camelCase, UUID, datas ISO, instantes UTC, dinheiro em cent
 
 Mapeamento obrigatório por operação: garagens/ownership -> GarageResource; members -> MemberResource; invites/acceptInvite -> InviteResource; vehicles -> VehicleResource; expenses -> ExpenseResource; fuel-records -> FuelResource; `charging-sessions` -> ElectricChargeResource; `electricity-tariffs` -> ElectricityTariffResource; maintenance -> MaintenanceResource; plans -> PlanResource; commitments/completion -> CommitmentResource; reminders -> ReminderResource; uploads -> AttachmentResource; exports/status -> ExportResource; `searchGarageRecords` -> Resource tipado por kind; `searchGarageAudit` -> AuditSearchItem fechado e owner-only. Coleções usam o mesmo tipo nos items; download retorna binário. Testes de contrato devem rejeitar kind trocado, campo extra/privado ou tipo incorreto, mesmo que o union aceite outro tipo em operação diferente. A API deve declarar o tipo específico ao publicar sua descrição, sem relaxar os schemas do desenho.
 
+Para membership, `MemberResource.id`, `MemberResource.attributes.userId`, a chave `Member.user_id` e o parâmetro `{id}` em `/garages/{garageId}/members/{id}` representam o mesmo UUID do usuário. Alteração de papel e revogação devem resolver `{id}` para esse `user_id` dentro da garagem autorizada; igualdade de UUIDs isoladamente no schema não comprova esse vínculo funcional.
+
 Coleções usam items/nextCursor e limite padrão 50, máximo 100. Ordenação é determinística por data/id; cursor opaco é validado e não permite navegar para outra garagem. Filtros temporais incluem as duas datas; `from > to` é erro de entrada. GET nunca exige If-Match; PUT substitui o conjunto de campos editáveis da entidade e exige versão.
 
 ## Pesquisa textual

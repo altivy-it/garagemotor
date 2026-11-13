@@ -23,29 +23,59 @@ test.describe('primitivas de acessibilidade do design system', () => {
 
     expect(focusedElement).not.toBeNull();
     expect(focusedElement?.focusVisible).toBe(true);
-    expect(
-      focusedElement?.outlineStyle !== 'none' ||
-        focusedElement?.outlineWidth !== '0px' ||
-        focusedElement?.boxShadow !== 'none',
-    ).toBe(true);
+    const hasVisibleOutline =
+      focusedElement !== null &&
+      focusedElement.outlineStyle !== 'none' &&
+      Number.parseFloat(focusedElement.outlineWidth) > 0;
+    const hasVisibleShadow = focusedElement !== null && focusedElement.boxShadow !== 'none';
+    expect(hasVisibleOutline || hasVisibleShadow).toBe(true);
   });
 
-  test('interactive controls have accessible names and status messages are textual', async ({ page }) => {
+  test('teclado alterna as abas e o formulário sinaliza seu estado', async ({ page }) => {
+    await page.goto('/');
+
+    const loginTab = page.getByRole('tab', { name: 'Entrar', exact: true });
+    const registerTab = page.getByRole('tab', { name: 'Criar conta', exact: true });
+    await loginTab.focus();
+    await page.keyboard.press('ArrowRight');
+    await expect(registerTab).toBeFocused();
+    await expect(registerTab).toHaveAttribute('aria-selected', 'true');
+    await expect(registerTab).toHaveAttribute('tabindex', '0');
+    await expect(loginTab).toHaveAttribute('tabindex', '-1');
+
+    const register = page.getByRole('button', { name: 'Criar conta', exact: true });
+    await expect(register).toBeDisabled();
+    await page.getByLabel('Nome', { exact: true }).fill('Pessoa de teste');
+    await page.getByLabel('E-mail', { exact: true }).fill('pessoa@example.invalid');
+    await page.getByLabel('Senha', { exact: true }).fill('senha-ficticia-de-teste');
+    await expect(register).toBeEnabled();
+
+    await registerTab.focus();
+    await page.keyboard.press('ArrowLeft');
+    await expect(loginTab).toBeFocused();
+    await expect(loginTab).toHaveAttribute('aria-selected', 'true');
+    await expect(page.getByRole('heading', { name: 'Entre na sua conta' })).toBeVisible();
+  });
+
+  test('interactive controls have accessible names and status messages are textual', async ({
+    page,
+  }) => {
     await page.goto('/');
     const controls = page.locator('button, a[href], input, select, textarea, [role="button"]');
     await expect(controls.first()).toBeVisible();
 
-    const unnamedControls = await controls.evaluateAll((elements) =>
-      elements.filter((element) => {
-        const label = element.getAttribute('aria-label')?.trim();
-        const labelledBy = element.getAttribute('aria-labelledby');
-        const text = element.textContent?.trim();
-        const title = element.getAttribute('title')?.trim();
-        const input = element as HTMLInputElement;
-        const placeholder = input.placeholder?.trim();
-        const associatedLabels = input.labels?.length ?? 0;
-        return !label && !labelledBy && !text && !title && !placeholder && associatedLabels === 0;
-      }).length,
+    const unnamedControls = await controls.evaluateAll(
+      (elements) =>
+        elements.filter((element) => {
+          const label = element.getAttribute('aria-label')?.trim();
+          const labelledBy = element.getAttribute('aria-labelledby');
+          const text = element.textContent?.trim();
+          const title = element.getAttribute('title')?.trim();
+          const input = element as HTMLInputElement;
+          const placeholder = input.placeholder?.trim();
+          const associatedLabels = input.labels?.length ?? 0;
+          return !label && !labelledBy && !text && !title && !placeholder && associatedLabels === 0;
+        }).length,
     );
     expect(unnamedControls).toBe(0);
 
@@ -61,12 +91,15 @@ test.describe('primitivas de acessibilidade do design system', () => {
     await page.goto('/');
     await expect(page.getByRole('main')).toBeVisible();
 
-    const animatedElements = await page.locator('body *').evaluateAll((elements) =>
-      elements.filter((element) => {
-        const style = window.getComputedStyle(element);
-        const animationDuration = style.animationDuration.split(',').map((value) => Number.parseFloat(value));
-        return animationDuration.some((duration) => Number.isFinite(duration) && duration > 0);
-      }).length,
+    const animatedElements = await page.locator('body *').evaluateAll(
+      (elements) =>
+        elements.filter((element) => {
+          const style = window.getComputedStyle(element);
+          const animationDuration = style.animationDuration
+            .split(',')
+            .map((value) => Number.parseFloat(value));
+          return animationDuration.some((duration) => Number.isFinite(duration) && duration > 0);
+        }).length,
     );
     expect(animatedElements).toBe(0);
   });
