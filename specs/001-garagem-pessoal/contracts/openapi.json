@@ -242,7 +242,7 @@
                 "operationId": "listGarages",
                 "responses": {
                     "200": {
-                        "$ref": "#/components/responses/Collection"
+                        "$ref": "#/components/responses/GarageCollection"
                     },
                     "default": {
                         "$ref": "#/components/responses/Problem"
@@ -268,7 +268,7 @@
                 },
                 "responses": {
                     "201": {
-                        "$ref": "#/components/responses/Item"
+                        "$ref": "#/components/responses/GarageItem"
                     },
                     "default": {
                         "$ref": "#/components/responses/Problem"
@@ -286,7 +286,7 @@
                 "operationId": "getGarage",
                 "responses": {
                     "200": {
-                        "$ref": "#/components/responses/Item"
+                        "$ref": "#/components/responses/GarageItem"
                     },
                     "default": {
                         "$ref": "#/components/responses/Problem"
@@ -312,7 +312,7 @@
                 },
                 "responses": {
                     "200": {
-                        "$ref": "#/components/responses/Item"
+                        "$ref": "#/components/responses/GarageItem"
                     },
                     "default": {
                         "$ref": "#/components/responses/Problem"
@@ -346,7 +346,7 @@
                 "operationId": "listMembers",
                 "responses": {
                     "200": {
-                        "$ref": "#/components/responses/Collection"
+                        "$ref": "#/components/responses/MemberCollection"
                     },
                     "default": {
                         "$ref": "#/components/responses/Problem"
@@ -380,7 +380,7 @@
                 },
                 "responses": {
                     "200": {
-                        "$ref": "#/components/responses/Item"
+                        "$ref": "#/components/responses/MemberItem"
                     },
                     "default": {
                         "$ref": "#/components/responses/Problem"
@@ -431,7 +431,7 @@
                 },
                 "responses": {
                     "200": {
-                        "$ref": "#/components/responses/Item"
+                        "$ref": "#/components/responses/GarageItem"
                     },
                     "default": {
                         "$ref": "#/components/responses/Problem"
@@ -464,7 +464,7 @@
                 },
                 "responses": {
                     "201": {
-                        "$ref": "#/components/responses/Item"
+                        "$ref": "#/components/responses/InviteItem"
                     },
                     "default": {
                         "$ref": "#/components/responses/Problem"
@@ -522,7 +522,7 @@
                 },
                 "responses": {
                     "200": {
-                        "$ref": "#/components/responses/Item"
+                        "$ref": "#/components/responses/InviteItem"
                     },
                     "default": {
                         "$ref": "#/components/responses/Problem"
@@ -540,7 +540,7 @@
                 "operationId": "listVehicles",
                 "responses": {
                     "200": {
-                        "$ref": "#/components/responses/Collection"
+                        "$ref": "#/components/responses/VehicleCollection"
                     },
                     "default": {
                         "$ref": "#/components/responses/Problem"
@@ -566,7 +566,7 @@
                 },
                 "responses": {
                     "201": {
-                        "$ref": "#/components/responses/Item"
+                        "$ref": "#/components/responses/VehicleItem"
                     },
                     "default": {
                         "$ref": "#/components/responses/Problem"
@@ -587,7 +587,7 @@
                 "operationId": "getVehicle",
                 "responses": {
                     "200": {
-                        "$ref": "#/components/responses/Item"
+                        "$ref": "#/components/responses/VehicleItem"
                     },
                     "default": {
                         "$ref": "#/components/responses/Problem"
@@ -613,7 +613,7 @@
                 },
                 "responses": {
                     "200": {
-                        "$ref": "#/components/responses/Item"
+                        "$ref": "#/components/responses/VehicleItem"
                     },
                     "default": {
                         "$ref": "#/components/responses/Problem"
@@ -646,7 +646,7 @@
                 "operationId": "listExpenses",
                 "responses": {
                     "200": {
-                        "$ref": "#/components/responses/Collection"
+                        "$ref": "#/components/responses/ExpenseCollection"
                     },
                     "default": {
                         "$ref": "#/components/responses/Problem"
@@ -672,7 +672,7 @@
                 },
                 "responses": {
                     "201": {
-                        "$ref": "#/components/responses/Item"
+                        "$ref": "#/components/responses/ExpenseItem"
                     },
                     "default": {
                         "$ref": "#/components/responses/Problem"
@@ -706,7 +706,7 @@
                 },
                 "responses": {
                     "200": {
-                        "$ref": "#/components/responses/Item"
+                        "$ref": "#/components/responses/ExpenseItem"
                     },
                     "default": {
                         "$ref": "#/components/responses/Problem"
@@ -717,7 +717,7 @@
                 "operationId": "voidExpense",
                 "responses": {
                     "200": {
-                        "$ref": "#/components/responses/Item"
+                        "$ref": "#/components/responses/ExpenseItem"
                     },
                     "default": {
                         "$ref": "#/components/responses/Problem"
@@ -735,7 +735,7 @@
                 "operationId": "listFuelRecords",
                 "responses": {
                     "200": {
-                        "$ref": "#/components/responses/Collection"
+                        "$ref": "#/components/responses/FuelCollection"
                     },
                     "default": {
                         "$ref": "#/components/responses/Problem"
@@ -761,7 +761,7 @@
                 },
                 "responses": {
                     "201": {
-                        "$ref": "#/components/responses/Item"
+                        "$ref": "#/components/responses/FuelItem"
                     },
                     "default": {
                         "$ref": "#/components/responses/Problem"
@@ -795,7 +795,7 @@
                 },
                 "responses": {
                     "200": {
-                        "$ref": "#/components/responses/Item"
+                        "$ref": "#/components/responses/FuelItem"
                     },
                     "default": {
                         "$ref": "#/components/responses/Problem"
@@ -806,7 +806,7 @@
                 "operationId": "voidFuelRecord",
                 "responses": {
                     "200": {
-                        "$ref": "#/components/responses/Item"
+                        "$ref": "#/components/responses/FuelItem"
                     },
                     "default": {
                         "$ref": "#/components/responses/Problem"
@@ -839,7 +839,7 @@
                 "operationId": "listElectricCharges",
                 "responses": {
                     "200": {
-                        "$ref": "#/components/responses/Collection"
+                        "$ref": "#/components/responses/ElectricChargeCollection"
                     },
                     "default": {
                         "$ref": "#/components/responses/Problem"
@@ -865,7 +865,7 @@
                 },
                 "responses": {
                     "201": {
-                        "$ref": "#/components/responses/Item"
+                        "$ref": "#/components/responses/ElectricChargeItem"
                     },
                     "default": {
                         "$ref": "#/components/responses/Problem"
@@ -886,7 +886,7 @@
                 "operationId": "getElectricCharge",
                 "responses": {
                     "200": {
-                        "$ref": "#/components/responses/Item"
+                        "$ref": "#/components/responses/ElectricChargeItem"
                     },
                     "default": {
                         "$ref": "#/components/responses/Problem"
@@ -912,7 +912,7 @@
                 },
                 "responses": {
                     "200": {
-                        "$ref": "#/components/responses/Item"
+                        "$ref": "#/components/responses/ElectricChargeItem"
                     },
                     "default": {
                         "$ref": "#/components/responses/Problem"
@@ -928,7 +928,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "$ref": "#/components/responses/Item"
+                        "$ref": "#/components/responses/ElectricChargeItem"
                     },
                     "default": {
                         "$ref": "#/components/responses/Problem"
@@ -952,7 +952,7 @@
                 "operationId": "listElectricityTariffs",
                 "responses": {
                     "200": {
-                        "$ref": "#/components/responses/Collection"
+                        "$ref": "#/components/responses/ElectricityTariffCollection"
                     },
                     "default": {
                         "$ref": "#/components/responses/Problem"
@@ -978,7 +978,7 @@
                 },
                 "responses": {
                     "201": {
-                        "$ref": "#/components/responses/Item"
+                        "$ref": "#/components/responses/ElectricityTariffItem"
                     },
                     "default": {
                         "$ref": "#/components/responses/Problem"
@@ -996,7 +996,7 @@
                 "operationId": "listMaintenance",
                 "responses": {
                     "200": {
-                        "$ref": "#/components/responses/Collection"
+                        "$ref": "#/components/responses/MaintenanceCollection"
                     },
                     "default": {
                         "$ref": "#/components/responses/Problem"
@@ -1022,7 +1022,7 @@
                 },
                 "responses": {
                     "201": {
-                        "$ref": "#/components/responses/Item"
+                        "$ref": "#/components/responses/MaintenanceItem"
                     },
                     "default": {
                         "$ref": "#/components/responses/Problem"
@@ -1056,7 +1056,7 @@
                 },
                 "responses": {
                     "200": {
-                        "$ref": "#/components/responses/Item"
+                        "$ref": "#/components/responses/MaintenanceItem"
                     },
                     "default": {
                         "$ref": "#/components/responses/Problem"
@@ -1074,7 +1074,7 @@
                 "operationId": "listPlans",
                 "responses": {
                     "200": {
-                        "$ref": "#/components/responses/Collection"
+                        "$ref": "#/components/responses/PlanCollection"
                     },
                     "default": {
                         "$ref": "#/components/responses/Problem"
@@ -1100,7 +1100,7 @@
                 },
                 "responses": {
                     "201": {
-                        "$ref": "#/components/responses/Item"
+                        "$ref": "#/components/responses/PlanItem"
                     },
                     "default": {
                         "$ref": "#/components/responses/Problem"
@@ -1134,7 +1134,7 @@
                 },
                 "responses": {
                     "200": {
-                        "$ref": "#/components/responses/Item"
+                        "$ref": "#/components/responses/PlanItem"
                     },
                     "default": {
                         "$ref": "#/components/responses/Problem"
@@ -1152,7 +1152,7 @@
                 "operationId": "listCommitments",
                 "responses": {
                     "200": {
-                        "$ref": "#/components/responses/Collection"
+                        "$ref": "#/components/responses/CommitmentCollection"
                     },
                     "default": {
                         "$ref": "#/components/responses/Problem"
@@ -1178,7 +1178,7 @@
                 },
                 "responses": {
                     "201": {
-                        "$ref": "#/components/responses/Item"
+                        "$ref": "#/components/responses/CommitmentItem"
                     },
                     "default": {
                         "$ref": "#/components/responses/Problem"
@@ -1212,7 +1212,7 @@
                 },
                 "responses": {
                     "200": {
-                        "$ref": "#/components/responses/Item"
+                        "$ref": "#/components/responses/CommitmentItem"
                     },
                     "default": {
                         "$ref": "#/components/responses/Problem"
@@ -1249,7 +1249,7 @@
                 },
                 "responses": {
                     "200": {
-                        "$ref": "#/components/responses/Item"
+                        "$ref": "#/components/responses/CommitmentItem"
                     },
                     "default": {
                         "$ref": "#/components/responses/Problem"
@@ -1267,7 +1267,7 @@
                 "operationId": "listReminders",
                 "responses": {
                     "200": {
-                        "$ref": "#/components/responses/Collection"
+                        "$ref": "#/components/responses/ReminderCollection"
                     },
                     "default": {
                         "$ref": "#/components/responses/Problem"
@@ -1410,7 +1410,7 @@
                 },
                 "responses": {
                     "201": {
-                        "$ref": "#/components/responses/Item"
+                        "$ref": "#/components/responses/AttachmentItem"
                     },
                     "default": {
                         "$ref": "#/components/responses/Problem"
@@ -1490,7 +1490,7 @@
                 ],
                 "responses": {
                     "202": {
-                        "$ref": "#/components/responses/Item"
+                        "$ref": "#/components/responses/ExportItem"
                     },
                     "default": {
                         "$ref": "#/components/responses/Problem"
@@ -1511,7 +1511,7 @@
                 "operationId": "getExport",
                 "responses": {
                     "200": {
-                        "$ref": "#/components/responses/Item"
+                        "$ref": "#/components/responses/ExportItem"
                     },
                     "default": {
                         "$ref": "#/components/responses/Problem"
@@ -1736,6 +1736,535 @@
                     "application/problem+json": {
                         "schema": {
                             "$ref": "#/components/schemas/Problem"
+                        }
+                    }
+                }
+            },
+            "GarageItem": {
+                "description": "Recurso autorizado; tipo de payload conforme operationId e api.md",
+                "headers": {
+                    "ETag": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "resources.schema.json#/$defs/GarageResource"
+                        }
+                    }
+                }
+            },
+            "MemberItem": {
+                "description": "Recurso autorizado; tipo de payload conforme operationId e api.md",
+                "headers": {
+                    "ETag": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "resources.schema.json#/$defs/MemberResource"
+                        }
+                    }
+                }
+            },
+            "InviteItem": {
+                "description": "Recurso autorizado; tipo de payload conforme operationId e api.md",
+                "headers": {
+                    "ETag": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "resources.schema.json#/$defs/InviteResource"
+                        }
+                    }
+                }
+            },
+            "VehicleItem": {
+                "description": "Recurso autorizado; tipo de payload conforme operationId e api.md",
+                "headers": {
+                    "ETag": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "resources.schema.json#/$defs/VehicleResource"
+                        }
+                    }
+                }
+            },
+            "ExpenseItem": {
+                "description": "Recurso autorizado; tipo de payload conforme operationId e api.md",
+                "headers": {
+                    "ETag": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "resources.schema.json#/$defs/ExpenseResource"
+                        }
+                    }
+                }
+            },
+            "FuelItem": {
+                "description": "Recurso autorizado; tipo de payload conforme operationId e api.md",
+                "headers": {
+                    "ETag": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "resources.schema.json#/$defs/FuelResource"
+                        }
+                    }
+                }
+            },
+            "ElectricChargeItem": {
+                "description": "Recurso autorizado; tipo de payload conforme operationId e api.md",
+                "headers": {
+                    "ETag": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "resources.schema.json#/$defs/ElectricChargeResource"
+                        }
+                    }
+                }
+            },
+            "ElectricityTariffItem": {
+                "description": "Recurso autorizado; tipo de payload conforme operationId e api.md",
+                "headers": {
+                    "ETag": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "resources.schema.json#/$defs/ElectricityTariffResource"
+                        }
+                    }
+                }
+            },
+            "MaintenanceItem": {
+                "description": "Recurso autorizado; tipo de payload conforme operationId e api.md",
+                "headers": {
+                    "ETag": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "resources.schema.json#/$defs/MaintenanceResource"
+                        }
+                    }
+                }
+            },
+            "PlanItem": {
+                "description": "Recurso autorizado; tipo de payload conforme operationId e api.md",
+                "headers": {
+                    "ETag": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "resources.schema.json#/$defs/PlanResource"
+                        }
+                    }
+                }
+            },
+            "CommitmentItem": {
+                "description": "Recurso autorizado; tipo de payload conforme operationId e api.md",
+                "headers": {
+                    "ETag": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "resources.schema.json#/$defs/CommitmentResource"
+                        }
+                    }
+                }
+            },
+            "AttachmentItem": {
+                "description": "Recurso autorizado; tipo de payload conforme operationId e api.md",
+                "headers": {
+                    "ETag": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "resources.schema.json#/$defs/AttachmentResource"
+                        }
+                    }
+                }
+            },
+            "ExportItem": {
+                "description": "Recurso autorizado; tipo de payload conforme operationId e api.md",
+                "headers": {
+                    "ETag": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "resources.schema.json#/$defs/ExportResource"
+                        }
+                    }
+                }
+            },
+            "GarageCollection": {
+                "description": "Coleção autorizada; limite padrão 50, máximo 100",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "items",
+                                "nextCursor"
+                            ],
+                            "properties": {
+                                "items": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "resources.schema.json#/$defs/GarageResource"
+                                    }
+                                },
+                                "nextCursor": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "MemberCollection": {
+                "description": "Coleção autorizada; limite padrão 50, máximo 100",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "items",
+                                "nextCursor"
+                            ],
+                            "properties": {
+                                "items": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "resources.schema.json#/$defs/MemberResource"
+                                    }
+                                },
+                                "nextCursor": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "VehicleCollection": {
+                "description": "Coleção autorizada; limite padrão 50, máximo 100",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "items",
+                                "nextCursor"
+                            ],
+                            "properties": {
+                                "items": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "resources.schema.json#/$defs/VehicleResource"
+                                    }
+                                },
+                                "nextCursor": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "ExpenseCollection": {
+                "description": "Coleção autorizada; limite padrão 50, máximo 100",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "items",
+                                "nextCursor"
+                            ],
+                            "properties": {
+                                "items": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "resources.schema.json#/$defs/ExpenseResource"
+                                    }
+                                },
+                                "nextCursor": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "FuelCollection": {
+                "description": "Coleção autorizada; limite padrão 50, máximo 100",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "items",
+                                "nextCursor"
+                            ],
+                            "properties": {
+                                "items": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "resources.schema.json#/$defs/FuelResource"
+                                    }
+                                },
+                                "nextCursor": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "ElectricChargeCollection": {
+                "description": "Coleção autorizada; limite padrão 50, máximo 100",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "items",
+                                "nextCursor"
+                            ],
+                            "properties": {
+                                "items": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "resources.schema.json#/$defs/ElectricChargeResource"
+                                    }
+                                },
+                                "nextCursor": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "ElectricityTariffCollection": {
+                "description": "Coleção autorizada; limite padrão 50, máximo 100",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "items",
+                                "nextCursor"
+                            ],
+                            "properties": {
+                                "items": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "resources.schema.json#/$defs/ElectricityTariffResource"
+                                    }
+                                },
+                                "nextCursor": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "MaintenanceCollection": {
+                "description": "Coleção autorizada; limite padrão 50, máximo 100",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "items",
+                                "nextCursor"
+                            ],
+                            "properties": {
+                                "items": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "resources.schema.json#/$defs/MaintenanceResource"
+                                    }
+                                },
+                                "nextCursor": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "PlanCollection": {
+                "description": "Coleção autorizada; limite padrão 50, máximo 100",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "items",
+                                "nextCursor"
+                            ],
+                            "properties": {
+                                "items": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "resources.schema.json#/$defs/PlanResource"
+                                    }
+                                },
+                                "nextCursor": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "CommitmentCollection": {
+                "description": "Coleção autorizada; limite padrão 50, máximo 100",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "items",
+                                "nextCursor"
+                            ],
+                            "properties": {
+                                "items": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "resources.schema.json#/$defs/CommitmentResource"
+                                    }
+                                },
+                                "nextCursor": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "ReminderCollection": {
+                "description": "Coleção autorizada; limite padrão 50, máximo 100",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "items",
+                                "nextCursor"
+                            ],
+                            "properties": {
+                                "items": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "resources.schema.json#/$defs/ReminderResource"
+                                    }
+                                },
+                                "nextCursor": {
+                                    "type": [
+                                        "string",
+                                        "null"
+                                    ]
+                                }
+                            }
                         }
                     }
                 }

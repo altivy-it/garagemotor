@@ -6,6 +6,8 @@
 
 **Status**: Rascunho
 
+**Estado da implementação (2026-11-12)**: as tarefas web T010, T026 e T027 estão marcadas como concluídas, com evidências de `quality` e `web-e2e` em `tasks.md` e `quickstart.md`. T015, T016 e T028 continuam abertas para a cadeia Android; a feature não está concluída em todas as plataformas.
+
 **Entrada**: Analisar a identidade visual disponível em Altivy, avaliar primitives Angular reutilizáveis do Dokpod e estabelecer um design system GarageMotor usado em web e Android, com logo e ícones originais e seletor de tema Claro/Escuro/Sistema sempre acessível.
 
 **Origem**: solicitação humana. **Revisor humano**: CEO da Altivy e owner do GarageMotor.

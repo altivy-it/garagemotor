@@ -1,7 +1,8 @@
 # Guia de Validação: Garagem pessoal e familiar
 
 **Origem**: IA assistida. **Revisor humano**: CEO da Altivy e owner do GarageMotor.
-**Estado**: roteiro planejado; aplicação e scripts citados ainda não implementados. Não executar como se já existissem.
+**Estado na revisão inicial (2026-11-09)**: este roteiro foi planejado antes da implementação dos scripts e da aplicação; esse registro não descreve o estado atual.
+**Estado atual (2026-11-12)**: implementação parcial. A T067 registra Dockerfiles e integração web parcial, com `quality` e `web-e2e` aprovados para o recorte documentado. A T067 permanece aberta; SMTP, sessão restaurada após reload, matriz completa, Android, pacote completo e perfis .NET `integration`/`load` ainda não estão validados. Consulte [docs/install.md](../../docs/install.md) para instruções e limites atuais. Este guia descreve a aceitação da feature completa e não afirma que todos os perfis já podem ser executados.
 **Base**: [spec](spec.md), [modelo](data-model.md), [API](contracts/api.md) e [ADR](../../docs/adr/2026-0001-persistencia-garagem.md).
 
 **Revisão**: 2026-11-09; os comandos e cenários abaixo incorporam os esclarecimentos, mas ainda dependem de scripts/tarefas revisados e implementação autorizada.
